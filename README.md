@@ -24,6 +24,8 @@ Analysis, not financial advice. Non-custodial: CryptoMind never holds user funds
   and an optional 08:00 daily brief (Telegram, Base App or in-app).
 - **Judgment scoring** – record your own market calls; they are graded against actual closing prices (private to you).
 - **Scam checker** – free, no login: EVM address risk flags plus community reports.
+- **Friends and chat** – one-to-one chat with real-time delivery, typing indicators, replies, reactions and unsend;
+  an optional in-chat AI assistant can look things up together with you.
 - **Bring your own key** – 13 LLM providers, keys encrypted at rest. Guests get a few free questions per day.
 - **Everywhere** – installable web app (PWA), Telegram bot / Mini App, LINE bot, Base mini app; UI in English,
   Traditional Chinese, Simplified Chinese and Russian.
@@ -90,6 +92,11 @@ ruff check .
 - The production rule sets used against abuse: the moderation phrase list here is a reduced demonstration set,
   and real thresholds are supplied through environment variables / admin settings, not source code.
 - Secrets of any kind. Git history is not carried over; this snapshot starts from a clean history.
+
+## Team
+
+Built by five independent developers covering AI/LLM architecture, data retrieval, backend and infrastructure,
+API and deployment, and web feature testing.
 
 ## Security
 

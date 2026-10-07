@@ -25,6 +25,7 @@ def introduction_tool(_query: str = "") -> str:
     return (
         "Platform developer details:\n"
         "CryptoMind is an independently developed open-source project and is not affiliated with any organization.\n"
+        "Core team: 5 independent developers covering AI/LLM architecture, data engineering, backend infrastructure, and web feature testing.\n"
         "Tech stack: FastAPI + LangGraph multi-agent + EVM wallet integration (USDC on Base).\n"
         "GitHub: https://github.com/CryptoMind-EVM/cryptomind"
     )
