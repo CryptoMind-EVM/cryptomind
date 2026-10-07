@@ -1,0 +1,131 @@
+{"id": "zh-tw-t0-001", "query": "你好", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-t0-002", "query": "哈囉", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-t0-003", "query": "早安", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-t0-004", "query": "晚安", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-t0-005", "query": "謝謝", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-t0-006", "query": "你是誰", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-t0-007", "query": "你可以做什麼", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-t0-008", "query": "怎麼用", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-t0-009", "query": "再見", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-t0-010", "query": "好的", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-t0-011", "query": "在嗎", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-t0-012", "query": "HELLO", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-cn-t0-001", "query": "你好", "language": "zh-CN", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-cn-t0-002", "query": "谢谢", "language": "zh-CN", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-cn-t0-003", "query": "你是谁", "language": "zh-CN", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-cn-t0-004", "query": "早上好", "language": "zh-CN", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-cn-t0-005", "query": "再见", "language": "zh-CN", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-t0-001", "query": "hi", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-t0-002", "query": "hello", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-t0-003", "query": "thanks", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-t0-004", "query": "who are you", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-t0-005", "query": "what can you do", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-t0-006", "query": "how do i use this", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-t0-007", "query": "bye", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-t0-008", "query": "OK", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "ru-t0-001", "query": "привет", "language": "ru", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "ru-t0-002", "query": "спасибо", "language": "ru", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "ru-t0-003", "query": "кто ты", "language": "ru", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "ru-t0-004", "query": "помощь", "language": "ru", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "ru-t0-005", "query": "пока", "language": "ru", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-meta-001", "query": "這個平台安全嗎", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-meta-002", "query": "我要怎麼開始", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-meta-003", "query": "你會說台語嗎", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-meta-004", "query": "你們有手機版嗎", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-meta-001", "query": "is this platform safe to use", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-meta-002", "query": "what languages do you speak", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-meta-003", "query": "do you have a mobile app", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "ru-meta-001", "query": "как начать пользоваться", "language": "ru", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-fin-lookup-001", "query": "台積電本益比", "language": "zh-TW", "expected": {"domains": ["finance_markets"], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-fin-lookup-002", "query": "聯發科今天收盤多少", "language": "zh-TW", "expected": {"domains": ["finance_markets"], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-fin-lookup-003", "query": "特斯拉除權息日期", "language": "zh-TW", "expected": {"domains": ["finance_markets"], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-fin-lookup-004", "query": "蘋果上一季賺進多少", "language": "zh-TW", "expected": {"domains": ["finance_markets"], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-fin-lookup-005", "query": "ethereum 手續費", "language": "zh-TW", "expected": {"domains": ["finance_markets"], "depth": "lookup", "gate": null}}
+{"id": "zh-cn-fin-lookup-001", "query": "宁德时代市盈率", "language": "zh-CN", "expected": {"domains": ["finance_markets"], "depth": "lookup", "gate": null}}
+{"id": "en-fin-lookup-001", "query": "taiwan semiconductor pe ratio", "language": "en", "expected": {"domains": ["finance_markets"], "depth": "lookup", "gate": null}}
+{"id": "en-fin-lookup-002", "query": "apple next results announcement", "language": "en", "expected": {"domains": ["finance_markets"], "depth": "lookup", "gate": null}}
+{"id": "en-fin-lookup-003", "query": "ethereum gas fee right now", "language": "en", "expected": {"domains": ["finance_markets"], "depth": "lookup", "gate": null}}
+{"id": "ru-fin-lookup-001", "query": "Сколько стоит Nvidia", "language": "ru", "expected": {"domains": ["finance_markets"], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-fin-veto-001", "query": "BTC 多少", "language": "zh-TW", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "zh-tw-fin-veto-002", "query": "台積電股價", "language": "zh-TW", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "zh-tw-fin-veto-003", "query": "黃金一盎司多少錢", "language": "zh-TW", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "zh-tw-fin-veto-004", "query": "幫我分析 BTC 走勢", "language": "zh-TW", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "zh-tw-fin-veto-005", "query": "今天美元兌台幣匯率", "language": "zh-TW", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "en-fin-veto-001", "query": "what is the price of bitcoin", "language": "en", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "en-fin-veto-002", "query": "should i buy NVDA", "language": "en", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "en-fin-veto-003", "query": "how is the market doing today", "language": "en", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "ru-fin-veto-001", "query": "курс биткоина", "language": "ru", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "zh-tw-fin-analysis-001", "query": "聯發科跟台積電哪間體質好", "language": "zh-TW", "expected": {"domains": ["finance_markets"], "depth": "analysis", "gate": null}}
+{"id": "zh-tw-fin-analysis-002", "query": "中華電值得列入退休清單嗎", "language": "zh-TW", "expected": {"domains": ["finance_markets"], "depth": "analysis", "gate": null}}
+{"id": "zh-tw-fin-analysis-003", "query": "高通本益比跟聯發科比一下", "language": "zh-TW", "expected": {"domains": ["finance_markets"], "depth": "analysis", "gate": null}}
+{"id": "zh-cn-fin-analysis-001", "query": "比亚迪和小鹏哪家更值得长期持有", "language": "zh-CN", "expected": {"domains": ["finance_markets"], "depth": "analysis", "gate": null}}
+{"id": "en-fin-analysis-001", "query": "is tesla overvalued compared to toyota", "language": "en", "expected": {"domains": ["finance_markets"], "depth": "analysis", "gate": null}}
+{"id": "en-fin-analysis-002", "query": "dividend aristocrats vs index funds for retirement", "language": "en", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "zh-tw-research-001", "query": "明年電動車產業的機會", "language": "zh-TW", "expected": {"domains": ["general_research", "finance_markets"], "depth": "research", "gate": null}}
+{"id": "zh-tw-research-002", "query": "幫我研究離岸風電供應鏈", "language": "zh-TW", "expected": {"domains": ["general_research", "finance_markets"], "depth": "research", "gate": null}}
+{"id": "en-research-001", "query": "outlook for the semiconductor industry next year", "language": "en", "expected": {"domains": ["general_research", "finance_markets"], "depth": "research", "gate": null}}
+{"id": "en-research-002", "query": "deep dive into quantum computing startups", "language": "en", "expected": {"domains": ["general_research"], "depth": "research", "gate": null}}
+{"id": "ru-research-001", "query": "обзор индустрии электромобилей", "language": "ru", "expected": {"domains": ["general_research"], "depth": "research", "gate": null}}
+{"id": "zh-tw-onchain-veto-001", "query": "這個地址安全嗎 EQA1...abc", "language": "zh-TW", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "zh-tw-onchain-veto-002", "query": "幫我查這個錢包的餘額", "language": "zh-TW", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "en-onchain-veto-001", "query": "is this wallet address safe to send to", "language": "en", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "zh-tw-onchain-router-001", "query": "這個 jetton 靠譜嗎", "language": "zh-TW", "expected": {"domains": ["onchain_security"], "depth": "analysis", "gate": "risk_first"}}
+{"id": "en-onchain-router-001", "query": "the guy says he sent me ton but nothing arrived", "language": "en", "expected": {"domains": ["onchain_security"], "depth": "analysis", "gate": "risk_first"}}
+{"id": "zh-tw-gate-001", "query": "對方說要先付款才出貨，這樣對嗎", "language": "zh-TW", "expected": {"domains": [], "depth": "analysis", "gate": "risk_first"}}
+{"id": "zh-tw-gate-002", "query": "陌生人叫我匯保證金到陌生帳號", "language": "zh-TW", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "en-gate-001", "query": "someone wants me to send a deposit first, is that normal", "language": "en", "expected": {"domains": [], "depth": "analysis", "gate": "risk_first"}}
+{"id": "zh-tw-people-001", "query": "manifund 上有哪些專案", "language": "zh-TW", "expected": {"domains": ["people_projects"], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-people-002", "query": "幫我查王小明在 manifund 的留言", "language": "zh-TW", "expected": {"domains": ["people_projects"], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-people-003", "query": "這個公益項目最近的進度", "language": "zh-TW", "expected": {"domains": ["people_projects"], "depth": "lookup", "gate": null}}
+{"id": "en-people-001", "query": "look up user Danny on manifund", "language": "en", "expected": {"domains": ["people_projects"], "depth": "lookup", "gate": null}}
+{"id": "en-people-002", "query": "show me the top fundraising causes this week", "language": "en", "expected": {"domains": ["people_projects"], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-mixed-001", "query": "你好，幫我分析 BTC", "language": "zh-TW", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "en-mixed-001", "query": "hi, what's ETH worth today", "language": "en", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "zh-tw-mixed-002", "query": "謝謝，那台積電現在多少", "language": "zh-TW", "expected": {"domains": ["finance_markets"], "depth": "lookup", "gate": null}}
+{"id": "en-mixed-002", "query": "cool, now show me the fear and greed chart", "language": "en", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "zh-tw-general-001", "query": "今天台北天氣如何", "language": "zh-TW", "expected": {"domains": ["general_research"], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-general-002", "query": "量子力學是什麼", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-general-001", "query": "what is the capital of australia", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-general-002", "query": "summarize the history of the printing press", "language": "en", "expected": {"domains": ["general_research"], "depth": "research", "gate": null}}
+{"id": "zh-tw-general-003", "query": "哪家電動車品牌比較好", "language": "zh-TW", "expected": {"domains": ["general_research"], "depth": "analysis", "gate": null}}
+{"id": "en-general-003", "query": "best way to learn a new language", "language": "en", "expected": {"domains": ["general_research"], "depth": "analysis", "gate": null}}
+{"id": "ru-general-001", "query": "столица австралии", "language": "ru", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-edge-001", "query": "早", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-edge-002", "query": "你好！！！！！", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-edge-001", "query": "thx", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-edge-002", "query": "see ya", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-edge-003", "query": "幫我記一筆今天喝咖啡 120 元", "language": "zh-TW", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "en-edge-003", "query": "what does the word serendipity mean", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-edge-004", "query": "你今天過得如何", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-edge-004", "query": "tell me a joke", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-edge-005", "query": "幫我翻譯一句英文成中文", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-edge-005", "query": "write me a short poem about the sea", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-fin-analysis-004", "query": "鴻海毛利率變化趨勢如何", "language": "zh-TW", "expected": {"domains": ["finance_markets"], "depth": "analysis", "gate": null}}
+{"id": "en-fin-analysis-003", "query": "why did nasdaq drop this week", "language": "en", "expected": {"domains": ["finance_markets"], "depth": "analysis", "gate": null}}
+{"id": "en-fin-analysis-004", "query": "compare snowflake and databricks valuations", "language": "en", "expected": {"domains": ["finance_markets"], "depth": "analysis", "gate": null}}
+{"id": "zh-tw-fin-lookup-006", "query": "大立光上季賺多少", "language": "zh-TW", "expected": {"domains": ["finance_markets"], "depth": "lookup", "gate": null}}
+{"id": "en-fin-lookup-004", "query": "when is the next fed meeting", "language": "en", "expected": {"domains": ["finance_markets"], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-fin-lookup-007", "query": "統一超商本益比多少", "language": "zh-TW", "expected": {"domains": ["finance_markets"], "depth": "lookup", "gate": null}}
+{"id": "ru-fin-analysis-001", "query": "сравни samsung и xiaomi", "language": "ru", "expected": {"domains": ["finance_markets"], "depth": "analysis", "gate": null}}
+{"id": "ru-people-001", "query": "найди проект солнечные панели на manifund", "language": "ru", "expected": {"domains": ["people_projects"], "depth": "lookup", "gate": null}}
+{"id": "zh-cn-lookup-001", "query": "腾讯市盈率是多少", "language": "zh-CN", "expected": {"domains": ["finance_markets"], "depth": "lookup", "gate": null}}
+{"id": "zh-cn-analysis-001", "query": "茅台可以放十年吗", "language": "zh-CN", "expected": {"domains": ["finance_markets"], "depth": "analysis", "gate": null}}
+{"id": "zh-cn-research-001", "query": "帮我调研储能行业", "language": "zh-CN", "expected": {"domains": ["general_research", "finance_markets"], "depth": "research", "gate": null}}
+{"id": "zh-cn-gate-001", "query": "网上认识的人让我先转定金", "language": "zh-CN", "expected": {"domains": [], "depth": "research", "gate": "risk_first"}}
+{"id": "zh-cn-meta-001", "query": "你们有网页版吗", "language": "zh-CN", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-people-004", "query": "搜尋一下 manifund 上的環保計畫", "language": "zh-TW", "expected": {"domains": ["people_projects"], "depth": "lookup", "gate": null}}
+{"id": "en-people-003", "query": "who is the founder of manifund", "language": "en", "expected": {"domains": ["people_projects"], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-fin-veto-006", "query": "美股大盤表現", "language": "zh-TW", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "en-fin-veto-004", "query": "bitcoin dominance chart", "language": "en", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "zh-tw-fin-veto-007", "query": "日圓換匯便宜了嗎", "language": "zh-TW", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "en-fin-veto-005", "query": "gold vs silver which is a better hedge", "language": "en", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "ru-fin-veto-002", "query": "акции сбербанка растут", "language": "ru", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "zh-tw-mixed-003", "query": "好的，那來看特斯拉新聞", "language": "zh-TW", "expected": {"domains": ["finance_markets"], "depth": "lookup", "gate": null}}
+{"id": "en-mixed-003", "query": "nice, now check solana staking yields", "language": "en", "expected": {"domains": [], "depth": "research", "gate": null}}
+{"id": "zh-tw-general-004", "query": "寫一篇關於永續能源的短文", "language": "zh-TW", "expected": {"domains": ["general_research"], "depth": "analysis", "gate": null}}
+{"id": "en-general-004", "query": "explain like i'm five how compound interest works", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-edge-006", "query": "你吃飯了沒", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-edge-006", "query": "good night everyone", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "ru-edge-001", "query": "доброе утро", "language": "ru", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "zh-tw-edge-007", "query": "幫我看看這則訊息在講什麼", "language": "zh-TW", "expected": {"domains": [], "depth": "lookup", "gate": null}}
+{"id": "en-edge-007", "query": "what does this error message mean", "language": "en", "expected": {"domains": [], "depth": "lookup", "gate": null}}

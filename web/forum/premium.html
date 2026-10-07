@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title data-i18n="seo.forumPremium">Premium Membership - CryptoMind Forum</title>
+    <link rel="icon" type="image/png" href="/static/img/title_icon.png">
+
+    <!-- Core Libraries -->
+    <link rel="stylesheet" href="/static/css/tailwind-built.css?v=52">
+    <script src="https://cdn.jsdelivr.net/npm/i18next@23.7.6/i18next.min.js" crossorigin="anonymous" integrity="sha384-OCCT+KZFt2FsqTxlTd8CUSq86zW/ZKmV0oe7qj36oye2CDbbVuxIXTY20t/u9LJt"></script>
+    <script src="https://unpkg.com/lucide@0.577.0" crossorigin="anonymous" integrity="sha384-orgVf2eX2+m1zKAOIi09hD0W6GtVhoOUmqDK+sysYB2JTZ4vS86j4jm+X7a4Nnei"></script>
+    <!-- TON Connect SDK loaded via main page -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css?v=46">
+    <script src="/static/config.js"></script>
+    <script src="/static/js/logger.js"></script>
+    <script src="/static/js/click-delegator.js?v=3"></script>
+    <!-- early-init: 防 FOUC + 預設主題（與主站共用 localStorage.selectedTheme） -->
+    <script src="/js/early-init.js"></script>
+</head>
+
+<body class="bg-background text-textMain min-h-screen flex flex-col" data-page="premium">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-background/94 backdrop-blur-xl border-b border-borderSubtle pl-4 pr-16 py-3">
+        <div class="max-w-5xl mx-auto flex items-center justify-between">
+            <a href="/static/index.html#forum" id="forum-premium-back-link"
+                class="flex items-center gap-2 text-secondary font-bold hover:text-primary transition">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span><span data-i18n="forum.backToForum">Back to Forum</span></span>
+            </a>
+            <div class="font-bold text-lg text-primary tracking-wide"><span data-i18n="forum.premium.title">Premium Membership</span></div>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-textMuted user-display-name"><span data-i18n="common.user">User</span></span>
+                <div
+                    class="w-8 h-8 rounded-full bg-surfaceHighlight flex items-center justify-center text-xs font-bold overflow-hidden">
+                    <i data-lucide="user" class="w-4 h-4"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-5xl mx-auto w-full p-4 py-8 space-y-8">
+        <section class="rounded-[28px] border border-borderSubtle bg-surface p-6 sm:p-7">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                    <p class="text-[11px] uppercase tracking-[0.22em] text-primary/70" data-i18n="premium.safetyKicker">Wallet Safety</p>
+                    <h1 class="mt-1 text-3xl font-extrabold text-secondary" data-i18n="premium.safetyHeroTitle">Every asset, one more line of defense</h1>
+                    <p class="mt-2 max-w-2xl text-sm leading-6 text-textMuted" data-i18n="premium.safetyHeroSub">Continuous wallet monitoring, proactive alerts on suspicious activity, and verifiable evidence that explains the risk.</p>
+                </div>
+                <div class="rounded-2xl border border-primary/20 bg-primary/10 px-4 py-3 text-sm text-primary" data-i18n="premium.safetyValueStatement">
+                    You're not buying more AI replies — you're buying earlier awareness of risk.
+                </div>
+            </div>
+        </section>
+
+        <!-- Premium Core Promises（design §5.4） -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
+            <div class="bg-surface border border-borderSubtle rounded-[24px] p-6 text-center hover:border-primary/30 transition">
+                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-primary"></i>
+                </div>
+                <h3 class="font-bold text-secondary mb-2" data-i18n="premium.promiseMonitoring">Continuous Monitoring</h3>
+                <p class="text-textMuted text-sm" data-i18n="premium.promiseMonitoringDesc">Up to 5 wallets, scheduled checks, and proactive alerts on suspicious interactions.</p>
+            </div>
+
+            <div class="bg-surface border border-borderSubtle rounded-[24px] p-6 text-center hover:border-primary/30 transition">
+                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="bell-ring" class="w-6 h-6 text-primary"></i>
+                </div>
+                <h3 class="font-bold text-secondary mb-2" data-i18n="premium.promiseAlerts">Proactive Alerts</h3>
+                <p class="text-textMuted text-sm" data-i18n="premium.promiseAlertsDesc">In-app and Telegram notifications for large outflows and scam-address contacts.</p>
+            </div>
+
+            <div class="bg-surface border border-borderSubtle rounded-[24px] p-6 text-center hover:border-primary/30 transition">
+                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="file-search" class="w-6 h-6 text-primary"></i>
+                </div>
+                <h3 class="font-bold text-secondary mb-2" data-i18n="premium.promiseEvidence">Verifiable Evidence</h3>
+                <p class="text-textMuted text-sm" data-i18n="premium.promiseEvidenceDesc">Full risk evidence with sources and timestamps behind every alert.</p>
+            </div>
+
+            <div class="bg-surface border border-borderSubtle rounded-[24px] p-6 text-center hover:border-primary/30 transition">
+                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="cpu" class="w-6 h-6 text-primary"></i>
+                </div>
+                <h3 class="font-bold text-secondary mb-2" data-i18n="premium.promiseTools">Premium Tools</h3>
+                <p class="text-textMuted text-sm" data-i18n="premium.promiseToolsDesc">Premium market research tools and higher usage — a secondary benefit on top of safety.</p>
+            </div>
+        </div>
+
+        <!-- Pricing Card -->
+        <div
+            class="max-w-md mx-auto bg-surface border border-borderLight rounded-3xl p-8 text-center relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-10 -mt-10"></div>
+
+            <div class="relative z-10">
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-primary"></i>
+                    <span class="text-sm font-bold text-primary"><span data-i18n="forum.c.premium">PREMIUM</span></span>
+                </div>
+
+                <h2 class="text-3xl font-serif font-bold text-secondary mb-4" data-i18n="premium.premiumMembership">Premium Membership</h2>
+
+                <!-- 月／年方案切換（design §6.1：30 天 / 365 天使用權） -->
+                <div class="grid grid-cols-2 gap-2 mb-6" style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem" role="group" aria-label="Plan" data-i18n="premium.planToggle" data-i18n-attr="aria-label">
+                    <button type="button" data-plan-toggle="premium_monthly" aria-pressed="true"
+                        class="w-full py-3 px-3 rounded-2xl border border-borderSubtle bg-background/50 font-bold text-sm transition ring-2 ring-primary text-primary bg-primary/10">
+                        <span data-i18n="premium.planMonthly">30 Days</span>
+                    </button>
+                    <button type="button" data-plan-toggle="premium_yearly" aria-pressed="false"
+                        class="w-full py-3 px-3 rounded-2xl border border-borderSubtle bg-background/50 text-textMuted font-bold text-sm transition relative">
+                        <span data-i18n="premium.planYearly">365 Days</span>
+                        <span class="block text-[10px] font-normal text-success mt-0.5" data-i18n="premium.planYearlySave">Save 3 months</span>
+                    </button>
+                </div>
+
+                <div class="mb-2">
+                    <span class="text-5xl font-bold text-primary" data-price="premium"><span
+                            class="animate-pulse">...</span></span>
+                </div>
+
+                <button id="upgrade-btn"
+                    class="w-full px-4 py-4 bg-primary hover:bg-primary/90 text-background font-bold rounded-2xl transition shadow-lg shadow-primary/20 hover:shadow-primary/30 flex items-center justify-center gap-2 upgrade-premium-btn hover:scale-[1.02] active:scale-[0.98]">
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    <span data-i18n="premium.upgradeNow">Start Protection</span>
+                </button>
+
+                <!-- 會員情境：CTA 正下方Inline目前方案與到期日（續訂=自到期日順延；
+                     2026-09-10 DANNY 回報「會員被要求付費卻無到期日」——狀態卡在頁尾，
+                     手機上根本看不到） -->
+                <p id="premium-inline-status" class="text-xs text-primary/90 mt-3 hidden"></p>
+
+                <p class="text-textMuted text-xs mt-4" data-i18n="premium.manualRenewalNote">Purchase grants 30/365 days of access. Renew manually before expiry — no auto-charge.</p>
+            </div>
+        </div>
+
+        <!-- Free vs Premium 比較表（design §8.1） -->
+        <div class="max-w-2xl mx-auto bg-surface border border-borderSubtle rounded-[24px] p-6 mt-8">
+            <h3 class="font-bold text-secondary mb-4 text-center" data-i18n="premium.compareTitle">Free snapshot vs Premium protection</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="text-textMuted text-xs uppercase tracking-wider">
+                            <th class="text-left py-2 font-medium" data-i18n="premium.compareCapability">Capability</th>
+                            <th class="text-center py-2 font-medium" data-i18n="premium.compareFree">Free</th>
+                            <th class="text-center py-2 font-medium text-primary"><span data-i18n="forum.premium.premium">Premium</span></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-borderSubtle">
+                        <tr>
+                            <td class="py-2.5" data-i18n="premium.compareWalletSnapshot">On-demand wallet snapshot</td>
+                            <td class="text-center py-2.5">1</td>
+                            <td class="text-center py-2.5 text-primary font-bold">5</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2.5" data-i18n="premium.compareScheduledMonitoring">Scheduled background monitoring</td>
+                            <td class="text-center py-2.5">—</td>
+                            <td class="text-center py-2.5 text-primary font-bold" data-i18n="premium.compareIncluded">Included</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2.5" data-i18n="premium.compareTelegramAlerts">Telegram alerts</td>
+                            <td class="text-center py-2.5">—</td>
+                            <td class="text-center py-2.5 text-primary font-bold" data-i18n="premium.compareIncluded">Included</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Current Status -->
+        <div class="mt-12 bg-surface border border-borderSubtle rounded-[24px] p-6">
+                    <h3 class="font-bold text-secondary mb-4 flex items-center gap-2">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                        <span data-i18n="premium.membershipStatus">Membership Status</span>
+                    </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-background/50 p-4 rounded-xl">
+                    <div class="text-textMuted text-sm mb-1" data-i18n="premium.currentTier">Current Tier</div>
+                    <div class="font-bold text-secondary flex items-center gap-2">
+                        <span id="current-tier" data-i18n="premium.freeMember">Free Member</span>
+                        <span
+                            class="px-2 py-0.5 rounded-md bg-surfaceHighlight text-[10px] text-textMuted border border-borderSubtle uppercase"
+                            id="membership-badge"><span data-i18n="forum.premium.free">FREE</span></span>
+                    </div>
+                </div>
+
+                <div class="bg-background/50 p-4 rounded-xl">
+                    <div class="text-textMuted text-sm mb-1" data-i18n="premium.expiryTime">Expiry Date</div>
+                    <div class="font-bold text-secondary" id="expiry-date" data-i18n="premium.notYetActive">Not Yet Active</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="true"
+        class="fixed z-[110] flex flex-col gap-3 pointer-events-none bottom-4 left-4 right-4 items-center md:bottom-auto md:top-24 md:left-auto md:right-4 md:items-end"
+        style="bottom: var(--shell-toast-bottom, calc(1rem + env(safe-area-inset-bottom, 0px)));"></div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal"
+        class="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div
+            class="bg-surface w-full max-w-sm max-h-[80dvh] overflow-y-auto custom-scrollbar p-6 rounded-3xl border border-borderLight shadow-2xl transform transition-all scale-100 opacity-100">
+            <div id="confirm-modal-icon"
+                class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 bg-primary/10">
+                <i data-lucide="shield-check" class="w-8 h-8 text-primary"></i>
+            </div>
+            <h3 id="confirm-modal-title" class="text-xl font-bold text-center text-secondary mb-2"><span data-i18n="common.confirm">Confirm</span></h3>
+            <p id="confirm-modal-message" class="text-textMuted text-center text-sm mb-6" data-i18n="common.confirmQuestion">Are you sure?</p>
+            <div id="confirm-modal-buttons" class="flex gap-3">
+                <button id="confirm-modal-cancel"
+                    class="flex-1 py-3 bg-surfaceHighlight hover:bg-surfaceHighlight text-textMuted font-bold rounded-2xl transition border border-borderSubtle">Cancel</button>
+                <button id="confirm-modal-confirm"
+                    class="flex-1 py-3 bg-primary hover:brightness-110 text-background font-bold rounded-2xl transition shadow-lg"><span data-i18n="common.confirm">Confirm</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="/js/pages/forum-premium.js"></script>
+    <script src="/static/forum/js/premium-page.js?v=1"></script>
+
+    <!-- Footer -->
+    <footer class="bg-surface/95 border-t border-borderSubtle mt-12 py-8">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-center md:text-left">
+                    <p class="text-xs text-textMuted" data-i18n="common.copyright">© 2026 CryptoMind. All rights reserved.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="/static/legal/terms-of-service.html"
+                        class="text-xs text-textMuted hover:text-primary transition"><span data-i18n="forum.c.terms">Terms of Service</span></a>
+                    <a href="/static/legal/privacy-policy.html"
+                        class="text-xs text-textMuted hover:text-primary transition"><span data-i18n="forum.c.privacy">Privacy Policy</span></a>
+                    <a href="/static/legal/community-guidelines.html"
+                        class="text-xs text-textMuted hover:text-primary transition"><span data-i18n="forum.c.guidelines">Community Guidelines</span></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- 子頁主題切換鈕（右上角） -->
+    <script src="/js/components/ThemeToggle.js"></script>
+    <script src="/js/site-sidebar.js?v=4"></script>
+</body>
+
+</html>

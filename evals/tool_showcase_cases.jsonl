@@ -1,0 +1,74 @@
+{"q": "台積電現在多少", "expect": ["tw_stock"]}
+{"q": "台股今天怎麼樣", "expect": ["tw_stock"]}
+{"q": "外資最近買超哪些股票", "expect": ["tw_stock"]}
+{"q": "2330 技術面如何", "expect": ["tw_stock"]}
+{"q": "加權指數今天收盤", "expect": ["tw_stock"]}
+{"q": "0050 的殖利率是多少", "expect": ["tw_stock"]}
+{"q": "鴻海最近月營收", "expect": ["tw_stock"]}
+{"q": "三大法人今天買賣超", "expect": ["tw_stock"]}
+{"q": "台积电的三大法人买卖超", "expect": ["tw_stock"]}
+{"q": "NVDA 最近財報如何", "expect": ["us_stock"]}
+{"q": "美股今天為什麼跌", "expect": ["us_stock"]}
+{"q": "納斯達克現在多少", "expect": ["us_stock"]}
+{"q": "AAPL 的內部人交易", "expect": ["us_stock"]}
+{"q": "特斯拉本益比合理嗎", "expect": ["us_stock"]}
+{"q": "TSLA 技術分析", "expect": ["us_stock"]}
+{"q": "道瓊指數今天", "expect": ["us_stock"]}
+{"q": "日經指數今天如何", "expect": ["global_stock"]}
+{"q": "港股恆生指數現在", "expect": ["global_stock"]}
+{"q": "騰訊最近財報", "expect": ["global_stock"]}
+{"q": "韓股 KOSPI 今天", "expect": ["global_stock"]}
+{"q": "BTC 技術分析", "expect": ["crypto"]}
+{"q": "比特幣資金費率多少", "expect": ["crypto"]}
+{"q": "ETH 現在多少", "expect": ["crypto"]}
+{"q": "恐慌貪婪指數今天", "expect": ["crypto"]}
+{"q": "最近哪些代幣要解鎖", "expect": ["crypto"]}
+{"q": "山寨幣最近有什麼熱門", "expect": ["crypto"]}
+{"q": "比特币现在多少钱", "expect": ["crypto"]}
+{"q": "bitcoin price analysis", "expect": ["crypto"]}
+{"q": "黃金現在多少", "expect": ["commodity"]}
+{"q": "原油價格走勢", "expect": ["commodity"]}
+{"q": "白銀跟黃金的比值", "expect": ["commodity"]}
+{"q": "美元兌日圓匯率", "expect": ["forex"]}
+{"q": "今天美金匯率", "expect": ["forex"]}
+{"q": "歐元對美元", "expect": ["forex"]}
+{"q": "聯準會升息機率", "expect": ["macro"]}
+{"q": "VIX 現在多少", "expect": ["macro"]}
+{"q": "CPI 什麼時候公布", "expect": ["macro"]}
+{"q": "這週有什麼經濟日曆", "expect": ["macro"]}
+{"q": "這個合約地址安全嗎 0xdAC17F958D2ee523a2206206994597C13D831ec7", "expect": ["onchain"]}
+{"q": "鏈上巨鯨最近動向", "expect": ["onchain"]}
+{"q": "這個代幣是不是蜜罐", "expect": ["crypto", "onchain"]}
+{"q": "ETH gas 現在貴嗎", "expect": ["crypto", "onchain"]}
+{"q": "台積電和 NVDA 誰比較強", "expect": ["tw_stock", "us_stock"]}
+{"q": "BTC 和黃金哪個比較抗通膨", "expect": ["commodity", "crypto", "macro"]}
+{"q": "比特幣和美股的相關性", "expect": ["crypto", "us_stock"]}
+{"q": "美股和台股今天誰強", "expect": ["tw_stock", "us_stock"]}
+{"q": "聯準會降息對黃金的影響", "expect": ["commodity", "macro"]}
+{"q": "你好", "expect": []}
+{"q": "今天天氣如何", "expect": []}
+{"q": "幫我寫一首詩", "expect": []}
+{"q": "幫我記一筆午餐 120 元", "expect": []}
+{"q": "提醒我明天看台積電財報", "expect": []}
+{"q": "我的持倉損益是多少", "expect": []}
+{"q": "我持有 BTC 今天賺多少", "expect": []}
+{"q": "分析我的投資組合", "expect": []}
+{"q": "台積電今天股價，順便幫我記到行事曆", "expect": []}
+{"q": "我看多 BTC 未來 30 天，幫我記下這個判斷", "expect": []}
+{"q": "你還記得我的偏好嗎", "expect": []}
+{"q": "新增一個分析技能", "expect": []}
+{"q": "幫我綁定錢包", "expect": []}
+{"q": "刪除剛剛那筆帳本", "expect": []}
+{"q": "A股今天如何", "expect": []}
+{"q": "XYZ 公司股價多少", "expect": []}
+{"q": "什麼是本益比", "expect": []}
+{"q": "台積電 NVDA BTC 黃金 哪個比較值得投資", "expect": []}
+{"q": "台股美股比特幣黃金匯率今天一次告訴我", "expect": []}
+{"q": "what is the best method for learning", "expect": []}
+{"q": "gasoline prices at the station", "expect": []}
+{"q": "I fed the cat", "expect": []}
+{"q": "will the fed cut rates", "expect": ["macro"]}
+{"q": "這是一個很長的問題：請你根據以下文章內容幫我整理重點並提供意見，文章內容如下，台積電本季法說會提到先進製程需求強勁，資本支出上調，美國廠進度順利，日本廠預計量產，歐洲廠規劃中，同時也提到匯率對毛利率的影響，外資對此看法分歧，市場關注聯準會降息時點與通膨數據走勢", "expect": []}
+{"q": "", "expect": []}
+{"q": "台積電在台股的收盤價，和它在美國掛牌的 ADR 價格差多少", "expect": ["tw_stock", "us_stock"]}
+{"q": "台積電今年的股價表現，順便用網路查一下它最新法說會的重點", "expect": ["tw_stock"]}

@@ -1,0 +1,35 @@
+name: Safety Kernel CI
+
+# 審查核心（safety_kernel/）的獨立驗證：
+#  - 純規則單元測試（不依賴主平台/DB/網路）
+#  - ruff lint
+# 同步鏡像到公開 repo 時，此 workflow 也會一起帶過去（該 repo 的 CI 用同內容）。
+# 公開 repo 版本：safety_kernel/.github/workflows/ci.yml（鏡像時由 export 腳本放入）。
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "safety_kernel/**"
+
+jobs:
+  kernel-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest ruff
+
+      - name: Ruff check (kernel only)
+        run: ruff check safety_kernel
+
+      - name: Kernel unit tests
+        run: python -m pytest safety_kernel/tests -v

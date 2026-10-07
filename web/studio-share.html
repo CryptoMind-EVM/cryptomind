@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposal Version History — CryptoMind Studio</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" href="/static/img/title_icon.png">
+    <link rel="stylesheet" href="/static/styles.css?v=46">
+    <link rel="stylesheet" href="/static/css/tailwind-built.css?v=52">
+    <style>
+        body { background: rgb(var(--color-background)); color: rgb(var(--color-text-primary)); }
+        .card { background: rgb(var(--color-surface)); border: 1px solid rgb(var(--color-border-subtle) / .1); border-radius: 1rem; }
+        .badge { font-size: 10px; padding: 2px 8px; border-radius: 9999px; }
+        .src-human { background: rgb(var(--color-success) / .15); color: rgb(var(--color-success)); }
+        .src-ai { background: rgb(var(--color-primary) / .15); color: rgb(var(--color-primary)); }
+        .src-auto { background: rgb(var(--color-surface-highlight)); color: rgb(var(--color-text-muted)); }
+        .vbtn { font-size: 10px; padding: 4px 8px; border-radius: 6px; background: rgb(var(--color-surface-highlight)); color: rgb(var(--color-text-muted)); border: none; cursor: pointer; }
+        .aimark { background: rgb(var(--color-primary) / .22); color: inherit; padding: 1px 3px; border-radius: 4px; }
+        .vbtn:hover { color: rgb(var(--color-text-secondary)); }
+        details > summary { cursor: pointer; list-style: none; }
+        pre.md { white-space: pre-wrap; font-family: inherit; font-size: 13px; }
+        pre.diff { font-family: 'JetBrains Mono', monospace; font-size: 11px; white-space: pre-wrap; max-height: 300px; overflow: auto; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="max-w-2xl mx-auto px-4 py-10">
+        <header class="mb-6 flex items-center gap-3">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgb(var(--color-primary))" stroke-width="2"><path d="M12 3v18M3 12h18" opacity="0"/><path d="M4 20h16M6 20V10l6-5 6 5v10"/></svg>
+            <div>
+                <h1 id="title" class="text-xl font-semibold">…</h1>
+                <p id="subtitle" class="text-xs opacity-60 mt-0.5"></p>
+            </div>
+        </header>
+
+        <div id="error" class="hidden card p-6 text-center text-sm opacity-70"></div>
+
+        <div id="content" class="hidden space-y-6">
+            <div class="card p-4">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-medium opacity-60" id="curve-label"></span>
+                    <span class="text-xs opacity-60" id="curve-range"></span>
+                </div>
+                <div id="curve"></div>
+            </div>
+
+            <div id="versions" class="space-y-2"></div>
+            <div id="diff-box" class="card p-3 hidden"></div>
+
+            <p class="text-xs opacity-50 text-center" id="footer-note"></p>
+        </div>
+    </div>
+
+<script src="/static/studio-share.js?v=1"></script>
+</body>
+</html>

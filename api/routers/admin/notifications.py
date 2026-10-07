@@ -1,0 +1,170 @@
+"""
+Admin Notification Management
+Broadcast and notification history endpoints
+"""
+
+import asyncio
+import json
+import logging
+import uuid
+
+from fastapi import APIRouter, Depends, Query, Request
+from sqlalchemy import func, select, text
+
+from api.deps import require_admin
+from api.middleware.rate_limit import limiter
+from api.routers.notifications import notification_manager, push_notification_to_user
+from core.orm import AdminBroadcast, Notification
+from core.orm.config_repo import _write_audit_log
+from core.orm.session import get_session_factory
+
+from .schemas import BroadcastRequest
+
+logger = logging.getLogger(__name__)
+router = APIRouter(tags=["Admin - Notifications"])
+
+
+@router.post("/notifications/broadcast")
+@limiter.limit("5/minute")
+async def broadcast_notification(
+    request: Request, req: BroadcastRequest, admin_user: dict = Depends(require_admin)
+):
+    """發送廣播通知給所有活躍用戶"""
+
+    factory = get_session_factory()
+    async with factory() as session:
+        result = await session.execute(
+            text(
+                "SELECT user_id FROM users WHERE is_active = TRUE OR is_active IS NULL"
+            )
+        )
+        user_ids = [row[0] for row in result.fetchall()]
+
+    if not user_ids:
+        return {"success": True, "sent_count": 0, "online_count": 0}
+
+    sent_count = 0
+
+    factory = get_session_factory()
+    async with factory() as session:
+        notifications = [
+            Notification(
+                id=f"notif_{uuid.uuid4().hex[:12]}",
+                user_id=uid,
+                type=req.type,
+                title=req.title,
+                body=req.body,
+                data={"admin_user_id": admin_user["user_id"]},
+                is_read=False,
+            )
+            for uid in user_ids
+        ]
+        session.add_all(notifications)
+        await session.flush()
+        # commit 不可省（2026-09-07 線上實證：admin_broadcasts 與 notifications
+        # 兩張表 0 行＝廣播從上線起從未真正落地，API 卻回假成功——session
+        # 關閉時 flush 過的寫入全部回滾）
+        await session.commit()
+        sent_count = len(notifications)
+
+    async def _push(uid):
+        if uid in notification_manager.active_connections:
+            try:
+                await push_notification_to_user(
+                    uid,
+                    {
+                        "type": req.type,
+                        "title": req.title,
+                        "body": req.body,
+                    },
+                )
+                return True
+            except (asyncio.CancelledError, KeyboardInterrupt, SystemExit):
+                raise
+            except Exception:
+                logger.debug(
+                    "Broadcast websocket push failed for user %s", uid, exc_info=True
+                )
+        return False
+
+    results = await asyncio.gather(*[_push(uid) for uid in user_ids])
+    online_count = sum(1 for r in results if r)
+
+    factory = get_session_factory()
+    async with factory() as session:
+        broadcast = AdminBroadcast(
+            admin_user_id=admin_user["user_id"],
+            title=req.title,
+            body=req.body,
+            type=req.type,
+            recipient_count=sent_count,
+        )
+        session.add(broadcast)
+        await _write_audit_log(
+            session,
+            "broadcast",
+            None,
+            json.dumps(
+                {
+                    "title": req.title,
+                    "type": req.type,
+                    "recipients": sent_count,
+                }
+            ),
+            admin_user["user_id"],
+        )
+        await session.commit()  # 同上：廣播歷史與 audit 都要真的落地
+
+    return {"success": True, "sent_count": sent_count, "online_count": online_count}
+
+
+@router.get("/notifications/history")
+async def get_broadcast_history(
+    page: int = Query(1, ge=1),
+    limit: int = Query(20, ge=1, le=100),
+    admin_user: dict = Depends(require_admin),
+):
+    """獲取廣播歷史紀錄"""
+    offset = (page - 1) * limit
+
+    factory = get_session_factory()
+    async with factory() as session:
+        result = await session.execute(
+            select(
+                AdminBroadcast.id,
+                AdminBroadcast.admin_user_id,
+                AdminBroadcast.title,
+                AdminBroadcast.body,
+                AdminBroadcast.type,
+                AdminBroadcast.recipient_count,
+                AdminBroadcast.created_at,
+            )
+            .order_by(AdminBroadcast.created_at.desc())
+            .limit(limit)
+            .offset(offset)
+        )
+        rows = result.fetchall()
+
+        total_result = await session.execute(
+            select(func.count()).select_from(AdminBroadcast)
+        )
+        total = total_result.scalar()
+
+        return {
+            "success": True,
+            "broadcasts": [
+                {
+                    "id": r[0],
+                    "admin_user_id": r[1],
+                    "title": r[2],
+                    "body": r[3],
+                    "type": r[4],
+                    "recipient_count": r[5],
+                    "created_at": r[6].isoformat() if r[6] else None,
+                }
+                for r in rows
+            ],
+            "total": total,
+            "page": page,
+            "limit": limit,
+        }

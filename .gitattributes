@@ -1,0 +1,7 @@
+# cron 對 CRLF 零容忍，強制這些檔永遠 LF（不論貢獻者的 autocrlf 設定）。
+crontab.txt text eol=lf
+# deploy/：VM 上跑的 shell / systemd 檔必須 LF（CRLF 會讓 bash、systemd 解析失敗）
+deploy/vm/** text eol=lf
+deploy/host/cidata/* text eol=lf
+# PowerShell：CRLF；start-stack.ps1 有 BOM + 中文註解（PS 5.1 靠 BOM 判斷 UTF-8）
+deploy/**/*.ps1 text eol=crlf

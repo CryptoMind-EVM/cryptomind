@@ -1,0 +1,33 @@
+[
+  {
+    "id": "crypto_price_btc",
+    "input": "比特幣現在多少錢",
+    "expected": {
+      "status": "ready",
+      "user_intent": "查詢比特幣實時價格",
+      "entities": {"symbol": "BTC", "market": "crypto"},
+      "tasks": [{"agent": "crypto"}],
+      "aggregation_strategy": "combine_all"
+    }
+  },
+  {
+    "id": "vague_query",
+    "input": "推薦我一些股票",
+    "expected": {
+      "status": "clarify",
+      "clarification_question": "請問您想了解哪個市場的股票？台股、美股、還是加密貨幣？"
+    }
+  },
+  {
+    "id": "multi_task_analysis",
+    "input": "比特幣現在多少錢？還有最近有什麼新聞？",
+    "expected": {
+      "status": "ready",
+      "tasks": [
+        {"agent": "crypto", "name": "price_query"},
+        {"agent": "news", "name": "recent_news"}
+      ],
+      "aggregation_strategy": "combine_all"
+    }
+  }
+]

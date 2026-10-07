@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title data-i18n="seo.forumProfile">User Profile - CryptoMind Forum</title>
+    <link rel="icon" type="image/png" href="/static/img/title_icon.png">
+
+    <!-- Core Libraries -->
+    <link rel="stylesheet" href="/static/css/tailwind-built.css?v=52">
+    <script src="https://cdn.jsdelivr.net/npm/i18next@23.7.6/i18next.min.js" crossorigin="anonymous" integrity="sha384-OCCT+KZFt2FsqTxlTd8CUSq86zW/ZKmV0oe7qj36oye2CDbbVuxIXTY20t/u9LJt"></script>
+    <script src="https://unpkg.com/lucide@0.577.0" crossorigin="anonymous" integrity="sha384-orgVf2eX2+m1zKAOIi09hD0W6GtVhoOUmqDK+sysYB2JTZ4vS86j4jm+X7a4Nnei"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css?v=46">
+    <script src="/static/config.js"></script>
+    <script src="/static/js/logger.js"></script>
+    <script src="/static/js/click-delegator.js?v=3"></script>
+    <!-- TON Connect SDK loaded via main page -->
+    <!-- TON Connect SDK loaded via main page -->
+    <!-- early-init: 防 FOUC + 預設主題（與主站共用 localStorage.selectedTheme） -->
+    <script src="/js/early-init.js"></script>
+</head>
+
+<body class="bg-background text-textMain min-h-screen flex flex-col" data-page="profile">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-background/94 backdrop-blur-xl border-b border-borderSubtle pl-4 pr-16 py-3">
+        <div class="max-w-3xl mx-auto flex items-center justify-between">
+            <button data-click="handleProfileBack"
+                class="flex items-center gap-2 text-secondary font-bold hover:text-primary transition">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span><span data-i18n="legal.back">Back</span></span>
+            </button>
+            <div class="font-bold text-lg text-primary tracking-wide"><span data-i18n="forum.profile.title">User Profile</span></div>
+            <div class="w-20"></div>
+        </div>
+    </nav>
+
+    <!-- Toast Container -->
+    <div id="toast-container"
+        role="status" aria-live="polite" aria-atomic="true"
+        class="fixed z-[110] flex flex-col gap-3 pointer-events-none bottom-4 left-4 right-4 items-center md:bottom-auto md:top-6 md:right-6 md:left-auto md:w-80 md:items-end"
+        style="bottom: var(--shell-toast-bottom, calc(1rem + env(safe-area-inset-bottom, 0px)));">
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal"
+        class="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-surface border border-borderLight rounded-2xl p-6 max-w-sm w-full max-h-[80dvh] overflow-y-auto custom-scrollbar shadow-2xl">
+            <div id="confirm-modal-icon" class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+            </div>
+            <h3 id="confirm-modal-title" class="text-xl font-bold text-textMain text-center mb-2"></h3>
+            <p id="confirm-modal-message" class="text-textMuted text-center mb-6"></p>
+            <div class="flex gap-3">
+                <button id="confirm-cancel-btn"
+                    class="flex-1 py-3 rounded-xl font-bold bg-surfaceHighlight hover:bg-surfaceHighlight text-textMuted transition" data-i18n="common.cancel">Cancel</button>
+                <button id="confirm-ok-btn" class="flex-1 py-3 rounded-xl font-bold transition"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-3xl mx-auto w-full px-4 pt-5 pb-10 space-y-4">
+        <!-- Profile Header -->
+        <div id="profile-header" class="bg-surface rounded-[28px] px-6 py-6 relative overflow-hidden shadow-[0_14px_40px_rgba(0,0,0,0.18)]">
+            <div class="flex flex-col md:flex-row md:items-center gap-4">
+                <div id="public-profile-avatar"
+                    class="w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold flex-shrink-0">
+                    <div class="animate-pulse w-full h-full rounded-full bg-surfaceHighlight"></div>
+                </div>
+                <div class="flex-1">
+                    <div id="public-profile-username" class="text-2xl font-bold text-textMain mb-1">
+                        <div class="animate-pulse h-8 w-32 bg-surfaceHighlight rounded"></div>
+                    </div>
+                    <div id="profile-badges" class="flex items-center gap-2 mb-2"></div>
+                    <div id="profile-meta" class="text-sm text-textMuted">
+                        <div class="animate-pulse h-4 w-48 bg-surfaceHighlight rounded"></div>
+                    </div>
+                </div>
+                <div id="profile-actions" class="flex-shrink-0">
+                    <div class="animate-pulse w-24 h-10 bg-surfaceHighlight rounded-lg"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div class="bg-surface rounded-[20px] px-4 py-5 text-center shadow-[0_6px_18px_rgba(0,0,0,0.14)]">
+                <div id="stat-posts" class="text-2xl font-bold text-primary">-</div>
+                    <div class="text-xs text-textMuted mt-1" data-i18n="profile.posts">Posts</div>
+            </div>
+            <div class="bg-surface rounded-[20px] px-4 py-5 text-center shadow-[0_6px_18px_rgba(0,0,0,0.14)]">
+                <div id="stat-pushes" class="text-2xl font-bold text-success">-</div>
+                    <div class="text-xs text-textMuted mt-1" data-i18n="profile.likes">Likes</div>
+            </div>
+            <div class="bg-surface rounded-[20px] px-4 py-5 text-center shadow-[0_6px_18px_rgba(0,0,0,0.14)]">
+                <div id="stat-friends" class="text-2xl font-bold text-accent">-</div>
+                    <div class="text-xs text-textMuted mt-1" data-i18n="profile.friends">Friends</div>
+            </div>
+            <div class="bg-surface rounded-[20px] px-4 py-5 text-center shadow-[0_6px_18px_rgba(0,0,0,0.14)]">
+                <div id="stat-member" class="text-lg font-bold text-secondary">-</div>
+                    <div class="text-xs text-textMuted mt-1" data-i18n="profile.joinedAt">Joined</div>
+            </div>
+        </div>
+
+        <!-- User Posts -->
+        <div class="bg-surface rounded-[24px] overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.14)]">
+            <div class="px-6 py-4 border-b border-borderSubtle">
+                <h2 class="font-bold text-base text-textMain flex items-center gap-2">
+                    <i data-lucide="file-text" class="w-4 h-4 text-primary"></i>
+                    <span data-i18n="profile.recentPosts">Recent Posts</span>
+                </h2>
+            </div>
+            <div id="user-posts" class="divide-y divide-borderSubtle">
+                <div class="p-6 text-center text-textMuted">
+                    <div
+                        class="animate-spin w-6 h-6 border-2 border-primary border-t-transparent rounded-full mx-auto mb-2">
+                    </div>
+                    Loading...
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions Menu (for non-self profiles) -->
+        <div id="more-actions" class="hidden">
+            <div class="bg-surface rounded-[24px] overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.14)]">
+                <button id="block-btn"
+                    class="w-full px-6 py-4 text-left text-danger hover:bg-danger/10 transition flex items-center gap-3">
+                    <i data-lucide="ban" class="w-5 h-5"></i>
+                    <span><span data-i18n="forum.profile.block">Block User</span></span>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Scripts -->
+    <script type="module" src="/js/pages/forum-profile.js"></script>
+    <script src="/static/forum/js/profile-page.js?v=5"></script>
+
+    <!-- Footer -->
+    <footer class="bg-surface/95 border-t border-borderSubtle mt-12 py-8">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-center md:text-left">
+                    <p class="text-xs text-textMuted" data-i18n="common.copyright">© 2026 CryptoMind. All rights reserved.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="/static/legal/terms-of-service.html"
+                        class="text-xs text-textMuted hover:text-primary transition"><span data-i18n="forum.c.terms">Terms of Service</span></a>
+                    <a href="/static/legal/privacy-policy.html"
+                        class="text-xs text-textMuted hover:text-primary transition"><span data-i18n="forum.c.privacy">Privacy Policy</span></a>
+                    <a href="/static/legal/community-guidelines.html"
+                        class="text-xs text-textMuted hover:text-primary transition"><span data-i18n="forum.c.guidelines">Community Guidelines</span></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- 子頁主題切換鈕（右上角） -->
+    <script src="/js/components/ThemeToggle.js"></script>
+    <script src="/js/site-sidebar.js?v=4"></script>
+</body>
+
+</html>

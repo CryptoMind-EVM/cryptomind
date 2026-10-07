@@ -1,0 +1,162 @@
+name: CI
+
+# 2026-09-05：拔掉 push:develop 觸發——PR 已對同一 commit 跑過整套檢查，
+# merge 後重跑是純重複（2026-09 帳面：33 次 push 執行 ≈ 165 分鐘白燒）。
+#
+# 2026-09-06：額度 2,000/2,000 見底後再砍一輪。PR 觸發從 **6 個 job 併行**
+# 收斂成 1 個 gate job。原本每個 PR 要付 6 次 runner 起機 + 6 次 checkout +
+# 4 次 pip install，而檢查本身大量重疊：
+#
+#   ci.yml::lint            ruff check .                    ← 保留
+#   ci.yml::test            pytest -m "not e2e"             ← 保留（最有價值的一個）
+#   ci.yml::validate-json   i18n JSON 合法性                 ← 保留（秒級）
+#   test-suite::python-tests  4 個測試檔                     ← **完全重複**：上面那個
+#                                                              全量已經包含它們
+#                           4 個 script 檢查                 ← 保留
+#                           pip-audit                        ← 移到週檢
+#                                                             （dependency-weekly-audit）
+#   test-suite::e2e-tests   Playwright + npm build           ← 移到 dispatch（最貴）
+#
+# kernel-ci.yml 不動：它已經有 `paths: safety_kernel/**` 過濾，多數 PR 根本
+# 不觸發。把它併進 gate 反而會讓每個 PR 都付這筆——那是增加成本不是減少。
+#
+# 要跑完整的（含 e2e）：Actions 頁對 test-suite.yml 按 Run workflow。
+on:
+  pull_request:
+    branches: [develop]
+  workflow_dispatch:
+
+jobs:
+  gate:
+    name: gate（lint + 靜態檢查 + 測試）
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://test:test@localhost:5432/test
+      REDIS_URL: memory://
+      SECRET_KEY: test-secret-key-for-testing
+      JWT_SECRET_KEY: test-jwt-secret-key-for-testing-1234567890
+      TEST_MODE: "true"
+      TEST_MODE_CONFIRMATION: I_UNDERSTAND_THE_RISKS
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      # test_build_css_fresh 需要 tailwindcss binary——沒裝 node_modules 時
+      # npm run build:css 必然 exit 1（2026-09-02 起 develop 紅燈的根因）。
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install ruff pytest pytest-cov pytest-asyncio pytest-xdist
+
+      # ── 秒級檢查先跑：壞了就不用付後面幾分鐘的測試時間 ──────────────
+      - name: Ruff check
+        run: ruff check .
+
+      - name: Ruff format check
+        run: ruff format --check .
+        continue-on-error: true  # 255 檔尚未符合 format;待全 repo format 整修後移除
+
+      - name: Validate i18n JSON files
+        run: |
+          python -c "
+          import json, pathlib, sys
+          files = list(pathlib.Path('web/js/i18n').glob('*.json'))
+          errors = []
+          for f in files:
+              try:
+                  json.load(open(f, encoding='utf-8'))
+              except json.JSONDecodeError as e:
+                  errors.append(f'{f}: {e}')
+                  print(f'FAIL: {f} - {e}')
+          if errors:
+              sys.exit(1)
+          print(f'All {len(files)} i18n JSON files are valid.')
+          "
+
+      - name: Check static asset references
+        run: python scripts/check_static_refs.py
+
+      - name: Check static asset version consistency
+        run: python scripts/check_asset_versions.py
+
+      - name: Check i18n key alignment
+        run: python scripts/check_i18n_keys.py
+
+      - name: Scan hardcoded Chinese in frontend
+        run: python scripts/scan_hardcoded_chinese.py
+        # 2026-09-05 實測仍有 index.html 31 處、evm-walletconnect.js 27 處。
+        # 這是 i18n 債不是新缺陷，清完再拔掉本行。**不要因為它紅就忽略整條
+        # workflow**——其餘檢查已改為真閘門。
+        continue-on-error: true
+
+      # ── 主閘門 ────────────────────────────────────────────────────────
+      - name: Run tests (skip e2e and integration)
+        run: |
+          # -n auto: 平行跑(依 runner 核數)。完整套件 3,243 測試、12-20 分鐘,
+          # 主因是每個測試重複初始化 app(import FastAPI+LangGraph),測試邏輯本身 <1s。
+          # xdist 平行後實測 246s → 89s(2.8x),CI 預期 12min → ~4-5min。
+          pytest -o addopts='-v --tb=short --no-cov' -m "not e2e and not integration" -n auto
+
+  create-pr:
+    runs-on: ubuntu-latest
+    needs: [gate]
+    # 2026-09-05：push 觸發移除後，release PR（develop→main）改由手動
+    # dispatch 觸發——在 Actions 頁對 develop 按 Run workflow 即可。
+    if: github.ref_name == 'develop' && github.event_name == 'workflow_dispatch'
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Create Pull Request to main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_EXISTS=$(gh pr list --head develop --base main --state open --json number -q '.[0].number')
+          if [ -n "$PR_EXISTS" ]; then
+            echo "PR already exists: #$PR_EXISTS. Skipping."
+            exit 0
+          fi
+          # 建 PR 失敗**不擋 CI**：唯一已知的失敗原因是 repo 設定沒開
+          # （GitHub Actions is not permitted to create or approve pull requests），
+          # 那不是「程式碼有問題」。但它會讓每次推 develop 都亮紅燈，而紅燈
+          # 一旦不代表壞掉，人就會開始忽略紅燈——2026-09-05 的 smoke.yml 正是
+          # 這樣每天紅一次紅了 20 次沒人看。改成大聲警告 + 明確指路。
+          if ! gh pr create \
+              --title "Release: merge develop into main (CI passed)" \
+              --body "This PR was automatically created by GitHub Actions because all tests and CI checks passed on the develop branch. Please review and merge to deploy to production." \
+              --base main \
+              --head develop 2> /tmp/pr_err.txt; then
+            echo "::warning title=Release PR 未建立::$(cat /tmp/pr_err.txt | tail -1)"
+            echo "::warning::測試全過，只是無法自動開發版 PR。"
+            echo "::warning::修法：Settings → Actions → General → Workflow permissions"
+            echo "::warning::      勾選「Allow GitHub Actions to create and approve pull requests」"
+          fi

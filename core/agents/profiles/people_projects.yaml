@@ -1,0 +1,25 @@
+id: people_projects
+version: "1.1.0"
+display_name: "People & Projects"
+description: "人物、募款、公共利益專案、留言與資金進度"
+tier: free
+capabilities:
+  - discover
+  - project_detail
+  - comments_summary
+  - person_lookup
+  - advanced_funds
+default_analysis_mode: quick
+default_action_policy: read_only
+allowed_data_sources:
+  - manifund_mcp
+  - web
+allowed_tool_categories:
+  - general
+  - news
+default_skills: []
+required_tools:
+  - search_projects
+  - get_project
+  - search_users
+  - get_user

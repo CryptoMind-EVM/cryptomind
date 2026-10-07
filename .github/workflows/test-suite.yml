@@ -1,0 +1,114 @@
+name: Test Suite
+
+# 2026-09-05：拔掉 push:develop 觸發——PR 已對同一 commit 跑過整套檢查，
+# merge 後重跑是純重複（2026-09 帳面：33 次 push 執行 ≈ 130 分鐘白燒）。
+# 2026-09-06：PR 觸發移除（額度見底）。內容併進 ci.yml 的 gate job——
+# python-tests 的 4 個測試檔本來就被 gate 的全量包含，script 檢查已搬過去，
+# pip-audit 移到 dependency-weekly-audit.yml。這裡留下**完整版（含 e2e）**
+# 供手動跑：Actions 頁按 Run workflow。合版前、上線前各跑一次。
+on:
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  python-tests:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+      DATABASE_URL: postgresql://test:test@localhost:5432/test
+      REDIS_URL: memory://
+      SECRET_KEY: test-secret-key-for-testing
+      JWT_SECRET_KEY: test-jwt-secret-key-for-testing-1234567890
+      TEST_MODE: "true"
+      TEST_MODE_CONFIRMATION: I_UNDERSTAND_THE_RISKS
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-asyncio pip-audit playwright
+
+      - name: Run dependency vulnerability audit
+        run: |
+          pip-audit -r requirements.txt --no-deps --disable-pip
+        continue-on-error: true
+
+      - name: Run critical backend tests
+        run: |
+          pytest -o addopts='' \
+            tests/test_analysis_policy.py \
+            tests/test_analysis_response_metadata.py \
+            tests/test_api_models.py \
+            tests/test_tool_system_v2.py \
+            -q
+
+      - name: Check static asset references
+        run: python scripts/check_static_refs.py
+
+      - name: Check static asset version consistency
+        run: python scripts/check_asset_versions.py
+
+      - name: Check i18n key alignment
+        run: python scripts/check_i18n_keys.py
+
+      - name: Scan hardcoded Chinese in frontend
+        run: python scripts/scan_hardcoded_chinese.py
+        # 2026-09-05 實測仍有 index.html 31 處、evm-walletconnect.js 27 處。
+        # 這是 i18n 債不是新缺陷，清完再拔掉本行。**不要因為它紅就忽略整條
+        # workflow**——其餘檢查已改為真閘門。
+        continue-on-error: true
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+      DATABASE_URL: postgresql://test:test@localhost:5432/test
+      REDIS_URL: memory://
+      SECRET_KEY: test-secret-key-for-testing
+      JWT_SECRET_KEY: test-jwt-secret-key-for-testing-1234567890
+      TEST_MODE: "true"
+      TEST_MODE_CONFIRMATION: I_UNDERSTAND_THE_RISKS
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-asyncio playwright
+
+      - name: Build frontend
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+
+      - name: Install Playwright browsers
+        run: python -m playwright install chromium
+
+      # 2026-09-05：拔掉 continue-on-error。#624 已經從 e2e.yml 拔過一次，
+      # 但這份還留著一份——「Test Suite 14 次全綠」其實是六個檢查不能讓它
+      # 失敗換來的。本機實跑 46 passed 才拔。
+      - name: Run E2E tests
+        run: |
+          pytest -o addopts='' \
+            tests/e2e/test_static_asset_load_smoke.py \
+            -q

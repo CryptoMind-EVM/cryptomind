@@ -1,0 +1,134 @@
+{
+  "_comment": "zh-TW 產品用語 → 現行 en／ru 譯法（取自 web/js/i18n 目前使用者看到的字，同義多譯時取多數）。scripts/i18n/translate.py 每次都把整份放進 prompt。改譯法先改這裡；已翻好的舊字串不會自動重翻。note 會一起送給 LLM。",
+  "CryptoMind": {
+    "en": "CryptoMind",
+    "ru": "CryptoMind"
+  },
+  "投資帳本": {
+    "en": "Investment Journal",
+    "ru": "Инвестиционный журнал"
+  },
+  "帳本": {
+    "en": "ledger",
+    "ru": "журнал"
+  },
+  "每日早報": {
+    "en": "Daily brief",
+    "ru": "Ежедневная сводка"
+  },
+  "早報": {
+    "en": "daily brief",
+    "ru": "сводка"
+  },
+  "行事曆": {
+    "en": "Calendar",
+    "ru": "Календарь"
+  },
+  "判斷": {
+    "en": "call",
+    "ru": "прогноз",
+    "note": "a user's own recorded bullish/bearish market call, e.g. 記一筆判斷 = Record a call"
+  },
+  "判斷成績": {
+    "en": "scorecard",
+    "ru": "результаты",
+    "note": "我的判斷成績 = My scorecard / Мои результаты"
+  },
+  "判斷評分": {
+    "en": "call scoring",
+    "ru": "оценка прогнозов"
+  },
+  "詐騙查詢": {
+    "en": "Scam Checker",
+    "ru": "Проверка скама"
+  },
+  "詐騙檢查": {
+    "en": "Scam Check",
+    "ru": "Проверка скама",
+    "note": "2026-09-27 起是 SPA 分頁名（nav.scamcheck）"
+  },
+  "詐騙": {
+    "en": "scam",
+    "ru": "скам"
+  },
+  "自帶金鑰": {
+    "en": "your own API key",
+    "ru": "свой API-ключ",
+    "note": "BYOK = bring your own key; keep the acronym BYOK as is"
+  },
+  "API Key": {
+    "en": "API key",
+    "ru": "API-ключ"
+  },
+  "金鑰": {
+    "en": "key",
+    "ru": "ключ"
+  },
+  "訪客模式": {
+    "en": "guest mode",
+    "ru": "гостевой режим"
+  },
+  "訪客": {
+    "en": "guest",
+    "ru": "гость"
+  },
+  "確認卡": {
+    "en": "confirmation card",
+    "ru": "карточка подтверждения",
+    "note": "the approval card shown before the AI writes or runs something on the user's behalf"
+  },
+  "同意卡": {
+    "en": "confirmation card",
+    "ru": "карточка подтверждения",
+    "note": "same UI as 確認卡"
+  },
+  "錢包": {
+    "en": "wallet",
+    "ru": "кошелёк"
+  },
+  "Premium 會員": {
+    "en": "Premium Membership",
+    "ru": "Premium-членство"
+  },
+  "會員": {
+    "en": "membership",
+    "ru": "членство",
+    "note": "when it means the person: en member, ru участник"
+  },
+  "Premium": {
+    "en": "Premium",
+    "ru": "Premium"
+  },
+  "深度分析": {
+    "en": "Deep Analysis",
+    "ru": "Глубокий анализ"
+  },
+  "分析技能": {
+    "en": "Analysis Skills",
+    "ru": "Навыки анализа"
+  },
+  "技能": {
+    "en": "skill",
+    "ru": "навык"
+  },
+  "自選股": {
+    "en": "Watchlist",
+    "ru": "Список наблюдения"
+  },
+  "論壇": {
+    "en": "Forum",
+    "ru": "Форум"
+  },
+  "市場脈動": {
+    "en": "Market Pulse",
+    "ru": "ИИ-пульс"
+  },
+  "信任分數": {
+    "en": "trust score",
+    "ru": "рейтинг доверия"
+  },
+  "非投資建議": {
+    "en": "not investment advice",
+    "ru": "не инвестиционная рекомендация"
+  }
+}

@@ -1,0 +1,486 @@
+"""
+Comprehensive Audit Logging System
+
+Logs all sensitive operations for security monitoring, compliance, and debugging.
+Supports both automatic middleware-based logging and manual action logging.
+"""
+
+import asyncio
+import json
+from datetime import datetime, timedelta, timezone
+from typing import Any, Dict, Optional
+
+from fastapi import Request
+
+from api.utils import logger
+from core.orm import AuditLog
+from core.orm.session import get_session_factory
+
+# 保留 fire-and-forget audit write task 的強引用,避免被 Python GC 中斷
+# (CPython 3.11+ 對未持有的 asyncio.Task 可能弱引用導致中途被回收)
+_audit_write_tasks: set = set()
+
+
+class AuditLogger:
+    """
+    Centralized audit logging system
+
+    Provides methods to log security-sensitive operations to the database
+    for compliance, monitoring, and incident investigation.
+    """
+
+    # Actions that are considered sensitive and require extra attention
+    SENSITIVE_ACTIONS = {
+        "login",
+        "logout",
+        "dev_login",
+        "tip_post",
+        "upgrade_premium",
+        "delete_post",
+        "delete_user",
+        "ban_user",
+        "block_user",
+        "admin_action",
+        "permission_change",
+        "config_change",
+        "create_post",
+        "update_post",
+        "send_friend_request",
+        "create_scam_report",
+        # Trustworthy AI — Principal: 暱稱變更 = 身份變更，需可追溯
+        "rename_display_name",
+        # Trustworthy AI — Policy Gate + Audit Log: Consent Gate 決定與 high-risk
+        # tool 執行，必須可追溯（誰同意了什麼、high-risk tool 何時被呼叫）。
+        "consent_high_risk_action",
+        "high_risk_tool_executed",
+        # Trustworthy AI — 使用者確認 AI 詐騙判定（高影響力、不可逆金錢決策）
+        "scam_verdict_confirmed",
+        # Trustworthy AI — Expiry/Revocation：使用者撤銷執行中 agent 的授權
+        "agent_revoked",
+    }
+
+    @staticmethod
+    def _normalize_action(action: Optional[str]) -> str:
+        """Normalize action names so audit records use one convention."""
+        normalized = (
+            (action or "unknown_action")
+            .strip()
+            .lower()
+            .replace("-", "_")
+            .replace(" ", "_")
+        )
+        while "__" in normalized:
+            normalized = normalized.replace("__", "_")
+        return normalized or "unknown_action"
+
+    @staticmethod
+    def is_sensitive_action(action: Optional[str]) -> bool:
+        """Return whether an action should be persisted in the audit table."""
+        return AuditLogger._normalize_action(action) in AuditLogger.SENSITIVE_ACTIONS
+
+    @staticmethod
+    def _prepare_payload(
+        action: str,
+        user_id: Optional[str] = None,
+        username: Optional[str] = None,
+        resource_type: Optional[str] = None,
+        resource_id: Optional[str] = None,
+        endpoint: Optional[str] = None,
+        method: Optional[str] = None,
+        ip_address: Optional[str] = None,
+        user_agent: Optional[str] = None,
+        request_data: Optional[Dict] = None,
+        response_code: Optional[int] = None,
+        success: bool = True,
+        error_message: Optional[str] = None,
+        duration_ms: Optional[int] = None,
+        metadata: Optional[Dict] = None,
+    ) -> tuple:
+        sanitized_data = _sanitize_request_data(request_data) if request_data else None
+        normalized_action = AuditLogger._normalize_action(action)
+        normalized_endpoint = endpoint or "system://internal"
+        normalized_method = (method or "SYSTEM").upper()
+
+        return (
+            user_id,
+            username,
+            normalized_action,
+            resource_type,
+            resource_id,
+            normalized_endpoint,
+            normalized_method,
+            ip_address,
+            user_agent,
+            json.dumps(sanitized_data) if sanitized_data else None,
+            response_code,
+            success,
+            error_message,
+            duration_ms,
+            json.dumps(metadata) if metadata else None,
+        )
+
+    @staticmethod
+    def log(
+        action: str,
+        user_id: Optional[str] = None,
+        username: Optional[str] = None,
+        resource_type: Optional[str] = None,
+        resource_id: Optional[str] = None,
+        endpoint: Optional[str] = None,
+        method: Optional[str] = None,
+        ip_address: Optional[str] = None,
+        user_agent: Optional[str] = None,
+        request_data: Optional[Dict] = None,
+        response_code: Optional[int] = None,
+        success: bool = True,
+        error_message: Optional[str] = None,
+        duration_ms: Optional[int] = None,
+        metadata: Optional[Dict] = None,
+    ):
+        """
+        Log an audit event to the database
+
+        Args:
+            action: The action being performed (e.g., 'login', 'payment_approve')
+            user_id: ID of the user performing the action
+            username: Username of the user
+            resource_type: Type of resource being acted upon (e.g., 'post', 'user')
+            resource_id: ID of the specific resource
+            endpoint: API endpoint path
+            method: HTTP method (GET, POST, etc.)
+            ip_address: Client IP address
+            user_agent: Client user agent string
+            request_data: Sanitized request data (sensitive fields removed)
+            response_code: HTTP response code
+            success: Whether the operation succeeded
+            error_message: Error message if failed
+            duration_ms: Request processing time in milliseconds
+            metadata: Additional context-specific data
+        """
+        import asyncio
+
+        try:
+            payload = AuditLogger._prepare_payload(
+                action=action,
+                user_id=user_id,
+                username=username,
+                resource_type=resource_type,
+                resource_id=resource_id,
+                endpoint=endpoint,
+                method=method,
+                ip_address=ip_address,
+                user_agent=user_agent,
+                request_data=request_data,
+                response_code=response_code,
+                success=success,
+                error_message=error_message,
+                duration_ms=duration_ms,
+                metadata=metadata,
+            )
+
+            async def _write_async():
+                try:
+                    factory = get_session_factory()
+                    async with factory() as session:
+                        session.add(
+                            AuditLog(
+                                user_id=payload[0],
+                                username=payload[1],
+                                action=payload[2],
+                                resource_type=payload[3],
+                                resource_id=payload[4],
+                                endpoint=payload[5],
+                                method=payload[6],
+                                ip_address=payload[7],
+                                user_agent=payload[8],
+                                request_data=json.loads(payload[9]) if payload[9] else None,
+                                response_code=payload[10],
+                                success=payload[11],
+                                error_message=payload[12],
+                                duration_ms=payload[13],
+                                metadata_=json.loads(payload[14]) if payload[14] else None,
+                            )
+                        )
+                        await session.commit()
+                except (asyncio.CancelledError, KeyboardInterrupt, SystemExit):
+                    raise
+                except Exception as write_err:
+                    logger.error(
+                        f"Audit log DB write failed for action '{action}': {write_err}"
+                    )
+
+            try:
+                loop = asyncio.get_running_loop()
+                task = loop.create_task(_write_async())
+                # 持有強引用直到完成,避免 GC 中斷 + 完成後自動清理
+                _audit_write_tasks.add(task)
+                task.add_done_callback(_audit_write_tasks.discard)
+            except RuntimeError:
+                asyncio.run(_write_async())
+
+            normalized_action = AuditLogger._normalize_action(action)
+            if normalized_action in AuditLogger.SENSITIVE_ACTIONS:
+                log_level = "WARNING" if not success else "INFO"
+                log_msg = (
+                    f"AUDIT [{normalized_action}]: user={username}({user_id}), "
+                    f"resource={resource_type}/{resource_id}, success={success}"
+                )
+                if not success and error_message:
+                    log_msg += f", error={error_message}"
+
+                if log_level == "WARNING":
+                    logger.warning(log_msg)
+                else:
+                    logger.info(log_msg)
+
+        except (asyncio.CancelledError, KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as e:
+            logger.error(f"Failed to write audit log for action '{action}': {e}")
+
+    @staticmethod
+    async def log_from_request(
+        request: Request,
+        action: str,
+        resource_type: Optional[str] = None,
+        resource_id: Optional[str] = None,
+        success: bool = True,
+        error_message: Optional[str] = None,
+        metadata: Optional[Dict] = None,
+    ):
+        """
+        Log audit event from FastAPI request object
+
+        Convenience method that extracts user and request info automatically.
+
+        Args:
+            request: FastAPI Request object
+            action: The action being performed
+            resource_type: Type of resource (optional)
+            resource_id: ID of resource (optional)
+            success: Whether operation succeeded
+            error_message: Error message if failed
+            metadata: Additional metadata
+        """
+        user = getattr(request.state, "user", None)
+
+        AuditLogger.log(
+            action=action,
+            user_id=user.get("user_id") if user else None,
+            username=user.get("username") if user else None,
+            resource_type=resource_type,
+            resource_id=resource_id,
+            endpoint=str(request.url.path),
+            method=request.method,
+            ip_address=request.client.host if request.client else None,
+            user_agent=request.headers.get("user-agent"),
+            success=success,
+            error_message=error_message,
+            metadata=metadata,
+        )
+
+
+def _sanitize_request_data(data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Remove sensitive fields from request data before logging
+
+    Args:
+        data: Original request data
+
+    Returns:
+        Sanitized copy with sensitive fields removed or masked
+    """
+    if not isinstance(data, dict):
+        return data
+
+    # Fields to completely remove
+    SENSITIVE_FIELDS_REMOVE = {
+        "password",
+        "secret",
+        "token",
+        "access_token",
+        "api_key",
+        "private_key",
+        "passphrase",
+        "credit_card",
+        "ssn",
+        "social_security",
+    }
+
+    # Fields to mask (show first/last few characters)
+    SENSITIVE_FIELDS_MASK = {"email", "phone", "wallet_address"}
+
+    sanitized: Dict[str, Any] = {}
+    for key, value in data.items():
+        key_lower = key.lower()
+
+        # Remove sensitive fields
+        if any(sensitive in key_lower for sensitive in SENSITIVE_FIELDS_REMOVE):
+            sanitized[key] = "[REDACTED]"
+            continue
+
+        # Mask fields
+        if any(sensitive in key_lower for sensitive in SENSITIVE_FIELDS_MASK):
+            if isinstance(value, str) and len(value) > 6:
+                sanitized[key] = f"{value[:3]}***{value[-3:]}"
+            else:
+                sanitized[key] = "***"
+            continue
+
+        # Recursively sanitize nested dicts
+        if isinstance(value, dict):
+            sanitized[key] = _sanitize_request_data(value)
+        elif isinstance(value, list):
+            sanitized[key] = [
+                _sanitize_request_data(item) if isinstance(item, dict) else item
+                for item in value
+            ]
+        else:
+            sanitized[key] = value
+
+    return sanitized
+
+
+# Convenience function for quick logging
+def audit_log(action: str, **kwargs):
+    """
+    Shorthand for audit logging
+
+    Usage:
+        audit_log("payment_approve", user_id="123", resource_id="pay_456", success=True)
+    """
+    AuditLogger.log(action, **kwargs)
+
+
+# Decorator for automatic audit logging
+def audit(action: str, resource_type: Optional[str] = None):
+    """
+    Decorator to automatically audit log a function call
+
+    Usage:
+        @audit(action="delete_post", resource_type="post")
+        async def delete_post(post_id: int, user: dict):
+            # ... function implementation
+    """
+
+    def decorator(func):
+        async def wrapper(*args, **kwargs):
+            import time
+
+            start_time = time.time()
+
+            # Try to extract user from kwargs
+            user = kwargs.get("current_user") or kwargs.get("user")
+            resource_id = (
+                kwargs.get("post_id") or kwargs.get("user_id") or kwargs.get("id")
+            )
+
+            try:
+                result = await func(*args, **kwargs)
+
+                # Log success
+                audit_log(
+                    action=action,
+                    user_id=user.get("user_id") if user else None,
+                    username=user.get("username") if user else None,
+                    resource_type=resource_type,
+                    resource_id=str(resource_id) if resource_id else None,
+                    success=True,
+                    duration_ms=int((time.time() - start_time) * 1000),
+                )
+
+                return result
+
+            except (asyncio.CancelledError, KeyboardInterrupt, SystemExit):
+                raise
+            except Exception as e:
+                # Log failure
+                audit_log(
+                    action=action,
+                    user_id=user.get("user_id") if user else None,
+                    username=user.get("username") if user else None,
+                    resource_type=resource_type,
+                    resource_id=str(resource_id) if resource_id else None,
+                    success=False,
+                    error_message=str(e),
+                    duration_ms=int((time.time() - start_time) * 1000),
+                )
+                raise
+
+        return wrapper
+
+    return decorator
+
+
+# ============================================================================
+# Audit Log Cleanup (Stage 2 Security)
+# ============================================================================
+
+
+async def cleanup_old_logs(days_to_keep: int = 90) -> int:
+    """
+    Delete audit logs older than specified days.
+
+    This function should be called periodically (e.g., daily) to prevent
+    unlimited growth of the audit_logs table.
+
+    Args:
+        days_to_keep: Number of days of logs to retain (default: 90)
+
+    Returns:
+        Number of logs deleted
+    """
+    try:
+        from sqlalchemy import delete
+
+        factory = get_session_factory()
+        async with factory() as session:
+            cutoff_date = datetime.now(timezone.utc) - timedelta(days=days_to_keep)
+
+            stmt = delete(AuditLog).where(AuditLog.created_at < cutoff_date)
+            result = await session.execute(stmt)
+            await session.commit()
+
+            deleted = result.rowcount
+
+            logger.info(
+                f"🧹 Cleaned up {deleted} old audit logs (older than {days_to_keep} days)"
+            )
+            return deleted
+
+    except (asyncio.CancelledError, KeyboardInterrupt, SystemExit):
+        raise
+    except Exception as e:
+        logger.error(f"Failed to cleanup old audit logs: {e}")
+        return 0
+
+
+async def audit_log_cleanup_task():
+    """
+    Scheduled task to run audit log cleanup daily.
+
+    This should be started in api_server.py's lifespan function.
+    Uses a simple sleep loop to run cleanup at 3 AM daily.
+
+    Example:
+        asyncio.create_task(audit_log_cleanup_task())
+    """
+    from datetime import timedelta as _timedelta
+
+    while True:
+        now = datetime.now(timezone.utc)
+        # Calculate seconds until 3 AM next UTC day
+        next_run = now.replace(hour=3, minute=0, second=0, microsecond=0)
+        if now >= next_run:
+            # Already past 3 AM today, schedule for tomorrow
+            next_run = next_run + _timedelta(days=1)
+
+        seconds_until_cleanup = (next_run - now).total_seconds()
+
+        logger.info(
+            f"📅 Audit log cleanup scheduled for {next_run} (in {seconds_until_cleanup:.0f}s)"
+        )
+
+        await asyncio.sleep(seconds_until_cleanup)
+
+        await cleanup_old_logs(90)

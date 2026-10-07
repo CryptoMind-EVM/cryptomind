@@ -1,0 +1,84 @@
+{
+  "$comment": "補助機會表（design 2026-08-17-discover-multisource §Phase 0）——涵蓋無 API 的募資/補助平台，人工 PR 維護。URL 與週期已於 2026-08-17 查證；死線過期由路由層自動過濾（不改檔）。",
+  "version": 1,
+  "opportunities": [
+    {
+      "id": "ea-funds-ltf",
+      "name": "EA Funds — Long-Term Future Fund",
+      "platform": "Effective Altruism Funds",
+      "url": "https://app.effectivealtruism.org/funds/ltf/application",
+      "deadline": null,
+      "cycle": "rolling",
+      "amount": "小額至六位數美元（依案）",
+      "eligibility": "個人或組織，長期主義取向專案（AI safety、biosecurity、治理）",
+      "tags": ["ai-safety", "longtermism", "research"],
+      "status": "open",
+      "notes": "線上申請表隨時可送；評審週期約 1-2 個月"
+    },
+    {
+      "id": "sff",
+      "name": "Survival and Flourishing Fund (SFF)",
+      "platform": "SFF",
+      "url": "https://survivalandflourishing.fund/",
+      "deadline": null,
+      "cycle": "annual",
+      "amount": "每年總額度達百萬美元級（單案差異大）",
+      "eligibility": "以既有組織/慈善實體為主（個人小額走 SFP）；存在性風險減緩主題",
+      "tags": ["ai-safety", "x-risk", "research"],
+      "status": "open",
+      "notes": "Jaan Tallinn 資助；每年一度收件輪（2026 輪已公告），長表申請"
+    },
+    {
+      "id": "acx-grants",
+      "name": "ACX Grants",
+      "platform": "Astral Codex Ten",
+      "url": "https://www.astralcodexten.com/",
+      "deadline": null,
+      "cycle": "annual",
+      "amount": "$1,000 – $100,000",
+      "eligibility": "慈善或科學專案；偏好新創、有清晰理論的小型專案",
+      "tags": ["ai-safety", "science", "charity"],
+      "status": "open",
+      "notes": "每年公告一次（通常年底）於部落格；無固定申請頁——關注年度公告文"
+    },
+    {
+      "id": "ston-fi-grant",
+      "name": "STON.fi Grant Program",
+      "platform": "STON.fi",
+      "url": "https://ston.fi/grant-program",
+      "deadline": null,
+      "cycle": "rolling",
+      "amount": "依案議定",
+      "eligibility": "建構於 TON 的 DeFi 專案（團隊需附專案/團隊/目標說明）",
+      "tags": ["ton", "defi", "infra"],
+      "status": "open",
+      "notes": "表單申請制；生態內最活躍的 DeFi 補助之一"
+    },
+    {
+      "id": "ton-champions",
+      "name": "TON Champions（TON Foundation 補助）",
+      "platform": "TON Foundation",
+      "url": "https://ton.org/",
+      "deadline": null,
+      "cycle": "program",
+      "amount": "開發者補助＋資源棧（依垂直領域）",
+      "eligibility": "TON 生態高成長垂直領域專案（五個優先方向輪動）",
+      "tags": ["ton", "ecosystem", "builder"],
+      "status": "open",
+      "notes": "無專屬申請頁——經 ton.org / TON 社群渠道接洽；獲選者授 Champions 頭銜"
+    },
+    {
+      "id": "ton-society",
+      "name": "TON Society 社群補助",
+      "platform": "TON Society",
+      "url": "https://ton.org/",
+      "deadline": null,
+      "cycle": "program",
+      "amount": "小額社群/開發者補助（依案）",
+      "eligibility": "TON 開源貢獻者與社群專案",
+      "tags": ["ton", "community", "oss"],
+      "status": "open",
+      "notes": "Society DAO 治理下運作；關注 ton.org 開發者報告取得最新輪次"
+    }
+  ]
+}

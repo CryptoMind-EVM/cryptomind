@@ -1,0 +1,12 @@
+# Telegram Bot 專用精簡依賴
+# ---------------------------------------------------------------
+# bot 只透過 HTTP 打 API service（httpx），加上 aiogram 跑 polling/webhook。
+# 連 DB 都不碰（純 HTTP，不 import 任何 core/ 模組）。
+# 對比主 requirements.txt，省掉：fastapi/gunicorn/uvicorn、langchain 全家、
+# pandas/numpy/yfinance、sqlalchemy/asyncpg/alembic、MCP、news/search 等。
+#
+# 版號與 requirements.txt 對齊，避免版本漂移。
+
+aiogram>=3.4.0
+httpx==0.28.1
+anyio==4.14.2  # Security floor: CVE-2026-63374 / 63349 / 64847

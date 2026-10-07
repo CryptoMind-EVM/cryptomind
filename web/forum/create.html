@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title data-i18n="seo.forumCreate">Create Post - CryptoMind Forum</title>
+    <link rel="icon" type="image/png" href="/static/img/title_icon.png">
+
+    <link rel="stylesheet" href="/static/css/tailwind-built.css?v=52">
+    <script src="https://cdn.jsdelivr.net/npm/i18next@23.7.6/i18next.min.js" crossorigin="anonymous" integrity="sha384-OCCT+KZFt2FsqTxlTd8CUSq86zW/ZKmV0oe7qj36oye2CDbbVuxIXTY20t/u9LJt"></script>
+    <script src="https://unpkg.com/lucide@0.577.0" crossorigin="anonymous" integrity="sha384-orgVf2eX2+m1zKAOIi09hD0W6GtVhoOUmqDK+sysYB2JTZ4vS86j4jm+X7a4Nnei"></script>
+    <!-- 撰寫／預覽：與文章頁（post.html）同一組 Markdown renderer＋清理 -->
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js" crossorigin="anonymous" integrity="sha384-wLhprpjsmjc/XYIcF+LpMxd8yS1gss6jhevOp6F6zhiIoFK6AmHtm4bGKtehTani"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js" crossorigin="anonymous" integrity="sha384-cwS6YdhLI7XS60eoDiC+egV0qHp8zI+Cms46R0nbn8JrmoAzV9uFL60etMZhAnSu"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css?v=46">
+    <script src="/static/config.js"></script>
+    <script src="/static/js/logger.js"></script>
+    <script src="/static/js/click-delegator.js?v=3"></script>
+    <!-- early-init: 防 FOUC + 預設主題（與主站共用 localStorage.selectedTheme） -->
+    <script src="/js/early-init.js"></script>
+    <style>
+        /* 發文列：放不下時按鈕換到下一行並撐滿（tailwind-built.css 沒編 basis-40／sm:grow-0） */
+        #create-submit-row > div:first-child { flex-basis: 10rem; }
+
+        /* 分類 chip：radio 本體藏起來，選中的那顆用主色 */
+        .create-cat { position: relative; cursor: pointer; }
+        .create-cat input { position: absolute; opacity: 0; pointer-events: none; }
+        .create-cat span {
+            display: inline-flex; align-items: center; padding: 0.4rem 0.9rem; border-radius: 9999px;
+            border: 1px solid var(--border-light-color); font-size: 0.8rem; font-weight: 600;
+            color: rgb(var(--color-text-muted)); transition: background .15s, border-color .15s, color .15s;
+        }
+        .create-cat:hover span { color: rgb(var(--color-text-primary)); }
+        .create-cat input:checked + span {
+            background: rgb(var(--color-primary) / 0.12); border-color: rgb(var(--color-primary) / 0.45);
+            color: rgb(var(--color-primary));
+        }
+        .create-cat input:focus-visible + span { outline: 2px solid rgb(var(--color-primary) / 0.5); outline-offset: 2px; }
+
+        /* 編輯卡裡的標題／內文／標籤是無框欄位：styles.css 的全站 focus-visible 外框會在每個欄位各畫
+           一個藍框（內文框頂到卡片邊、字數掉到框外，標籤框貼著字）。改成整張卡片亮起來（2026-10-01）。 */
+        #input-title:focus-visible, #input-content:focus-visible, #input-tags:focus-visible { outline: none; }
+        .create-editor { transition: border-color .15s, box-shadow .15s; }
+        .create-editor:focus-within {
+            border-color: rgb(var(--color-primary) / 0.45);
+            box-shadow: 0 0 0 3px rgb(var(--color-primary) / 0.12);
+        }
+
+        /* 撰寫／預覽切換 */
+        .create-mode { display: inline-flex; padding: 0.15rem; border-radius: 0.6rem; background: rgb(var(--color-text-muted) / 0.1); }
+        .create-mode button {
+            padding: 0.3rem 0.8rem; border-radius: 0.45rem; font-size: 0.75rem; font-weight: 700;
+            color: rgb(var(--color-text-muted)); transition: background .15s, color .15s;
+        }
+        .create-mode button[aria-selected="true"] { background: var(--surface-color); color: rgb(var(--color-text-primary)); box-shadow: 0 1px 2px rgb(0 0 0 / 0.12); }
+
+        /* 預覽沿用文章頁的內文樣式（post.html），不要 styles.css 聊天泡泡的圓形編號 */
+        #content-preview p { margin-bottom: 1em; line-height: 1.8; }
+        #content-preview ul, #content-preview ol { margin-bottom: 1em; padding-left: 1.5em; }
+        #content-preview ul { list-style-type: disc; }
+        #content-preview ol { list-style-type: decimal; }
+        #content-preview li { padding-left: 0; }
+        #content-preview li::before { content: none; }
+        #content-preview h1, #content-preview h2, #content-preview h3 { font-weight: 800; margin: 1.2em 0 0.6em; line-height: 1.3; }
+        #content-preview blockquote { margin: 1em 0; padding: 0.9em 1em; border-left: 3px solid rgb(var(--color-primary)); background: rgb(var(--color-primary) / 0.06); }
+        @media (max-width: 639px) {
+            #create-submit-row > button[type="submit"] { flex-grow: 1; }
+            /* 中文六個分類在 390px 一排放得下（以前「心得」單獨掉到第二排）；英俄文本來就長，照常換行 */
+            .create-editor fieldset > div { gap: 0.375rem; }
+            .create-cat span { padding: 0.4rem 0.6rem; }
+        }
+    </style>
+</head>
+
+<body class="bg-background text-textMain min-h-screen flex flex-col" data-page="create">
+    <nav class="sticky top-0 z-50 bg-background/94 backdrop-blur-xl border-b border-borderSubtle pl-4 pr-16 py-3">
+        <div class="max-w-3xl mx-auto flex items-center justify-between">
+            <a href="/static/index.html#forum" id="forum-create-back-link"
+                class="flex items-center gap-2 text-secondary font-bold hover:text-primary transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+                <span data-i18n="common.cancel">Cancel</span>
+            </a>
+            <div class="font-bold text-lg text-primary tracking-wide"><span data-i18n="forum.create.newPost">New Post</span></div>
+            <div class="flex items-center gap-3">
+                <div class="hidden md:flex flex-col items-end">
+                    <span id="forum-user-name" class="text-xs font-bold text-secondary">Guest</span>
+                    <span class="text-[10px] text-textMuted opacity-60" data-i18n="forum.create.poster">Poster</span>
+                </div>
+                <!-- 手機隱藏：子頁右上角的主題切換鈕（site-sidebar.js）會疊在頭像上 -->
+                <div id="forum-user-avatar"
+                    class="hidden md:flex w-8 h-8 rounded-full bg-surfaceHighlight items-center justify-center text-xs font-bold overflow-hidden border border-borderLight">
+                    <i data-lucide="user" class="w-4 h-4"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-1 max-w-3xl mx-auto w-full px-4 py-5">
+        <div>
+            <form id="post-form" class="flex flex-col gap-4">
+                <!-- 發文要收費時（FORUM_POST_FEE_USD > 0、非 Premium）先講清楚要準備什麼，別等寫完才知道 -->
+                <div id="post-requirements" class="hidden rounded-2xl border border-primary/20 bg-primary/5 px-4 py-3 text-sm leading-relaxed text-textMain">
+                    <span id="post-requirements-text"></span>
+                    <a href="/static/index.html#settings" class="ml-1 whitespace-nowrap font-bold text-primary hover:underline" data-i18n="forum.create.goBindWallet">Bind wallet</a>
+                </div>
+
+                <!-- 單一編輯卡（2026-09-26）：以前分類／標題／內文／標籤各一張卡，手機要捲很久才到內文 -->
+                <div class="create-editor bg-surface rounded-3xl border border-borderSubtle">
+                    <!-- 分類：一次看到全部、一點就選（以前是下拉選單） -->
+                    <fieldset class="px-4 pt-4 sm:px-6 sm:pt-5">
+                        <legend class="sr-only"><span data-i18n="forum.create.category">Category</span></legend>
+                        <div class="flex flex-wrap gap-2">
+                            <label class="create-cat"><input type="radio" name="category" value="analysis" checked><span data-i18n="forum.c.analysis">Analysis</span></label>
+                            <label class="create-cat"><input type="radio" name="category" value="question"><span data-i18n="forum.categoryQuestion">Question</span></label>
+                            <label class="create-cat"><input type="radio" name="category" value="tutorial"><span data-i18n="forum.create.tutorial">Tutorial</span></label>
+                            <label class="create-cat"><input type="radio" name="category" value="news"><span data-i18n="forum.categoryNews">News</span></label>
+                            <label class="create-cat"><input type="radio" name="category" value="chat"><span data-i18n="forum.create.chat">Chat</span></label>
+                            <label class="create-cat"><input type="radio" name="category" value="insight"><span data-i18n="forum.categoryInsight">Insight</span></label>
+                        </div>
+                    </fieldset>
+
+                    <!-- 標題 -->
+                    <div class="flex items-center gap-3 px-4 pt-3 pb-2 sm:px-6">
+                        <input type="text" id="input-title"
+                            class="min-w-0 flex-1 bg-transparent py-2 text-xl sm:text-2xl font-bold text-textMain outline-none placeholder-textMuted/50"
+                            placeholder="Enter an interesting title..." maxlength="200" required data-i18n="forum.create.titlePlaceholder" data-i18n-attr="placeholder">
+                        <span id="title-counter" class="shrink-0 text-[11px] font-mono text-textMuted"><span id="title-current" class="text-primary font-bold">0</span>/<span id="title-max">200</span></span>
+                    </div>
+
+                    <!-- 內文：撰寫／預覽（預覽用文章頁同一個 Markdown renderer，看到的就是發出去的樣子） -->
+                    <div class="border-t border-borderSubtle">
+                        <div class="flex items-center justify-between gap-3 px-4 pt-3 sm:px-6">
+                            <div class="create-mode" role="tablist">
+                                <button type="button" role="tab" data-mode="write" aria-selected="true"><span data-i18n="forum.create.compose">Compose</span></button>
+                                <button type="button" role="tab" data-mode="preview" aria-selected="false"><span data-i18n="forum.create.preview">Preview</span></button>
+                            </div>
+                            <span class="flex items-center gap-1.5 text-[11px] text-textMuted opacity-80">
+                                <i data-lucide="info" class="w-3 h-3"></i><span data-i18n="forum.create.markdownHint">Use Markdown for formatting</span>
+                            </span>
+                        </div>
+                        <textarea id="input-content"
+                            class="block min-h-[240px] sm:min-h-[320px] w-full resize-y bg-transparent px-4 py-3 sm:px-6 text-sm leading-relaxed text-textMain outline-none placeholder-textMuted/50"
+                            placeholder="Share your insights..." maxlength="10000" required data-i18n="forum.create.contentPlaceholder" data-i18n-attr="placeholder"></textarea>
+                        <div id="content-preview" class="prose hidden min-h-[240px] sm:min-h-[320px] px-4 py-3 sm:px-6 text-sm text-textMain"></div>
+                        <div class="flex justify-end px-4 pb-2 sm:px-6">
+                            <span id="content-counter" class="text-[11px] font-mono text-textMuted"><span id="content-current" class="text-primary font-bold">0</span>/<span id="content-max">10000</span></span>
+                        </div>
+                    </div>
+
+                    <!-- 標籤 -->
+                    <div class="flex items-center gap-3 border-t border-borderSubtle px-4 py-3 sm:px-6">
+                        <label for="input-tags" class="shrink-0 text-xs font-bold text-textMuted"><span data-i18n="forum.create.tags">Tags (Optional)</span></label>
+                        <input type="text" id="input-tags"
+                            class="min-w-0 flex-1 bg-transparent py-1 text-sm text-textMain outline-none placeholder-textMuted/50"
+                            placeholder="#BTC #ETH #Analysis" data-i18n="forum.create.tagsPlaceholder" data-i18n-attr="placeholder">
+                    </div>
+                </div>
+
+                <p class="flex items-start gap-1.5 px-1 text-xs leading-5 text-textMuted/80">
+                    <i data-lucide="info" class="mt-0.5 h-3.5 w-3.5 shrink-0"></i>
+                    <span data-i18n="forum.create.disclaimerNotice">Please share your own views only — not investment advice. Stick to facts; no baseless shilling or market manipulation (see the community guidelines).</span>
+                </p>
+
+                <div class="sticky z-10" style="bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));">
+                    <div class="bg-surface/95 p-3 sm:p-4 rounded-3xl border border-borderSubtle backdrop-blur-xl">
+                        <!-- 發文前的內容檢查（2026-10-01 試驗）：通過亮綠燈才能按發文，見 web/js/forum-moderation.js -->
+                        <div id="moderation-status" data-state="idle" role="status" aria-live="polite" class="mb-2 flex items-start gap-1.5 text-xs leading-5 text-textMuted">
+                            <i data-lucide="shield" class="mt-0.5 h-4 w-4 shrink-0"></i>
+                            <span data-i18n="forum.moderation.idle">Your post is checked for scams before publishing</span>
+                        </div>
+                        <!-- 手機也排成一列：以前直排（限額／費用／提示／按鈕）佔掉約四分之一螢幕、蓋住內文輸入框。
+                             放不下時（如英文「Post for Free (PREMIUM)」）按鈕換到下一行並撐滿，
+                             不再壓住左邊的每日上限（2026-09-26 回報） -->
+                        <div id="create-submit-row" class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+                            <div class="min-w-0 flex-1 text-left text-xs sm:text-sm text-textMuted space-y-0.5">
+                                <div id="daily-limit-display" class="flex items-center gap-2 whitespace-nowrap text-xs sm:mb-1">
+                                    <span class="animate-pulse"><span data-i18n="forum.create.checking">Checking limits...</span></span>
+                                </div>
+                                <div>
+                                    <span data-i18n="forum.create.costToPost">Cost to post:</span> <span id="post-cost" class="text-primary font-bold" data-price="create_post"><i
+                                            data-lucide="loader" class="w-3 h-3 animate-spin inline-block"></i></span>
+                                </div>
+                                <div id="post-cost-premium-hint" class="hidden text-[10px] opacity-60"><span class="hidden sm:inline" data-i18n="forum.create.freeForPremium">(Free for Premium members)</span></div>
+                            </div>
+                            <button type="submit"
+                                class="shrink-0 px-5 sm:px-10 py-3 sm:py-3.5 bg-primary hover:brightness-110 text-background font-bold text-sm sm:text-base rounded-2xl transition flex items-center justify-center gap-2">
+                                <span><span data-i18n="common.pay">Pay</span> <span data-price="create_post"><i data-lucide="loader"
+                                            class="w-3 h-3 animate-spin inline-block"></i></span> <span data-i18n="forum.create.andPost"> & Post</span></span>
+                                <i data-lucide="send" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        <div
+                            id="create-post-warning"
+                            class="hidden mt-4 w-full rounded-2xl border border-danger/25 bg-danger/10 px-4 py-3 text-sm leading-relaxed text-danger"
+                        ></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="true"
+        class="fixed z-[110] flex flex-col gap-3 pointer-events-none top-20 left-4 right-4 items-center md:top-24 md:left-auto md:right-4 md:items-end md:w-80"></div>
+
+    <div id="confirm-modal"
+        class="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div
+            class="bg-surface w-full max-w-sm max-h-[80dvh] overflow-y-auto custom-scrollbar p-6 rounded-3xl border border-borderLight shadow-2xl transform transition-all scale-100 opacity-100">
+            <div id="confirm-modal-icon"
+                class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 bg-danger/20">
+                <i data-lucide="alert-circle" class="w-8 h-8 text-danger"></i>
+            </div>
+            <h3 id="confirm-modal-title" class="text-xl font-bold text-center text-secondary mb-2"><span data-i18n="common.confirm">Confirm</span></h3>
+            <p id="confirm-modal-message" class="text-textMuted text-center text-sm mb-6" data-i18n="common.confirmQuestion">Are you sure?</p>
+            <div id="confirm-modal-buttons" class="flex gap-3">
+                <button id="confirm-modal-cancel"
+                    class="flex-1 py-3 bg-surfaceHighlight hover:bg-surfaceHighlight text-textMuted font-bold rounded-2xl transition border border-borderSubtle">Cancel</button>
+                <button id="confirm-modal-confirm"
+                    class="flex-1 py-3 bg-primary hover:brightness-110 text-background font-bold rounded-2xl transition shadow-lg"><span data-i18n="common.confirm">Confirm</span></button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/js/pages/forum-create.js"></script>
+    <script src="/static/forum/js/create-page.js?v=1"></script>
+
+    <footer class="bg-surface/95 border-t border-borderSubtle mt-12 py-8">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-center md:text-left">
+                    <p class="text-xs text-textMuted" data-i18n="common.copyright">© 2026 CryptoMind. All rights reserved.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="/static/legal/terms-of-service.html"
+                        class="text-xs text-textMuted hover:text-primary transition"><span data-i18n="forum.c.terms">Terms of Service</span></a>
+                    <a href="/static/legal/privacy-policy.html"
+                        class="text-xs text-textMuted hover:text-primary transition"><span data-i18n="forum.c.privacy">Privacy Policy</span></a>
+                    <a href="/static/legal/community-guidelines.html"
+                        class="text-xs text-textMuted hover:text-primary transition"><span data-i18n="forum.c.guidelines">Community Guidelines</span></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- 子頁主題切換鈕（右上角） -->
+    <script src="/js/components/ThemeToggle.js"></script>
+    <script src="/js/site-sidebar.js?v=4"></script>
+</body>
+
+</html>

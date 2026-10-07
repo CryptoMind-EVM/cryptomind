@@ -1,0 +1,78 @@
+{"q": "BTC 現在多少", "plain": true, "tool": "get_crypto_price"}
+{"q": "比特幣多少錢", "plain": true, "tool": "get_crypto_price"}
+{"q": "ETH 價格", "plain": true, "tool": "get_crypto_price"}
+{"q": "ETH 現價", "plain": true, "tool": "get_crypto_price"}
+{"q": "SOL 現在多少錢", "plain": true, "tool": "get_crypto_price"}
+{"q": "狗狗幣多少", "plain": true, "tool": "get_crypto_price"}
+{"q": "以太幣價格", "plain": true, "tool": "get_crypto_price"}
+{"q": "BTC", "plain": true, "tool": "get_crypto_price"}
+{"q": "btc 現在價格", "plain": true, "tool": "get_crypto_price"}
+{"q": "XRP 報價", "plain": true, "tool": "get_crypto_price"}
+{"q": "台積電股價", "plain": true, "tool": "tw_price"}
+{"q": "台積電現在多少", "plain": true, "tool": "tw_price"}
+{"q": "鴻海股價多少", "plain": true, "tool": "tw_price"}
+{"q": "聯發科現在股價", "plain": true, "tool": "tw_price"}
+{"q": "2330 股價", "plain": true, "tool": "tw_price"}
+{"q": "0050 現在多少 台股", "plain": true, "tool": "tw_price"}
+{"q": "AAPL 現在多少", "plain": true, "tool": "us_stock_price"}
+{"q": "特斯拉股價", "plain": true, "tool": "us_stock_price"}
+{"q": "NVDA 現價", "plain": true, "tool": "us_stock_price"}
+{"q": "輝達現在多少", "plain": true, "tool": "us_stock_price"}
+{"q": "微軟股價", "plain": true, "tool": "us_stock_price"}
+{"q": "台積電 ADR 價格", "plain": true, "tool": "us_stock_price"}
+{"q": "黃金多少錢", "plain": true, "tool": "get_commodity_price_tool"}
+{"q": "金價現在多少", "plain": true, "tool": "get_commodity_price_tool"}
+{"q": "白銀價格", "plain": true, "tool": "get_commodity_price_tool"}
+{"q": "原油現在多少", "plain": true, "tool": "get_commodity_price_tool"}
+{"q": "油價多少", "plain": true, "tool": "get_commodity_price_tool"}
+{"q": "美元兌台幣匯率", "plain": true, "tool": "get_usd_twd_rate_tool"}
+{"q": "美金台幣現在多少", "plain": true, "tool": "get_usd_twd_rate_tool"}
+{"q": "日圓匯率多少", "plain": true, "tool": "get_forex_rate_tool"}
+{"q": "歐元匯率", "plain": true, "tool": "get_forex_rate_tool"}
+{"q": "VIX 現在多少", "plain": true, "tool": "get_vix_index_tool"}
+{"q": "恐慌指數現在多少", "plain": true, "tool": "get_vix_index_tool"}
+{"q": "道瓊現在多少", "plain": true, "tool": "get_market_indices_tool"}
+{"q": "那斯達克現在多少", "plain": true, "tool": "get_market_indices_tool"}
+{"q": "標普現在多少點", "plain": true, "tool": "get_market_indices_tool"}
+{"q": "加權指數現在多少", "plain": true, "tool": "tw_market_index_tool"}
+{"q": "台股大盤現在多少", "plain": true, "tool": "tw_market_index_tool"}
+{"q": "恐懼貪婪指數現在多少", "plain": true, "tool": "get_fear_and_greed_index"}
+{"q": "金銀比現在多少", "plain": true, "tool": "get_gold_silver_ratio_tool"}
+{"q": "台積電現在多少員工", "plain": false}
+{"q": "ETH 現在多少人在用", "plain": false}
+{"q": "特斯拉現在多少車款", "plain": false}
+{"q": "微軟目前有多少產品", "plain": false}
+{"q": "黃金現在多少國家在囤", "plain": false}
+{"q": "蘋果現在多少間門市", "plain": false}
+{"q": "比特幣現在多少礦工", "plain": false}
+{"q": "美元現在多少國家使用", "plain": false}
+{"q": "NVDA 現在多少人在討論", "plain": false}
+{"q": "BTC 現在是什麼", "plain": false}
+{"q": "台積電現在還好嗎", "plain": false}
+{"q": "道瓊現在代表什麼", "plain": false}
+{"q": "恐慌指數現在是什麼意思", "plain": false}
+{"q": "黃金現在的產量多少", "plain": false}
+{"q": "請問 BTC 現在大概多少錢", "plain": true, "tool": "get_crypto_price"}
+{"q": "ETH 現在價位多少", "plain": true, "tool": "get_crypto_price"}
+{"q": "幫我看一下比特幣現價", "plain": true, "tool": "get_crypto_price"}
+{"q": "SOL 即時價格", "plain": true, "tool": "get_crypto_price"}
+{"q": "台積電現在股價多少", "plain": true, "tool": "tw_price"}
+{"q": "鴻海現價", "plain": true, "tool": "tw_price"}
+{"q": "蘋果股價現在多少", "plain": true, "tool": "us_stock_price"}
+{"q": "AAPL 目前股價", "plain": true, "tool": "us_stock_price"}
+{"q": "白銀現在多少錢", "plain": true, "tool": "get_commodity_price_tool"}
+{"q": "天然氣價格", "plain": true, "tool": "get_commodity_price_tool"}
+{"q": "現在美元兌台幣多少", "plain": true, "tool": "get_usd_twd_rate_tool"}
+{"q": "英鎊匯率現在多少", "plain": true, "tool": "get_forex_rate_tool"}
+{"q": "台積電目前多少張", "plain": false}
+{"q": "黃金現在多少盎司", "plain": false}
+{"q": "ETH 多少錢才算便宜", "plain": false}
+{"q": "美元兌台幣多少是合理的", "plain": false}
+{"q": "BTC 現在多少是支撐", "plain": false}
+{"q": "特斯拉現在多少歲創辦", "plain": false}
+{"q": "台積電現在多少市佔", "plain": false}
+{"q": "原油現在多少桶庫存", "plain": false}
+{"q": "ETH 現在多少 gas", "plain": false}
+{"q": "道瓊現在多少成分股", "plain": false}
+{"q": "輝達現在多少營收", "plain": false}
+{"q": "微軟現在多少市值排名", "plain": false}

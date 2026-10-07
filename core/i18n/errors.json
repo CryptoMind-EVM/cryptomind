@@ -1,0 +1,63 @@
+{
+  "zh-TW": {
+    "analysis.message_too_long": "訊息過長，請精簡後再試。",
+    "analysis.filter_blocked": "訊息無法處理：{reason}",
+    "analysis.api_key_invalid": "API Key 無效，請檢查您的設定。",
+    "analysis.api_key_missing": "缺少可用的 LLM API Key。請在系統設定中輸入您的 API Key。",
+    "analysis.no_response": "模型沒有產生回應，請重新發送訊息或換個問法再試一次。",
+    "analysis.data_unavailable_general": "目前無法取得這個即時查詢所需的資料，請稍後再試。",
+    "analysis.discovery_tool_unavailable": "目前無法先確認這個代號屬於哪個市場。請直接提供標準代號（例如 BTC、AAPL、2330），或稍後再試。",
+    "analysis.generic_error": "抱歉，處理時發生錯誤：{error}",
+    "analysis.timeout": "執行逾時：超過 {seconds} 秒未完成，請稍後再試。",
+    "analysis.system_init_error": "系統初始化異常，請稍後再試。",
+    "analysis.cannot_process": "抱歉，暫時無法處理您的請求，請稍後再試。",
+    "analysis.try_specific_question": "執行完成，但沒有有效結果。請嘗試更具體的問題。",
+    "analysis.clarify_what": "請問您想查詢什麼？"
+  },
+  "zh-CN": {
+    "analysis.message_too_long": "消息过长，请精简后再试。",
+    "analysis.filter_blocked": "消息无法处理：{reason}",
+    "analysis.api_key_invalid": "API Key 无效，请检查您的设置。",
+    "analysis.api_key_missing": "缺少可用的 LLM API Key。请在系统设置中输入您的 API Key。",
+    "analysis.no_response": "模型没有产生回应，请重新发送消息或换个问法再试一次。",
+    "analysis.data_unavailable_general": "目前无法取得这个实时查询所需的数据，请稍后再试。",
+    "analysis.discovery_tool_unavailable": "目前无法先确认这个代号属于哪个市场。请直接提供标准代号（例如 BTC、AAPL、2330），或稍后再试。",
+    "analysis.generic_error": "抱歉，处理时发生错误：{error}",
+    "analysis.timeout": "执行超时：超过 {seconds} 秒未完成，请稍后再试。",
+    "analysis.system_init_error": "系统初始化异常，请稍后再试。",
+    "analysis.cannot_process": "抱歉，暂时无法处理您的请求，请稍后再试。",
+    "analysis.try_specific_question": "执行完成，但没有有效结果。请尝试更具体的问题。",
+    "analysis.clarify_what": "请问您想查询什么？"
+  },
+  "en": {
+    "analysis.message_too_long": "Message is too long, please simplify and retry.",
+    "analysis.filter_blocked": "Message cannot be processed: {reason}",
+    "analysis.api_key_invalid": "Invalid API Key, please check your settings.",
+    "analysis.api_key_missing": "No LLM API Key available. Please enter your API Key in Settings.",
+    "analysis.no_response": "The model produced no response. Please resend the message or try a different phrasing.",
+    "analysis.data_unavailable_general": "Cannot retrieve the data required for this real-time query right now. Please try again later.",
+    "analysis.discovery_tool_unavailable": "Cannot confirm which market this symbol belongs to. Please provide a standard ticker (e.g., BTC, AAPL, 2330) or try again later.",
+    "analysis.generic_error": "Sorry, an error occurred during processing: {error}",
+    "analysis.timeout": "Execution timeout: exceeded {seconds} seconds without completion, please try again later.",
+    "analysis.system_init_error": "System initialization error, please try again later.",
+    "analysis.cannot_process": "Sorry, we cannot process your request right now. Please try again later.",
+    "analysis.try_specific_question": "Execution completed but produced no valid result. Please try a more specific question.",
+    "analysis.clarify_what": "What would you like to query?"
+  },
+  "ru": {
+    "_todo_native_review": true,
+    "analysis.message_too_long": "Сообщение слишком длинное, пожалуйста, сократите и повторите.",
+    "analysis.filter_blocked": "Сообщение не может быть обработано: {reason}",
+    "analysis.api_key_invalid": "Недействительный API Key, проверьте настройки.",
+    "analysis.api_key_missing": "Нет доступного LLM API Key. Пожалуйста, введите ваш API Key в настройках.",
+    "analysis.no_response": "Модель не дала ответа. Пожалуйста, повторите сообщение или переформулируйте запрос.",
+    "analysis.data_unavailable_general": "Не удалось получить данные для этого запроса в реальном времени. Попробуйте позже.",
+    "analysis.discovery_tool_unavailable": "Не удалось определить, к какому рынку относится этот символ. Пожалуйста, укажите стандартный тикер (например, BTC, AAPL, 2330) или попробуйте позже.",
+    "analysis.generic_error": "Извините, при обработке произошла ошибка: {error}",
+    "analysis.timeout": "Тайм-аут выполнения: превышено {seconds} секунд без завершения, попробуйте позже.",
+    "analysis.system_init_error": "Ошибка инициализации системы, попробуйте позже.",
+    "analysis.cannot_process": "Извините, мы не можем обработать ваш запрос прямо сейчас. Попробуйте позже.",
+    "analysis.try_specific_question": "Выполнение завершено, но нет действительного результата. Пожалуйста, задайте более конкретный вопрос.",
+    "analysis.clarify_what": "Что вы хотите запросить?"
+  }
+}

@@ -1,0 +1,1323 @@
+/**
+ * US Stock Tab - 美股看板
+ * Architecture mirrors twstock.js
+ */
+
+window.USStockTab = {
+    activeSubTab: 'market',
+    lastUpdatedAt: null,
+
+    getStockName(item) {
+        const lang = window.I18n?.getLanguage?.() || 'zh-TW';
+        if (lang === 'en') return item.name_en || item.name || '';
+        return item.name_zh || item.name || '';
+    },
+
+    defaultSymbols: [
+        'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA',
+        'META', 'NVDA', 'NFLX', 'AMD', 'INTC',
+    ],
+
+    // ── 精選標的清單（分組，供 Picker 使用）───────────────────────
+    AVAILABLE_SYMBOLS: [
+        { symbol: 'AAPL',  name: 'Apple',       group: '科技' },
+        { symbol: 'MSFT',  name: 'Microsoft',   group: '科技' },
+        { symbol: 'GOOGL', name: 'Alphabet',    group: '科技' },
+        { symbol: 'AMZN',  name: 'Amazon',      group: '科技' },
+        { symbol: 'META',  name: 'Meta',        group: '科技' },
+        { symbol: 'NVDA',  name: 'NVIDIA',      group: '科技' },
+        { symbol: 'TSLA',  name: 'Tesla',       group: '科技' },
+        { symbol: 'NFLX',  name: 'Netflix',     group: '科技' },
+        { symbol: 'AMD',   name: 'AMD',         group: '科技' },
+        { symbol: 'INTC',  name: 'Intel',       group: '科技' },
+        { symbol: 'QCOM',  name: 'Qualcomm',    group: '科技' },
+        { symbol: 'AVGO',  name: 'Broadcom',    group: '科技' },
+        { symbol: 'TSM',   name: 'TSMC ADR',    group: '科技' },
+        { symbol: 'ORCL',  name: 'Oracle',      group: '科技' },
+        { symbol: 'JPM',   name: 'JPMorgan',    group: '金融' },
+        { symbol: 'BAC',   name: 'Bank of America', group: '金融' },
+        { symbol: 'GS',    name: 'Goldman Sachs', group: '金融' },
+        { symbol: 'V',     name: 'Visa',        group: '金融' },
+        { symbol: 'MA',    name: 'Mastercard',  group: '金融' },
+        { symbol: 'WMT',   name: 'Walmart',     group: '消費' },
+        { symbol: 'COST',  name: 'Costco',      group: '消費' },
+        { symbol: 'MCD',   name: "McDonald's",  group: '消費' },
+        { symbol: 'JNJ',   name: 'J&J',         group: '醫療' },
+        { symbol: 'UNH',   name: 'UnitedHealth', group: '醫療' },
+        { symbol: 'PFE',   name: 'Pfizer',      group: '醫療' },
+        { symbol: 'XOM',   name: 'ExxonMobil',  group: '能源' },
+        { symbol: 'CVX',   name: 'Chevron',     group: '能源' },
+        { symbol: 'SPY',   name: 'S&P 500 ETF', group: 'ETF' },
+        { symbol: 'QQQ',   name: 'Nasdaq ETF',  group: 'ETF' },
+        { symbol: 'GLD',   name: 'Gold ETF',    group: 'ETF' },
+    ],
+
+    showPicker() {
+        const container = document.getElementById('usstock-screener-controls');
+        if (!container) return;
+        const selected = new Set(AppStore.get('usStockSelectedSymbols') || this.defaultSymbols);
+        const groups = {};
+        this.AVAILABLE_SYMBOLS.forEach(s => {
+            if (!groups[s.group]) groups[s.group] = [];
+            groups[s.group].push(s);
+        });
+        container.innerHTML = `
+            <div>
+                <p class="text-xs text-textMuted mb-4">${window.I18n.t('stock.watchlistHint', { market: window.I18n.t('stock.marketNames.us') })}</p>
+                ${Object.entries(groups).map(([group, syms]) => `
+                    <div class="mb-4">
+                        <div class="text-[10px] uppercase tracking-wider text-textMuted/50 mb-2 pl-1">${window.I18n.t('sectors.' + group, { defaultValue: group })}</div>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            ${syms.map(s => `
+                                <label class="flex items-center gap-2 bg-surface border ${selected.has(s.symbol) ? 'border-primary/40 bg-primary/5' : 'border-borderSubtle'} rounded-xl px-3 py-2 cursor-pointer hover:border-primary/30 transition">
+                                    <input type="checkbox" value="${s.symbol}" ${selected.has(s.symbol) ? 'checked' : ''}
+                                        class="usstock-sym-check w-3.5 h-3.5 accent-primary">
+                                    <div>
+                                        <span class="text-xs font-bold text-secondary">${s.symbol}</span>
+                                        <span class="text-[10px] text-textMuted ml-1">${escapeHtml(s.name)}</span>
+                                    </div>
+                                </label>`).join('')}
+                        </div>
+                    </div>`).join('')}
+                <div class="flex gap-2 mt-2 pb-4">
+                    <button data-click="USStockTab.renderWatchlistControls" data-click-after="refreshMarketWatch"
+                        class="flex-1 py-2.5 bg-surface border border-borderLight text-textMuted font-bold rounded-xl hover:bg-surfaceHighlight transition text-sm">${window.I18n.t('common.cancel')}</button>
+                    <button data-click="USStockTab._applyPicker"
+                        class="flex-1 py-2.5 bg-primary text-background font-bold rounded-xl hover:opacity-90 transition text-sm">${window.I18n.t('stock.applySelection')}</button>
+                </div>
+            </div>`;
+    },
+
+    _applyPicker() {
+        const checks = document.querySelectorAll('.usstock-sym-check:checked');
+        const selected = Array.from(checks).map(c => c.value);
+        if (selected.length === 0) {
+            if (typeof showToast === 'function') showToast(window.I18n.t('stock.selectAtLeastOne'), 'error');
+            return;
+        }
+        AppStore.set('usStockSelectedSymbols', selected);
+        window.usStockSelectedSymbols = selected;
+        this.saveWatchlist();
+        this.renderWatchlistControls();
+        this.refreshMarketWatch();
+    },
+
+    // ── Init ─────────────────────────────────────────────────────────────────
+
+    init: function () {
+        window.addEventListener('languageChanged', () => {
+            if (this.activeSubTab === 'market') this.refreshMarketWatch();
+        });
+        if (window.MarketStatus && !this._autoRefreshBound) {
+            this._autoRefreshBound = true;
+            window.MarketStatus.startMarketAutoRefresh(
+                'usstock',
+                () => this.refreshCurrent(),
+                () => this.lastUpdatedAt
+            );
+        }
+        this.loadWatchlist();
+        this._hydrateServerWatchlist();
+        this.renderWatchlistControls();
+        this.bindEvents();
+        this.refreshCurrent(true);
+    },
+
+    // ── Watchlist persistence ────────────────────────────────────────────────
+
+    loadWatchlist: function () {
+        try {
+            const saved = localStorage.getItem('usStockWatchlist');
+            if (saved) {
+                AppStore.set('usStockSelectedSymbols', JSON.parse(saved));
+                window.usStockSelectedSymbols = AppStore.get('usStockSelectedSymbols');
+            } else {
+                AppStore.set('usStockSelectedSymbols', [...this.defaultSymbols]);
+                window.usStockSelectedSymbols = AppStore.get('usStockSelectedSymbols');
+                this.saveWatchlist();
+            }
+        } catch (e) {
+            console.warn('[US Stock] Error loading watchlist', e);
+            AppStore.set('usStockSelectedSymbols', [...this.defaultSymbols]);
+            window.usStockSelectedSymbols = AppStore.get('usStockSelectedSymbols');
+        }
+    },
+
+    // 登入的人：自選存在伺服器（web/js/watchlist-sync.js）——伺服器有這個市場的清單就用伺服器的
+    _hydrateServerWatchlist: function () {
+        const ws = window.WatchlistSync;
+        if (!ws) return;
+        ws.hydrate('us_stock', AppStore.get('usStockSelectedSymbols'), this.defaultSymbols).then((list) => {
+            if (!list || ws.sameList(list, AppStore.get('usStockSelectedSymbols'), 'us_stock')) return;
+            AppStore.set('usStockSelectedSymbols', [...list]);
+            window['usStockSelectedSymbols'] = AppStore.get('usStockSelectedSymbols');
+            try {
+                localStorage.setItem('usStockWatchlist', JSON.stringify(list));
+            } catch (e) { /* ignore */ }
+            this.renderWatchlistControls();
+            this.refreshCurrent(true);
+        });
+    },
+
+    saveWatchlist: function () {
+        try {
+            if (!AppStore.get('usStockSelectedSymbols') || AppStore.get('usStockSelectedSymbols').length === 0) {
+                AppStore.set('usStockSelectedSymbols', [...this.defaultSymbols]);
+                window.usStockSelectedSymbols = AppStore.get('usStockSelectedSymbols');
+            }
+            localStorage.setItem('usStockWatchlist', JSON.stringify(AppStore.get('usStockSelectedSymbols')));
+            if (window.WatchlistSync) window.WatchlistSync.push('us_stock', AppStore.get('usStockSelectedSymbols'), this.defaultSymbols);
+        } catch (e) {
+            console.error('[US Stock] Failed to save watchlist', e);
+        }
+    },
+
+    // ── Add / Remove ─────────────────────────────────────────────────────────
+
+    addStock: async function (symbol) {
+        if (!symbol) return;
+        const sym = symbol
+            .toUpperCase()
+            .replace(/[^A-Z.^]/g, '')
+            .trim();
+        if (sym.length < 1) return;
+
+        const input = document.getElementById('usStockAddInput');
+        if (AppStore.get('usStockSelectedSymbols').includes(sym)) {
+            if (input) input.value = '';
+            if (window.showToast) window.showToast(_t('usstock.alreadyInWatchlist').replace('{sym}', sym), 'info');
+            return;
+        }
+
+        const btn = input ? input.nextElementSibling : null;
+        let originalIcon = '';
+        if (btn) {
+            originalIcon = btn.innerHTML;
+            btn.innerHTML =
+                '<div class="w-4 h-4 border-2 border-primary/50 border-t-primary rounded-full animate-spin"></div>';
+            btn.disabled = true;
+        }
+
+        try {
+            const data = await AppAPI.get(`/api/usstock/market?symbols=${encodeURIComponent(sym)}`);
+
+            if (data.stocks && data.stocks.length > 0) {
+                AppStore.get('usStockSelectedSymbols').unshift(sym);
+                window.usStockSelectedSymbols = AppStore.get('usStockSelectedSymbols');
+                this.saveWatchlist();
+                this.refreshMarketWatch();
+                this.refreshMarketInfo();
+                if (window.showToast) window.showToast(_t('usstock.addSuccess').replace('{sym}', sym), 'success');
+            } else {
+                if (window.showToast) {
+                    window.showToast(_t('usstock.notFoundSymbol').replace('{sym}', sym), 'error');
+                }
+            }
+        } catch (e) {
+            console.error('[US Stock] Validation error:', e);
+            if (window.showToast) window.showToast(_t('marketPage.addFailed') + '：' + e.message, 'error');
+        } finally {
+            if (btn) {
+                btn.innerHTML = originalIcon;
+                btn.disabled = false;
+            }
+            if (input) input.value = '';
+        }
+    },
+
+    removeStock: function (symbol, event) {
+        if (event) event.stopPropagation();
+        AppStore.set('usStockSelectedSymbols', AppStore.get('usStockSelectedSymbols').filter((s) => s !== symbol));
+        window.usStockSelectedSymbols = AppStore.get('usStockSelectedSymbols');
+        this.saveWatchlist();
+        this.refreshMarketWatch();
+        this.refreshMarketInfo();
+    },
+
+    // ── Watchlist controls render ────────────────────────────────────────────
+
+    renderWatchlistControls: function () {
+        const container = document.getElementById('usstock-screener-controls');
+        if (!container) return;
+
+        container.innerHTML = `
+            <div class="flex items-center gap-2 mb-4">
+                <h3 class="font-bold text-secondary flex items-center gap-2 flex-shrink-0">
+                    <i data-lucide="star" class="w-4 h-4 text-yellow-500"></i> My US Stocks
+                </h3>
+                <button data-click="USStockTab.showPicker"
+                    class="p-1.5 text-textMuted hover:text-primary hover:bg-surfaceHighlight rounded-lg transition" title="${window.I18n.t('common.selectSymbol')}">
+                    <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
+                </button>
+                <div class="flex-1 min-w-0">
+                    <div class="relative">
+                        <input type="text" id="usStockAddInput" placeholder="${_t('marketPage.usStockAddPlaceholder')}" maxlength="10"
+                            data-input-filter="ticker" data-uppercase
+                            class="w-full bg-background/50 border border-borderLight rounded-lg pl-3 pr-10 py-1.5 text-sm focus:outline-none focus:border-primary transition-colors text-textMain placeholder-textMuted/50">
+                        <button data-click="USStockTab.addStock" data-click-input="usStockAddInput"
+                            class="absolute right-1 top-1/2 -translate-y-1/2 p-1 text-textMuted hover:text-primary transition-colors hover:bg-surfaceHighlight rounded">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        AppUtils.refreshIcons();
+
+        const input = document.getElementById('usStockAddInput');
+        if (input) {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') window.USStockTab.addStock(e.target.value);
+            });
+        }
+    },
+
+    // ── Sub-tab switching ────────────────────────────────────────────────────
+
+    switchSubTab: function (tabId) {
+        if (this.activeSubTab === tabId) return;
+
+        const marketBtn = document.getElementById('usstock-btn-market');
+        const pulseBtn = document.getElementById('usstock-btn-pulse');
+        const marketContent = document.getElementById('usstock-market-content');
+        const pulseContent = document.getElementById('usstock-pulse-content');
+
+        if (!marketBtn || !pulseBtn || !marketContent || !pulseContent) return;
+
+        const active =
+            'usstock-sub-tab flex-1 py-2 px-4 rounded-lg font-bold text-sm transition flex items-center justify-center gap-2 bg-primary text-background shadow-md';
+        const inactive =
+            'usstock-sub-tab flex-1 py-2 px-4 rounded-lg font-bold text-sm transition flex items-center justify-center gap-2 text-textMuted hover:text-textMain hover:bg-surfaceHighlight';
+
+        [marketContent, pulseContent].forEach((el) => el.classList.add('hidden'));
+        [marketBtn, pulseBtn].forEach((el) => (el.className = inactive));
+
+        if (tabId === 'market') {
+            marketBtn.className = active;
+            marketContent.classList.remove('hidden');
+        } else if (tabId === 'pulse') {
+            pulseBtn.className = active;
+            pulseContent.classList.remove('hidden');
+        }
+
+        this.activeSubTab = tabId;
+        this.refreshCurrent(true);
+    },
+
+    refreshCurrent: function (isFirst = false) {
+        if (this.activeSubTab === 'market') {
+            this.refreshMarketWatch();
+            this.refreshMarketInfo();
+        } else if (this.activeSubTab === 'pulse') {
+            const inputEl = document.getElementById('usstockPulseSearchInput');
+            const sym = inputEl ? inputEl.value.trim() : '';
+            if (sym) {
+                this.refreshAIPulse(sym);
+            } else {
+                const container = document.getElementById('usstock-pulse-result');
+                if (container) {
+                    container.innerHTML = `<div class="py-20 text-center text-textMuted uppercase tracking-widest text-sm italic opacity-50 flex flex-col items-center"><i data-lucide="search" class="w-8 h-8 mb-3 opacity-50"></i>${_t('usstock.enterSymbolOrDeepAnalysis')}</div>`;
+                    container.classList.remove('hidden');
+                    AppUtils.refreshIcons();
+                }
+            }
+        }
+    },
+
+    // ── Market Watch ─────────────────────────────────────────────────────────
+
+    refreshMarketWatch: async function () {
+        const listContainer = document.getElementById('usstock-screener-list');
+        const loader = document.getElementById('usstock-market-loader');
+        if (!listContainer || !loader) return;
+
+        // 失敗冷卻：連續逾時後拉長重試間隔，避免錯誤洗版（同 twstock 修復）
+        if (this._marketFailAfter && Date.now() < this._marketFailAfter) return;
+
+        if (window.MarketStatus) window.MarketStatus.markSynced('usstock');
+        loader.classList.remove('hidden');
+        // 不先清空列表——保留舊資料避免重試閃白；成功時才整批換新
+
+        try {
+            const syms = AppStore.get('usStockSelectedSymbols') || this.defaultSymbols;
+            const url = `/api/usstock/market?symbols=${encodeURIComponent(syms.join(','))}`;
+            const data = await AppAPI.get(url);
+            this.lastUpdatedAt = data.last_updated || new Date().toISOString();
+            if (window.MarketStatus) {
+                window.MarketStatus.markSynced('usstock');
+                window.MarketStatus.updateMarketStatusBar('usstock', this.lastUpdatedAt);
+            }
+            this._marketFailStreak = 0;
+            this._marketFailAfter = 0;
+            this._renderWatchlist(listContainer, data.stocks || []);
+        } catch (err) {
+            console.error('[US Stock] Market error:', err);
+            this._marketFailStreak = (this._marketFailStreak || 0) + 1;
+            this._marketFailAfter = Date.now() + 2 * 60 * 1000;
+            if (!listContainer.children.length) {
+                listContainer.innerHTML = `<div class="p-4 text-center text-danger bg-danger/10 rounded-xl text-sm">${_t('usstock.loadMarketFailed')}${SecurityUtils.escapeHTML(err.message || '')}</div>`;
+            }
+        } finally {
+            loader.classList.add('hidden');
+        }
+    },
+
+    _renderWatchlist: function (container, items) {
+        if (!items || items.length === 0) {
+            container.innerHTML =
+                '<p class="text-textMuted text-[10px] italic py-6 text-center opacity-50 uppercase tracking-widest">' + _t('marketPage.noData') + '</p>';
+            return;
+        }
+
+        const esc = (s) =>
+            String(s || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+
+        const frag = document.createDocumentFragment();
+        items.forEach((item) => {
+            const sym = esc(item.symbol);
+            const name = esc(this.getStockName(item) || sym);
+            const price = item.price != null ? `$${Number(item.price).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-';
+            const chg = item.changePercent != null ? parseFloat(item.changePercent) : 0;
+            const isPos = chg > 0;
+            const isNeg = chg < 0;
+            const color = isPos ? 'text-success' : isNeg ? 'text-danger' : 'text-textMuted';
+            const sign = isPos ? '+' : '';
+            const abbr = sym.substring(0, 2);
+
+            const div = document.createElement('div');
+            div.className =
+                'group bg-surface/20 hover:bg-surface/40 border border-borderSubtle rounded-2xl p-4 transition-all duration-300 cursor-pointer';
+            div.onclick = () => window.USStockTab.jumpToPulse(sym);
+            div.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-background flex items-center justify-center text-xs font-bold text-primary border border-borderSubtle group-hover:scale-110 transition-transform flex-shrink-0 mt-0.5">${abbr}</div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="min-w-0">
+                                <div class="font-bold text-sm text-secondary leading-tight">${name}</div>
+                                <div class="text-[9px] text-textMuted font-bold tracking-wider uppercase opacity-60">NASDAQ</div>
+                            </div>
+                            <div class="text-right flex-shrink-0">
+                                <div class="text-sm font-black font-mono ${color}">${sign}${chg.toFixed(2)}%</div>
+                                <div class="text-[9px] text-textMuted uppercase opacity-40 font-bold">24H</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mt-1.5">
+                            <div class="text-[11px] text-textMuted font-mono opacity-80">${price}</div>
+                            <div class="flex items-center gap-1">
+                                <button data-click="USStockTab.showChart" data-click-arg="${encodeURIComponent(sym)}" data-click-event class="w-7 h-7 rounded-lg flex items-center justify-center text-textMuted hover:text-primary hover:bg-primary/10 transition-colors border border-borderSubtle" title="${window.I18n ? window.I18n.t('common.viewChart') : 'View Chart'}">
+                                    <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
+                                </button>
+                                <button data-click="openAlert" data-click-args="${encodeURIComponent(JSON.stringify([sym, 'us_stock']))}" data-click-stop class="w-7 h-7 rounded-lg flex items-center justify-center text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/10 transition-colors border border-borderSubtle" title="${_t('usstock.setPriceAlert')}"><span class="text-xs leading-none">🔔</span></button>
+                                <button data-click="USStockTab.removeStock" data-click-arg="${encodeURIComponent(sym)}" data-click-event class="w-7 h-7 rounded-lg flex items-center justify-center text-textMuted hover:text-danger hover:bg-danger/10 transition-colors border border-borderSubtle" title="${window.I18n ? window.I18n.t('common.remove') : 'Remove'}">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            frag.appendChild(div);
+        });
+
+        container.innerHTML = '';
+        container.appendChild(frag);
+        AppUtils.refreshIcons();
+    },
+
+    jumpToPulse: function (symbol) {
+        const inputEl = document.getElementById('usstockPulseSearchInput');
+        if (inputEl) inputEl.value = symbol;
+        if (this.activeSubTab === 'pulse') {
+            this.refreshAIPulse(symbol);
+        } else {
+            this.switchSubTab('pulse');
+        }
+    },
+
+    // ── Market Info (indices + news) ─────────────────────────────────────────
+
+    refreshMarketInfo: async function () {
+        this.initSectionToggles();
+        await Promise.all([this._loadIndicesSection(), this._loadNewsSection()]);
+    },
+
+    _showLoader: function (id, show) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.toggle('hidden', !show);
+        el.classList.toggle('flex', show);
+    },
+
+    _loadIndicesSection: async function () {
+        const container = document.getElementById('usstock-info-indices');
+        if (!container) return;
+        this._showLoader('usstock-info-indices-loader', true);
+        try {
+            const data = await AppAPI.get('/api/usstock/indices');
+            const indices = data.indices || [];
+            if (!indices.length) {
+                container.innerHTML =
+                    '<p class="text-textMuted text-xs italic text-center py-6 opacity-50 col-span-3">' + _t('usstock.noIndexData') + '</p>';
+                return;
+            }
+            container.innerHTML = indices
+                .map((idx) => {
+                    const chg = idx.change != null ? parseFloat(idx.change) : 0;
+                    const chgP = idx.changePercent != null ? parseFloat(idx.changePercent) : 0;
+                    const color = chg >= 0 ? 'text-success' : 'text-danger';
+                    const arrow = chg >= 0 ? '↑' : '↓';
+                    return `
+                <div class="relative overflow-hidden rounded-2xl border border-borderSubtle bg-gradient-to-br from-surface to-background hover:border-primary/30 transition-all duration-200 group cursor-default">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-all"></div>
+                    <div class="relative p-4">
+                        <div class="text-[10px] text-textMuted mb-2 font-bold uppercase tracking-wider">${escapeHtml(idx.name)}</div>
+                        <div class="font-black text-secondary text-lg font-mono">$${idx.price != null ? idx.price.toFixed(2) : '—'}</div>
+                        <div class="text-xs ${color} font-bold mt-1">${arrow} ${Math.abs(chg).toFixed(2)} (${chgP.toFixed(2)}%)</div>
+                    </div>
+                </div>`;
+                })
+                .join('');
+        } catch (err) {
+            console.error('[US Stock] Indices error:', err);
+            container.innerHTML = `<p class="text-danger text-xs text-center py-4 col-span-3">${_t('usstock.loadIndexFailed')}${SecurityUtils.escapeHTML(err.message || '')}</p>`;
+        } finally {
+            this._showLoader('usstock-info-indices-loader', false);
+        }
+    },
+
+    _loadNewsSection: async function () {
+        const container = document.getElementById('usstock-info-news');
+        if (!container) return;
+        this._showLoader('usstock-info-news-loader', true);
+        try {
+            const syms = (AppStore.get('usStockSelectedSymbols') || this.defaultSymbols).slice(0, 5);
+            const url = `/api/usstock/news?symbols=${encodeURIComponent(syms.join(','))}&limit=15`;
+            const json = await AppAPI.get(url);
+            const items = json.data || [];
+            if (!items.length) {
+                container.innerHTML =
+                    '<p class="text-textMuted text-xs italic text-center py-6 opacity-50">' + _t('usstock.noNews') + '</p>';
+                return;
+            }
+            container.innerHTML = items
+                .map((item) => {
+                    const pub = item.publisher
+                        ? `<span class="text-[9px] bg-yellow-500/10 text-yellow-400 px-1.5 py-0.5 rounded font-mono">${escapeHtml(item.publisher)}</span>`
+                        : '';
+                    return `
+                <div class="bg-surface/40 border border-yellow-500/10 hover:border-yellow-500/30 rounded-xl p-3 transition-colors">
+                    <div class="flex items-start gap-3">
+                        <div class="flex-shrink-0 w-12 text-center">
+                            <div class="text-xs font-black text-yellow-400 font-mono">${escapeHtml(item.symbol || '—')}</div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <a href="${sanitizeUrl(item.url)}" target="_blank" rel="noopener noreferrer"
+                               class="text-xs text-textMain leading-relaxed line-clamp-2 hover:text-primary transition-colors block">${escapeHtml(item.title || _t('usstock.noTitle'))}</a>
+                            <div class="flex items-center gap-2 mt-1">${pub}</div>
+                        </div>
+                    </div>
+                </div>`;
+                })
+                .join('');
+        } catch (err) {
+            console.error('[US Stock] News error:', err);
+            container.innerHTML = `<p class="text-danger text-xs text-center py-4">${_t('usstock.loadNewsFailed')}${SecurityUtils.escapeHTML(err.message || '')}</p>`;
+        } finally {
+            this._showLoader('usstock-info-news-loader', false);
+        }
+    },
+
+    // ── Section toggles ──────────────────────────────────────────────────────
+
+    initSectionToggles: function () {
+        try {
+            const prefs = JSON.parse(localStorage.getItem('usstock_section_prefs') || '{}');
+            ['indices', 'news'].forEach((sec) => {
+                const isHidden = prefs[sec] === false;
+                const bodyEl = document.getElementById(`usstock-section-body-${sec}`);
+                const chevronEl = document.getElementById(`usstock-chevron-${sec}`);
+                if (bodyEl && chevronEl) {
+                    bodyEl.classList.toggle('hidden', isHidden);
+                    chevronEl.classList.toggle('rotate-180', isHidden);
+                }
+            });
+        } catch (e) {
+            /* ignore */
+        }
+    },
+
+    toggleSection: function (key) {
+        const bodyEl = document.getElementById(`usstock-section-body-${key}`);
+        const chevronEl = document.getElementById(`usstock-chevron-${key}`);
+        if (!bodyEl || !chevronEl) return;
+
+        const wasHidden = bodyEl.classList.contains('hidden');
+        bodyEl.classList.toggle('hidden', !wasHidden);
+        chevronEl.classList.toggle('rotate-180', !wasHidden);
+
+        try {
+            const prefs = JSON.parse(localStorage.getItem('usstock_section_prefs') || '{}');
+            prefs[key] = wasHidden; // true = now visible
+            localStorage.setItem('usstock_section_prefs', JSON.stringify(prefs));
+        } catch (e) {
+            /* ignore */
+        }
+    },
+
+    // ── AI 分析結果 localStorage 持久化（per-user per-symbol，保留 7 天）──────
+    _aiLocalKey(symbol) {
+        const u = window.AuthManager?.currentUser;
+        const uid = (u?.user_id || u?.uid || 'anon').replace(/[^a-zA-Z0-9_-]/g, '_');
+        return `ai_deep_us_${uid}_${symbol.toUpperCase()}_${(window.I18n?.getLanguage?.() || localStorage.getItem('selectedLanguage') || 'zh-TW')}`;
+    },
+    _saveAILocal(symbol, data) {
+        try {
+            localStorage.setItem(this._aiLocalKey(symbol), JSON.stringify({ data, savedAt: Date.now() }));
+        } catch (_) {}
+    },
+    _loadAILocal(symbol) {
+        try {
+            const raw = localStorage.getItem(this._aiLocalKey(symbol));
+            if (!raw) return null;
+            const { data, savedAt } = JSON.parse(raw);
+            if (Date.now() - savedAt > 7 * 24 * 60 * 60 * 1000) {
+                localStorage.removeItem(this._aiLocalKey(symbol));
+                return null;
+            }
+            return { data, savedAt };
+        } catch (_) { return null; }
+    },
+
+    // ── AI Pulse ─────────────────────────────────────────────────────────────
+
+    refreshAIPulse: async function (symbol) {
+        const container = document.getElementById('usstock-pulse-result');
+        const loader = document.getElementById('usstock-pulse-loader');
+        if (!container || !loader) return;
+        const cacheKey = 'usstock_pulse_' + symbol.toUpperCase();
+
+        // 1) 記憶體快取 → 直接顯示，不打 API
+        const cached = window.AppCache?.get(cacheKey);
+        if (cached) {
+            loader.classList.add('hidden');
+            const userProvider = await window.APIKeyManager?.getCurrentProvider();
+            this._renderAIPulse(container, cached, !!userProvider);
+            this._appendPulseRefreshBar(container, symbol, cacheKey);
+            container.classList.remove('hidden');
+            return;
+        }
+
+        // 2) localStorage 持久化快取（含 ${window.I18n.t('stock.aiDeepAnalysis')}）→ 先顯示上次結果
+        const _localResult = this._loadAILocal(symbol);
+        if (_localResult) {
+            const { data: localAI, savedAt: _localSavedAt } = _localResult;
+            if (!localAI.cached_at) localAI.cached_at = new Date(_localSavedAt).toISOString();
+            if (window.AppCache) window.AppCache.savedAt[cacheKey] = _localSavedAt;
+            loader.classList.add('hidden');
+            const userProvider = await window.APIKeyManager?.getCurrentProvider();
+            this._renderAIPulse(container, localAI, !!userProvider);
+            this._appendPulseRefreshBar(container, symbol, cacheKey);
+            container.classList.remove('hidden');
+            return;
+        }
+
+        loader.classList.remove('hidden');
+        container.classList.add('hidden');
+
+        try {
+            const userProvider = await window.APIKeyManager?.getCurrentProvider();
+            const url = `/api/usstock/pulse/${encodeURIComponent(symbol.toUpperCase())}`;
+            const data = await AppAPI.get(url);
+            window.AppCache?.setWithTime(cacheKey, data, 15 * 60 * 1000); // 快取 15 分鐘
+            this._renderAIPulse(container, data, !!userProvider);
+            this._appendPulseRefreshBar(container, symbol, cacheKey);
+            container.classList.remove('hidden');
+        } catch (err) {
+            console.error('[US Stock] Pulse error:', err);
+            container.innerHTML = `<div class="p-4 text-center text-danger bg-danger/10 rounded-xl text-sm">${_t('usstock.loadPulseFailed').replace('{sym}', SecurityUtils.escapeHTML(symbol || ''))}${SecurityUtils.escapeHTML(err.message || '')}</div>`;
+            container.classList.remove('hidden');
+        } finally {
+            loader.classList.add('hidden');
+        }
+    },
+
+    _appendPulseRefreshBar: function (container, symbol, cacheKey) {
+        const timeStr = window.AppCache?.getTimeStr(cacheKey) || '';
+        const safeSym = (symbol || '').replace(/'/g, "\\'");
+        const bar = document.createElement('div');
+        bar.className = 'flex items-center justify-between px-4 py-2 mt-2 rounded-xl bg-surfaceHighlight border border-borderLight text-xs text-textMuted';
+        bar.innerHTML = `
+            <span>${timeStr ? window.I18n.t('stock.cachedAt', { time: timeStr }) : window.I18n.t('stock.cachedShort')}</span>
+            <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20 transition"
+                    data-click="clearCacheAndInvoke" data-cache-key="${encodeURIComponent(cacheKey)}" data-target-action="USStockTab.runDeepAnalysis" data-click-args="${encodeURIComponent(JSON.stringify([symbol, true]))}">
+                <i data-lucide="zap" class="w-3 h-3"></i> ${window.I18n.t('stock.aiDeepAnalysis')}
+            </button>`;
+        container.appendChild(bar);
+        AppUtils.refreshIcons();
+    },
+
+    runDeepAnalysis: async function (symbol, forceRefresh) {
+        const container = document.getElementById('usstock-pulse-result');
+        const loader = document.getElementById('usstock-pulse-loader');
+        if (!container || !loader) return;
+
+        loader.classList.remove('hidden');
+        container.classList.add('hidden');
+
+        try {
+            const providerHint = window.APIKeyManager?.getSelectedProvider?.() || 'openai';
+            const _force = forceRefresh ? 'true' : 'false';
+            const url = `/api/usstock/pulse/${encodeURIComponent(symbol.toUpperCase())}?deep_analysis=true&force_refresh=${_force}&lang=${encodeURIComponent(window.I18n?.getLanguage?.() || localStorage.getItem('selectedLanguage') || 'zh-TW')}`;
+            const data = await AppAPI.get(url, { headers: { 'X-User-LLM-Provider': providerHint }, timeout: 120000 });
+            // 更新記憶體快取（15 分鐘）+ localStorage 持久化（7 天）
+            window.AppCache?.setWithTime('usstock_pulse_' + symbol.toUpperCase(), data, 15 * 60 * 1000);
+            this._saveAILocal(symbol, data);
+            this._renderAIPulse(container, data, true);
+            container.classList.remove('hidden');
+        } catch (err) {
+            console.error('[US Stock] Deep Analysis Error:', err);
+            container.innerHTML = `<div class="p-4 text-center text-danger bg-danger/10 rounded-xl text-sm">${SecurityUtils.escapeHTML(err.message || _t('usstock.loadPulseFailed'))}</div>`;
+            container.classList.remove('hidden');
+        } finally {
+            loader.classList.add('hidden');
+        }
+    },
+
+    _renderAIPulse: function (container, data, hasKey) {
+        const rep = data.report || {};
+        const tech = data.technical_indicators || {};
+        const fund = data.fundamentals || {};
+        const chg = data.change_24h || 0;
+        const isPos = chg > 0;
+        const isNeg = chg < 0;
+        const color = isPos ? 'text-success' : isNeg ? 'text-danger' : 'text-textMuted';
+        const bg = isPos ? 'bg-success/10' : isNeg ? 'bg-danger/10' : 'bg-surfaceHighlight';
+        const sign = isPos ? '+' : '';
+        const icon = isPos ? 'trending-up' : isNeg ? 'trending-down' : 'minus';
+
+        // ── Helpers ────────────────────────────────────────────────────────
+        const fv = (v, d = 2) => (v != null && !isNaN(Number(v)) ? Number(v).toFixed(d) : 'N/A');
+        const fmtPct = (v, d = 1) =>
+            v != null && !isNaN(Number(v)) ? (Number(v) * 100).toFixed(d) + '%' : 'N/A';
+        const fmtPctDirect = (v, d = 2) =>
+            v != null && !isNaN(Number(v)) ? Number(v).toFixed(d) + '%' : 'N/A';
+        const fmtLarge = (v) => {
+            if (!v || isNaN(v)) return 'N/A';
+            if (v >= 1e12) return '$' + (v / 1e12).toFixed(2) + 'T';
+            if (v >= 1e9) return '$' + (v / 1e9).toFixed(2) + 'B';
+            if (v >= 1e6) return '$' + (v / 1e6).toFixed(1) + 'M';
+            return '$' + Number(v).toLocaleString();
+        };
+
+        // RSI
+        const rsiVal = tech.rsi;
+        const rsiSig = tech.rsi_signal || '';
+        const rsiColor =
+            rsiSig === 'oversold'
+                ? 'text-success'
+                : rsiSig === 'overbought'
+                  ? 'text-danger'
+                  : 'text-secondary';
+        const rsiLabelMap = {
+            oversold: [_t('pulse.oversold'), 'bg-success/20 text-success'],
+            overbought: [_t('pulse.overbought'), 'bg-danger/20 text-danger'],
+            neutral: [_t('pulse.neutral'), 'bg-surfaceHighlight text-textMuted'],
+        };
+        const [rsiLabelTxt, rsiLabelStyle] = rsiLabelMap[rsiSig] || ['', ''];
+
+        // MACD
+        const macdTrend = tech.macd_trend || '';
+        const macdHistColor =
+            macdTrend === 'bullish'
+                ? 'text-success'
+                : macdTrend === 'bearish'
+                  ? 'text-danger'
+                  : 'text-textMuted';
+
+        // MA position
+        const close = data.current_price || 0;
+        const maPosBadge = (v) => {
+            if (!v || !close) return '';
+            return close >= v
+                ? '<span class="text-[9px] ml-1 px-1 rounded bg-success/20 text-success">' + _t('usstock.maAbove') + '</span>'
+                : '<span class="text-[9px] ml-1 px-1 rounded bg-danger/20 text-danger">' + _t('usstock.maBelow') + '</span>';
+        };
+
+        // Bollinger Bands signal
+        const bbSig = tech.bb_signal || '';
+        const bbSigMap = {
+            overbought: [_t('usstock.bbOverbought'), 'text-danger'],
+            oversold: [_t('usstock.bbOversold'), 'text-success'],
+            neutral: [_t('usstock.bbNeutral'), 'text-textMuted'],
+        };
+        const [bbLbl, bbLblColor] = bbSigMap[bbSig] || ['N/A', 'text-textMuted'];
+
+        // Volume signal
+        const volSig = tech.vol_signal || '';
+        const volSigMap = {
+            high: [_t('pulse.volumeHigh'), 'text-success'],
+            low: [_t('pulse.volumeLow'), 'text-danger'],
+            normal: [_t('pulse.volumeNormal'), 'text-textMuted'],
+        };
+        const [volLbl, volLblColor] = volSigMap[volSig] || ['N/A', 'text-textMuted'];
+
+        // Overall signal badge
+        const overallSig = tech.summary_en || '';
+        const overallMap = {
+            Bullish: ['Bullish', 'bg-success/20 text-success border-success/30'],
+            Bearish: ['Bearish', 'bg-danger/20 text-danger border-danger/30'],
+            Neutral: ['Neutral', 'bg-surfaceHighlight text-textMuted border-borderLight'],
+        };
+        const [overallLbl, overallStyle] = overallMap[overallSig] || [
+            '—',
+            'bg-surfaceHighlight text-textMuted border-borderLight',
+        ];
+
+        // Analyst recommendation
+        const recRaw = (fund.analyst_recommendation || '').toLowerCase();
+        const recMap = {
+            buy: [_t('usstock.recBuy'), 'bg-success/20 text-success'],
+            'strong buy': [_t('usstock.recStrongBuy'), 'bg-success/30 text-success'],
+            hold: [_t('usstock.recHold'), 'bg-yellow-500/20 text-yellow-400'],
+            sell: [_t('usstock.recSell'), 'bg-danger/20 text-danger'],
+            'strong sell': [_t('usstock.recStrongSell'), 'bg-danger/30 text-danger'],
+        };
+        const [recLbl, recStyle] =
+            recMap[recRaw] ||
+            (recRaw
+                ? [recRaw, 'bg-surfaceHighlight text-textMuted']
+                : ['N/A', 'bg-surfaceHighlight text-textMuted']);
+
+        // 52W progress bar
+        const low52 = fund['52_week_low'];
+        const high52 = fund['52_week_high'];
+        let w52Html = '<div class="text-xs text-textMuted">N/A</div>';
+        if (low52 && high52 && close && high52 > low52) {
+            const pct = Math.min(100, Math.max(0, ((close - low52) / (high52 - low52)) * 100));
+            w52Html = `
+                <div class="flex justify-between text-[9px] text-textMuted mb-1">
+                    <span>${_t('usstock.w52Low')} $${fv(low52)}</span><span>${_t('usstock.w52Current')} ${pct.toFixed(0)}%</span><span>${_t('usstock.w52High')} $${fv(high52)}</span>
+                </div>
+                <div class="h-1.5 rounded-full bg-surfaceHighlight overflow-hidden">
+                    <div class="h-full rounded-full bg-gradient-to-r from-danger via-yellow-500 to-success" style="width:${pct}%"></div>
+                </div>`;
+        }
+
+        const html = `
+            <!-- Hero -->
+            <div class="relative overflow-hidden bg-surface/80 backdrop-blur-xl rounded-3xl p-6 mb-6 border border-borderLight shadow-2xl shadow-black/20">
+                <div class="absolute -top-24 -right-24 w-48 h-48 bg-primary/20 rounded-full blur-3xl opacity-50"></div>
+                ${isPos ? '<div class="absolute -bottom-24 -left-24 w-48 h-48 bg-success/10 rounded-full blur-3xl opacity-50"></div>' : ''}
+                ${isNeg ? '<div class="absolute -bottom-24 -left-24 w-48 h-48 bg-danger/10 rounded-full blur-3xl opacity-50"></div>' : ''}
+                <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="flex items-center gap-5">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center shadow-inner">
+                            <i data-lucide="building-2" class="w-8 h-8 text-primary"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <h2 class="text-xl md:text-2xl font-serif text-secondary font-bold">${escapeHtml(data.company_name)}</h2>
+                                <span class="px-2 py-0.5 rounded text-xs font-bold tracking-wider uppercase bg-surfaceHighlight text-textMain border border-borderLight">${escapeHtml(data.symbol)}</span>
+                            </div>
+                            <div class="text-xs text-textMuted flex items-center gap-2">
+                                <i data-lucide="map-pin" class="w-3 h-3"></i> US Stock Exchange
+                                ${fund.sector ? `<span class="text-textMuted/60">· ${escapeHtml(fund.sector)}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2 md:mt-0 ml-20 md:ml-0 flex flex-col items-start md:items-end">
+                        <div class="text-[10px] text-textMuted uppercase tracking-[0.2em] mb-1 font-bold"data-i18n="stock.currentPrice">Current Price</div>
+                        <div class="text-4xl font-mono font-black text-secondary tracking-tight mb-2 flex items-center gap-2">
+                            <span class="text-xl text-primary font-serif font-medium">$</span>${data.current_price}
+                        </div>
+                        <div class="inline-flex items-center gap-1.5 text-sm font-bold ${color} ${bg} px-3 py-1 rounded-lg border border-borderSubtle backdrop-blur-md shadow-sm">
+                            <i data-lucide="${icon}" class="w-4 h-4"></i>
+                            <span>${sign}${chg}% (24h)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Summary + News -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <div class="lg:col-span-2">
+                    <div class="bg-surface/60 backdrop-blur-md border border-primary/20 rounded-2xl p-6 shadow-lg relative overflow-hidden h-full">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary via-accent to-primary"></div>
+                        <h3 class="font-serif text-lg text-primary mb-4 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                                <i data-lucide="brain-circuit" class="w-4 h-4 text-primary"></i>
+                            </div>
+                            ${_t('stock.pulseAiSummary')}
+                        </h3>
+                        <div class="md:ml-11">
+                            ${window.renderAIAnalysisSection({
+                                data: data,
+                                tabName: 'USStockTab',
+                                hasKey: hasKey,
+                                settingsBtn: "switchTab('settings')",
+                                symbolArg: data.symbol || '',
+                                _t: _t,
+                            })}
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    ${
+                        rep.highlights && rep.highlights.length > 0
+                            ? `
+                        <div class="bg-surface/40 backdrop-blur-sm border border-borderSubtle rounded-2xl p-6 h-full">
+                            <h3 class="font-bold text-secondary mb-4 flex items-center gap-2 text-sm uppercase tracking-wider">
+                                <i data-lucide="rss" class="w-4 h-4 text-yellow-500"></i> Market Sentiments
+                            </h3>
+                            <div class="space-y-3">
+                                ${rep.highlights
+                                    .map(
+                                        (h) => `
+                                    <a href="${sanitizeUrl(h.url)}" target="_blank" rel="noopener noreferrer"
+                                       class="block bg-surfaceHighlight p-3 rounded-lg border border-borderSubtle hover:border-borderLight transition-colors">
+                                        <p class="text-xs text-textMain leading-relaxed line-clamp-3 hover:text-primary transition-colors">${escapeHtml(h.title || '')}</p>
+                                    </a>
+                                `
+                                    )
+                                    .join('')}
+                            </div>
+                        </div>
+                    `
+                            : ''
+                    }
+                </div>
+            </div>
+
+            <!-- Section A: Technical Analysis -->
+            <div class="bg-surface/40 backdrop-blur-sm border border-borderSubtle rounded-2xl p-6 mb-6">
+                <div class="flex items-center justify-between mb-5">
+                    <h3 class="font-bold text-secondary flex items-center gap-2 text-sm uppercase tracking-wider">
+                        <i data-lucide="activity" class="w-4 h-4 text-accent"></i> Technical Analysis
+                    </h3>
+                    <span class="text-xs font-bold px-3 py-1 rounded-full border ${overallStyle}">${overallLbl}</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- RSI -->
+                    <div class="bg-background/80 rounded-xl p-4 border border-borderSubtle hover:border-borderLight transition-colors">
+                        <div class="text-[10px] text-textMuted uppercase tracking-wider mb-2">RSI (14)</div>
+                        <div class="flex items-end justify-between mb-2">
+                            <span class="text-2xl font-black font-mono ${rsiColor}">${rsiVal != null ? Number(rsiVal).toFixed(1) : 'N/A'}</span>
+                            ${rsiLabelTxt ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${rsiLabelStyle}">${rsiLabelTxt}</span>` : ''}
+                        </div>
+                        ${rsiVal != null ? `<div class="h-1.5 rounded-full bg-surfaceHighlight overflow-hidden"><div class="h-full rounded-full" style="width:${Math.min(100, Number(rsiVal))}%;background:${Number(rsiVal) < 30 ? '#86efac' : Number(rsiVal) > 70 ? '#fda4af' : '#a1a1aa'}"></div></div>` : ''}
+                    </div>
+                    <!-- MACD -->
+                    <div class="bg-background/80 rounded-xl p-4 border border-borderSubtle hover:border-borderLight transition-colors">
+                        <div class="text-[10px] text-textMuted uppercase tracking-wider mb-2">MACD (12/26/9)</div>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs"><span class="text-textMuted" data-i18n="stock.macd">MACD</span><span class="font-mono text-secondary">${fv(tech.macd, 3)}</span></div>
+                            <div class="flex justify-between text-xs"><span class="text-textMuted" data-i18n="stock.signal">Signal</span><span class="font-mono text-secondary">${fv(tech.macd_signal, 3)}</span></div>
+                            <div class="flex justify-between text-xs"><span class="text-textMuted" data-i18n="stock.histogram">Histogram</span><span class="font-bold font-mono ${macdHistColor}">${fv(tech.macd_histogram, 3)}</span></div>
+                        </div>
+                    </div>
+                    <!-- Moving Averages -->
+                    <div class="bg-background/80 rounded-xl p-4 border border-borderSubtle hover:border-borderLight transition-colors">
+                        <div class="text-[10px] text-textMuted uppercase tracking-wider mb-2">${_t('usstock.movingAverages')}</div>
+                        <div class="space-y-1.5">
+                            ${[
+                                ['MA20', tech.ma_20],
+                                ['MA50', tech.ma_50],
+                                ['MA200', tech.ma_200],
+                            ]
+                                .map(
+                                    ([l, v]) =>
+                                        `<div class="flex justify-between text-xs items-center"><span class="text-textMuted">${l}</span><span class="font-mono text-secondary">$${fv(v)}${v ? maPosBadge(v) : ''}</span></div>`
+                                )
+                                .join('')}
+                        </div>
+                    </div>
+                    <!-- Bollinger Bands -->
+                    <div class="bg-background/80 rounded-xl p-4 border border-borderSubtle hover:border-borderLight transition-colors">
+                        <div class="text-[10px] text-textMuted uppercase tracking-wider mb-2">${_t('usstock.bollingerBands')}</div>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs"><span class="text-textMuted">${_t('usstock.bbUpper')}</span><span class="font-mono text-secondary">$${fv(tech.bb_upper)}</span></div>
+                            <div class="flex justify-between text-xs"><span class="text-textMuted">${_t('usstock.bbMiddle')}</span><span class="font-mono text-secondary">$${fv(tech.bb_middle)}</span></div>
+                            <div class="flex justify-between text-xs"><span class="text-textMuted">${_t('usstock.bbLower')}</span><span class="font-mono text-secondary">$${fv(tech.bb_lower)}</span></div>
+                        </div>
+                        <div class="mt-2 text-[10px] font-bold ${bbLblColor}">${bbLbl}</div>
+                    </div>
+                    <!-- Volume -->
+                    <div class="bg-background/80 rounded-xl p-4 border border-borderSubtle hover:border-borderLight transition-colors">
+                        <div class="text-[10px] text-textMuted uppercase tracking-wider mb-2">${_t('usstock.volume')}</div>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs"><span class="text-textMuted">${_t('usstock.todayVolume')}</span><span class="font-mono text-secondary">${tech.volume ? Number(tech.volume).toLocaleString() : 'N/A'}</span></div>
+                            <div class="flex justify-between text-xs"><span class="text-textMuted">${_t('usstock.avg20dVolume')}</span><span class="font-mono text-secondary">${tech.vol_ma20 ? Number(tech.vol_ma20).toLocaleString() : 'N/A'}</span></div>
+                        </div>
+                        <div class="mt-2 text-[10px] font-bold ${volLblColor}">${volLbl}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section B + C: Fundamentals + Analyst -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Section B: Fundamentals -->
+                <div class="bg-surface/40 backdrop-blur-sm border border-borderSubtle rounded-2xl p-6">
+                    <h3 class="font-bold text-secondary mb-5 flex items-center gap-2 text-sm uppercase tracking-wider">
+                        <i data-lucide="bar-chart-2" class="w-4 h-4 text-primary"></i> Fundamental Analysis
+                    </h3>
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="bg-background/60 rounded-lg p-3 border border-borderSubtle"><div class="text-[9px] text-textMuted uppercase mb-1">P/E (TTM)</div><div class="font-bold font-mono text-secondary">${fv(fund.pe_ratio)}</div></div>
+                        <div class="bg-background/60 rounded-lg p-3 border border-borderSubtle"><div class="text-[9px] text-textMuted uppercase mb-1">Forward P/E</div><div class="font-bold font-mono text-secondary">${fv(fund.forward_pe)}</div></div>
+                        <div class="bg-background/60 rounded-lg p-3 border border-borderSubtle"><div class="text-[9px] text-textMuted uppercase mb-1">P/B</div><div class="font-bold font-mono text-secondary">${fv(fund.price_to_book)}</div></div>
+                        <div class="bg-background/60 rounded-lg p-3 border border-borderSubtle"><div class="text-[9px] text-textMuted uppercase mb-1">EPS (TTM)</div><div class="font-bold font-mono text-secondary">$${fv(fund.eps)}</div></div>
+                        <div class="bg-background/60 rounded-lg p-3 border border-borderSubtle"><div class="text-[9px] text-textMuted uppercase mb-1">${_t('usstock.dividendYield')}</div><div class="font-bold font-mono ${fund.dividend_yield > 0.02 ? 'text-success' : 'text-secondary'}">${fmtPct(fund.dividend_yield)}</div></div>
+                        <div class="bg-background/60 rounded-lg p-3 border border-borderSubtle"><div class="text-[9px] text-textMuted uppercase mb-1"data-i18n="stock.beta">Beta</div><div class="font-bold font-mono text-secondary">${fv(fund.beta)}</div></div>
+                        <div class="bg-background/60 rounded-lg p-3 border border-borderSubtle"><div class="text-[9px] text-textMuted uppercase mb-1">ROE</div><div class="font-bold font-mono text-secondary">${fmtPct(fund.roe)}</div></div>
+                        <div class="bg-background/60 rounded-lg p-3 border border-borderSubtle"><div class="text-[9px] text-textMuted uppercase mb-1">${_t('usstock.profitMargin')}</div><div class="font-bold font-mono text-secondary">${fmtPct(fund.profit_margin)}</div></div>
+                    </div>
+                    <div class="bg-background/60 rounded-lg p-3 border border-borderSubtle">
+                        <div class="text-[9px] text-textMuted uppercase mb-2">${_t('usstock.week52Range')}</div>
+                        ${w52Html}
+                    </div>
+                </div>
+
+                <!-- Section C: Analyst Consensus -->
+                <div class="bg-surface/40 backdrop-blur-sm border border-borderSubtle rounded-2xl p-6">
+                    <h3 class="font-bold text-secondary mb-5 flex items-center gap-2 text-sm uppercase tracking-wider">
+                        <i data-lucide="telescope" class="w-4 h-4 text-accent"></i> Analyst Consensus
+                    </h3>
+                    <div class="flex items-center gap-3 mb-5 p-4 bg-background/60 rounded-xl border border-borderSubtle">
+                        <span class="text-sm font-bold px-3 py-1 rounded-lg ${recStyle}">${recLbl}</span>
+                        <div>
+                            <div class="text-[10px] text-textMuted">${_t('usstock.targetPrice')}</div>
+                            <div class="font-bold font-mono text-secondary">${fund.analyst_target_price != null ? '$' + fv(fund.analyst_target_price) : 'N/A'}</div>
+                        </div>
+                    </div>
+                    <div class="space-y-0">
+                        <div class="flex justify-between py-2 border-b border-borderSubtle"><span class="text-xs text-textMuted">${_t('usstock.analystCount')}</span><span class="text-xs font-mono text-secondary">${fund.analyst_num_ratings || 'N/A'}</span></div>
+                        <div class="flex justify-between py-2 border-b border-borderSubtle"><span class="text-xs text-textMuted">${_t('usstock.revenueGrowth')}</span><span class="text-xs font-bold font-mono ${fund.revenue_growth > 0 ? 'text-success' : fund.revenue_growth < 0 ? 'text-danger' : 'text-textMuted'}">${fmtPct(fund.revenue_growth)}</span></div>
+                        <div class="flex justify-between py-2 border-b border-borderSubtle"><span class="text-xs text-textMuted">${_t('usstock.earningsGrowth')}</span><span class="text-xs font-bold font-mono ${fund.earnings_growth > 0 ? 'text-success' : fund.earnings_growth < 0 ? 'text-danger' : 'text-textMuted'}">${fmtPct(fund.earnings_growth)}</span></div>
+                        <div class="flex justify-between py-2 border-b border-borderSubtle"><span class="text-xs text-textMuted">${_t('usstock.debtToEquity')}</span><span class="text-xs font-mono text-secondary">${fv(fund.debt_to_equity)}</span></div>
+                        <div class="flex justify-between py-2"><span class="text-xs text-textMuted">${_t('usstock.marketCap')}</span><span class="text-xs font-mono text-secondary">${fmtLarge(fund.enterprise_value || fund.market_cap)}</span></div>
+                    </div>
+                    ${fund.industry ? `<div class="mt-4 pt-3 border-t border-borderLight text-[10px] text-textMuted flex items-center gap-1"><i data-lucide="building" class="w-3 h-3"></i> ${escapeHtml(fund.industry)}</div>` : ''}
+                </div>
+            </div>
+        `;
+
+        container.innerHTML = html;
+        AppUtils.refreshIcons();
+    },
+
+    // ── Chart ─────────────────────────────────────────────────────────────────
+
+    _chart: null,
+    _candleSeries: null,
+    _volumeSeries: null,
+    _chartSymbol: null,
+    _chartInterval: '1d',
+
+    showChart: async function (symbol, event) {
+        if (event) event.stopPropagation();
+
+        const section = document.getElementById('usstock-chart-section');
+        const chartEl = document.getElementById('usstock-chart-container');
+        const volumeEl = document.getElementById('usstock-volume-container');
+        const titleEl = document.getElementById('usstock-chart-title');
+
+        if (!section || !chartEl || typeof LightweightCharts === 'undefined') {
+            console.error('[US Stock] Chart elements or LightweightCharts missing');
+            return;
+        }
+
+        this._chartSymbol = symbol;
+        section.classList.remove('hidden');
+        if (titleEl) titleEl.textContent = `${symbol} (${this._chartInterval.toUpperCase()})`;
+        AppUtils.refreshIcons();
+
+        document.querySelectorAll('.us-chart-interval-btn').forEach((btn) => {
+            const active = btn.dataset.interval === this._chartInterval;
+            btn.classList.toggle('bg-surfaceHighlight', active);
+            btn.classList.toggle('text-primary', active);
+            btn.classList.toggle('text-textMuted', !active);
+        });
+
+        chartEl.innerHTML =
+            '<div class="animate-pulse text-textMuted h-full flex items-center justify-center">' + _t('usstock.loadingHistory') + '</div>';
+        if (volumeEl) {
+            volumeEl.innerHTML = '';
+            volumeEl.style.display = '';
+        }
+
+        try {
+            const responseData = await AppAPI.get(
+                `/api/usstock/klines/${encodeURIComponent(symbol)}?interval=${this._chartInterval}&limit=200`
+            );
+            const klineData = responseData.data || [];
+
+            if (!klineData.length) {
+                chartEl.innerHTML =
+                    '<div class="text-danger h-full flex items-center justify-center">' + _t('usstock.failedToLoadData') + '</div>';
+                return;
+            }
+
+            const updatedEl = document.getElementById('usstock-chart-updated');
+            if (updatedEl)
+                updatedEl.textContent = _t('usstock.loadedAt') + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+            chartEl.innerHTML = '';
+            if (this._chart) {
+                this._chart.remove();
+                this._chart = null;
+            }
+
+            this._chart = LightweightCharts.createChart(chartEl, {
+                layout: {
+                    background: { type: 'solid', color: 'transparent' },
+                    textColor: '#A0AEC0',
+                },
+                grid: {
+                    vertLines: { color: 'rgba(255,255,255,0.05)' },
+                    horzLines: { color: 'rgba(255,255,255,0.05)' },
+                },
+                crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+                rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)' },
+                timeScale: {
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    timeVisible: true,
+                    rightOffset: 5,
+                },
+                handleScroll: {
+                    mouseWheel: true,
+                    pressedMouseMove: true,
+                    horzTouchDrag: true,
+                    vertTouchDrag: false,
+                },
+                handleScale: {
+                    mouseWheel: true,
+                    pinchScale: true,
+                    axisPressedMouseMove: { time: true, price: false },
+                },
+            });
+
+            this._candleSeries = this._chart.addCandlestickSeries({
+                upColor: '#10B981',
+                downColor: '#EF4444',
+                borderVisible: false,
+                wickUpColor: '#10B981',
+                wickDownColor: '#EF4444',
+            });
+
+            // Create separate volume chart
+            if (this._volumeChart) {
+                this._volumeChart.remove();
+                this._volumeChart = null;
+            }
+            this._volumeSeries = null;
+            if (volumeEl) {
+                this._volumeChart = LightweightCharts.createChart(volumeEl, {
+                    layout: {
+                        background: { type: 'solid', color: 'transparent' },
+                        textColor: '#A0AEC0',
+                    },
+                    grid: {
+                        vertLines: { color: 'rgba(255,255,255,0.05)' },
+                        horzLines: { color: 'rgba(255,255,255,0.02)' },
+                    },
+                    crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+                    rightPriceScale: {
+                        borderColor: 'rgba(255,255,255,0.1)',
+                        scaleMargins: { top: 0.1, bottom: 0.05 },
+                    },
+                    timeScale: { visible: false },
+                    handleScroll: {
+                        mouseWheel: false,
+                        pressedMouseMove: false,
+                        horzTouchDrag: false,
+                        vertTouchDrag: false,
+                    },
+                    handleScale: { mouseWheel: false, pinchScale: false },
+                });
+                this._volumeSeries = this._volumeChart.addHistogramSeries({
+                    priceFormat: { type: 'volume' },
+                });
+            }
+
+            const candles = klineData.map((k) => ({
+                time: k.time,
+                open: k.open,
+                high: k.high,
+                low: k.low,
+                close: k.close,
+            }));
+            const volumes = klineData.map((k) => ({
+                time: k.time,
+                value: k.volume,
+                color: k.close >= k.open ? 'rgba(16,185,129,0.4)' : 'rgba(239,68,68,0.4)',
+            }));
+
+            this._candleSeries.setData(candles);
+            if (this._volumeSeries) this._volumeSeries.setData(volumes);
+            this._chart.timeScale().fitContent();
+            if (this._volumeChart) {
+                this._volumeChart.timeScale().fitContent();
+                let _syncingRange = false;
+                this._chart.timeScale().subscribeVisibleLogicalRangeChange((range) => {
+                    if (_syncingRange || !range || !this._volumeChart) return;
+                    _syncingRange = true;
+                    this._volumeChart.timeScale().setVisibleLogicalRange(range);
+                    _syncingRange = false;
+                });
+                this._volumeChart.timeScale().subscribeVisibleLogicalRangeChange((range) => {
+                    if (_syncingRange || !range || !this._chart) return;
+                    _syncingRange = true;
+                    this._chart.timeScale().setVisibleLogicalRange(range);
+                    _syncingRange = false;
+                });
+            }
+
+            // OHLCV hover
+            const fmtVol = (v) => {
+                if (v >= 1e9) return (v / 1e9).toFixed(2) + 'B';
+                if (v >= 1e6) return (v / 1e6).toFixed(2) + 'M';
+                if (v >= 1e3) return (v / 1e3).toFixed(2) + 'K';
+                return v.toFixed(0);
+            };
+            const setHover = (c, v) => {
+                if (!c) return;
+                const setEl = (id, txt, cls) => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.textContent = txt;
+                        if (cls) el.className = cls + ' ml-0.5';
+                    }
+                };
+                setEl('us-info-open', c.open.toFixed(2));
+                setEl('us-info-high', c.high.toFixed(2));
+                setEl('us-info-low', c.low.toFixed(2));
+                setEl(
+                    'us-info-close',
+                    c.close.toFixed(2),
+                    c.close >= c.open ? 'text-success' : 'text-danger'
+                );
+                if (v) setEl('us-info-volume', fmtVol(typeof v === 'object' ? v.value : v));
+            };
+            if (candles.length) setHover(candles[candles.length - 1], volumes[volumes.length - 1]);
+
+            this._chart.subscribeCrosshairMove((param) => {
+                if (!param.time || param.point?.x < 0) {
+                    if (candles.length)
+                        setHover(candles[candles.length - 1], volumes[volumes.length - 1]);
+                    if (this._volumeChart) this._volumeChart.clearCrosshairPosition();
+                    return;
+                }
+                const c = param.seriesData.get(this._candleSeries);
+                // Look up volume by time since it's on a separate chart
+                const v = volumes.find((d) => d.time === param.time);
+                if (c) setHover(c, v);
+                if (this._volumeChart && this._volumeSeries && v) {
+                    this._volumeChart.setCrosshairPosition(v.value, param.time, this._volumeSeries);
+                }
+            });
+
+            const onResize = () => {
+                if (!section.classList.contains('hidden') && this._chart) {
+                    const w = chartEl.clientWidth;
+                    if (!w) return;
+                    this._chart.applyOptions({ width: w });
+                    if (this._volumeChart && volumeEl)
+                        this._volumeChart.applyOptions({ width: volumeEl.clientWidth });
+                    // 寬度變更後重新 fitContent，否則蠟燭不撐滿、右側留白
+                    this._chart.timeScale().fitContent();
+                }
+            };
+            window.removeEventListener('resize', this._onChartResize);
+            this._onChartResize = window.Utils ? window.Utils.debounce(onResize, 150) : onResize;
+            window.addEventListener('resize', this._onChartResize);
+
+            // Theme 切換時更新圖表配色（文字/格線/邊框跟著 token，避免亮模式留在暗色低對比）
+            window.removeEventListener('themeChanged', this._chartThemeHandler || (() => {}));
+            this._chartThemeHandler = () => {
+                if (!this._chart) return;
+                const tokenRgb = (name, fb) => {
+                    const r = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+                    return r ? `rgb(${r})` : fb;
+                };
+                const textColor = tokenRgb('--color-text-muted', '#A0AEC0');
+                const gridColor = tokenRgb('--color-surface-deep', 'rgba(255,255,255,0.05)');
+                const borderColor = tokenRgb('--color-text-muted', 'rgba(255,255,255,0.1)');
+                const opts = {
+                    layout: { textColor },
+                    grid: { vertLines: { color: gridColor }, horzLines: { color: gridColor } },
+                    rightPriceScale: { borderColor },
+                    timeScale: { borderColor },
+                };
+                try {
+                    this._chart.applyOptions(opts);
+                    if (this._volumeChart) this._volumeChart.applyOptions(opts);
+                } catch (e) { /* 圖表已銷毀則略過 */ }
+            };
+            window.addEventListener('themeChanged', this._chartThemeHandler);
+
+            // ResizeObserver：容器寬度在 createChart 後才定案時 window resize 不會觸發
+            if (this._chartResizeObserver) this._chartResizeObserver.disconnect();
+            if (typeof ResizeObserver !== 'undefined') {
+                this._chartResizeObserver = new ResizeObserver(onResize);
+                this._chartResizeObserver.observe(chartEl);
+            }
+
+            setTimeout(onResize, 50);
+        } catch (err) {
+            console.error('[US Stock] Chart error:', err);
+            chartEl.innerHTML = `<div class="text-danger h-full flex flex-col items-center justify-center text-sm p-4 text-center"><i data-lucide="alert-triangle" class="w-8 h-8 mb-2"></i>${_t('usstock.readFailed')}${SecurityUtils.escapeHTML(err.message || '')}</div>`;
+            AppUtils.refreshIcons();
+        }
+    },
+
+    closeChart: function () {
+        window.removeEventListener('resize', this._onChartResize);
+        this._onChartResize = null;
+        if (this._chartThemeHandler) {
+            window.removeEventListener('themeChanged', this._chartThemeHandler);
+            this._chartThemeHandler = null;
+        }
+        const section = document.getElementById('usstock-chart-section');
+        if (section) section.classList.add('hidden');
+        if (this._chart) {
+            this._chart.remove();
+            this._chart = null;
+        }
+        if (this._volumeChart) {
+            this._volumeChart.remove();
+            this._volumeChart = null;
+        }
+        this._volumeSeries = null;
+        this._chartSymbol = null;
+    },
+
+    changeChartInterval: function (interval) {
+        if (!this._chartSymbol || this._chartInterval === interval) return;
+        this._chartInterval = interval;
+        this.showChart(this._chartSymbol);
+    },
+
+    // ── Events ────────────────────────────────────────────────────────────────
+
+    bindEvents: function () {
+        const btn = document.getElementById('usstockPulseSearchBtn');
+        const input = document.getElementById('usstockPulseSearchInput');
+        if (btn && input && !btn.dataset.bound) {
+            btn.dataset.bound = 'true';
+            btn.addEventListener('click', () => {
+                const s = input.value.trim();
+                if (s) this.refreshAIPulse(s);
+            });
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const s = input.value.trim();
+                    if (s) this.refreshAIPulse(s);
+                }
+            });
+        }
+    },
+};

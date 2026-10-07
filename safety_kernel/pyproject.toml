@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cryptomind-safety-kernel"
+# 與 safety_kernel/__init__.py 的 __version__ 保持同步。
+# 主平台 GET /api/swap/kernel-version 回傳此版本，公開 repo 以 git tag v<version> 對照。
+version = "0.1.0"
+description = "Verifiable risk-gating rules for agent-driven money operations (TON / Omniston)"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "CryptoMind" }]
+keywords = ["ton", "omniston", "ston.fi", "swap", "risk", "consent", "ai-agent", "safety"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Security",
+]
+
+[tool.setuptools]
+packages = ["safety_kernel"]
+
+# 公開 repo 是此目錄的扁平鏡像（subtree split 後內容在 repo 根）——
+# package-dir 對映讓「根目錄」成為 safety_kernel 套件，pip install . 即可安裝。
+# 主平台不經 pip 安裝（直接 import 本目錄），此設定只影響公開 repo 的安裝/CI。
+[tool.setuptools.package-dir]
+safety_kernel = "."

@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+bower_components/
+
+# Production
+build/
+dist/
+
+# Generated files
+*.min.js
+*.min.css
+
+# Logs
+logs
+*.log
+
+# Third-party
+web/static/vendor/
+web/static/lib/
+
+# Config files
+.eslintrc.json
+.eslintignore
+.prettierrc*

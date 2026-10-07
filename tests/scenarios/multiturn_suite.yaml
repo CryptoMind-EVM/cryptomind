@@ -1,0 +1,1380 @@
+# Multiturn Scenario Suite — CryptoMind agent 回歸測試問題集
+#
+# 用途：手動或自動跑一次完整流程，驗證 agent 的關鍵行為沒被改壞。
+# 每個 scenario 是一個獨立 session（不延續上一個）。
+#
+# 欄位說明：
+#   id:          唯一識別碼
+#   category:    情境分類
+#   language:    該 session 的 UI 語言
+#   turns:       多輪對話（同一個 session_id，測多輪記憶 + 切換）
+#     - query:                使用者問句
+#       expect_tools:          預期至少呼叫其中任一個（可選；空 = 允許不用工具）
+#       expect_keywords:       回應中必須包含的關鍵詞（可選）
+#       expect_not_keywords:   回應中不該出現的關鍵詞（可選）
+#       expect_nonempty:       回應不該是空或 fallback message（預設 true）
+#       notes:                 這題在驗什麼
+#
+# 執行：python tests/scenarios/run_suite.py
+# 結果：每題 trace 上傳 Langfuse，summary 印 console + 寫 JSON。
+
+suite_name: "CryptoMind multiturn regression v1"
+description: |
+  涵蓋 7 種情境：未知代號、跨主題切換、多輪代名詞、語言切換、tool 失敗容忍、
+  小白問法、複雜推理。每個 scenario 是獨立 session。
+
+scenarios:
+  # ============================================================
+  # 情境 1：未知代號（SNXX bug 回歸）
+  # ============================================================
+  - id: "S1-unknown-ticker"
+    category: unknown_ticker
+    language: "zh-TW"
+    turns:
+      - query: "SNXX 現在值得買嗎？"
+        expect_tools: ["resolve_symbol", "us_stock_price", "web_search", "us_technical_analysis"]
+        expect_keywords: ["SNXX", "SNDK"]
+        expect_nonempty: true
+        soft: true  # nemotron 對未知代號的遵從性不穩定；soft=true 時 fail 算 warning 不算 fail
+        notes: |
+          修復前 0 tool calls + fallback；修復後 claw_loop recovery 會 nudge，
+          但 nemotron 對 SNXX 這類冷門代號仍可能直接回空（不是 code bug）。
+          用 GPT/Claude 時通常能通過。
+          soft=true：fail 時算 warning，不阻擋 suite 整體通過。
+
+  # ============================================================
+  # 情境 2：未知代號 + 冷門幣
+  # ============================================================
+  - id: "S2-unknown-crypto"
+    category: unknown_ticker
+    language: "zh-TW"
+    turns:
+      - query: "PEPE 幣現在多少錢？"
+        expect_tools: ["get_crypto_price", "resolve_symbol", "web_search"]
+        expect_keywords: ["PEPE"]
+        expect_nonempty: true
+        notes: "冷門幣也要能查到（fallback 到 CoinGecko）"
+
+  # ============================================================
+  # 情境 3：多輪 + 跨主題切換（在同一個 session 內）
+  # ============================================================
+  - id: "S3-cross-topic-switch"
+    category: multiturn_context
+    language: "zh-TW"
+    soft: true  # nemotron 對「黃金 → commodity tool」連結不穩
+    turns:
+      - query: "比特幣現在多少錢？"
+        expect_tools: ["get_crypto_price"]
+        expect_keywords: ["比特幣", "BTC"]
+        expect_nonempty: true
+        notes: "建立 BTC 脈絡"
+      - query: "台積電現在多少？"
+        expect_tools: ["tw_stock_price", "resolve_symbol", "get_stock_price"]
+        expect_keywords: ["台積電", "2330"]
+        expect_nonempty: true
+        notes: "切到台股，不該把台積電當成 BTC"
+      - query: "那黃金呢？"
+        expect_tools: ["get_commodity_price"]
+        expect_keywords: ["黃金"]
+        expect_nonempty: true
+        notes: |
+          切到大宗商品，'那' 要理解為新一個標的（不是台積電）。
+          注意：nemotron 對「黃金 → commodity tool」連結不穩，
+          若 LLM 說「沒這個工具」屬於 LLM 知識限制，不是 code bug；
+          但『不該把黃金當成台積電的追問』。
+
+  # ============================================================
+  # 情境 4：多輪代名詞（測 history parser）
+  # ============================================================
+  - id: "S4-pronoun-resolution"
+    category: multiturn_context
+    language: "zh-TW"
+    soft: true  # nemotron 對多輪代名詞有時間歇性空回
+    turns:
+      - query: "比較比特幣跟以太坊的差異，用表格列出來"
+        expect_keywords: ["比特幣", "以太坊"]
+        expect_nonempty: true
+        notes: "產生多行表格（測 history parser 多行保留）"
+      - query: "它們哪個風險比較高？"
+        expect_keywords: ["比特幣", "以太坊"]
+        expect_not_keywords: ["請問您想詢問"]
+        expect_nonempty: true
+        notes: "測 parser 修復：'它們' 必須理解為 BTC+ETH（修復前會反問）"
+
+  # ============================================================
+  # 情境 5：語言切換（zh-TW → en → zh-CN）
+  # ============================================================
+  - id: "S5-language-switch"
+    category: language_switch
+    language: "zh-TW"
+    turns:
+      - query: "Bitcoin price now?"
+        expect_tools: ["get_crypto_price"]
+        # 2026-07-19：放寬為任一即可。UI=zh-TW 時 LanguageAwareLLM 會把
+        # 回應導向繁中，LLM 可能翻成「比特幣（BTC）」而非保留原文 "Bitcoin"。
+        # 只要提到比特幣/Bitcoin/BTC 任一即可。
+        expect_any_keyword: ["比特幣", "Bitcoin", "BTC"]
+        expect_nonempty: true
+        notes: "英文 query 但 UI 是 zh-TW"
+      - query: "现在值得投资吗？"
+        expect_nonempty: true
+        notes: "簡中 query（測不會被回繁中）"
+      - query: "Tell me the latest news"
+        expect_tools: ["aggregate_news", "google_news", "web_search"]
+        expect_nonempty: true
+        notes: "英文 query 切回"
+
+  # ============================================================
+  # 情境 6：tool 失敗容忍（用一個絕對查不到的代號）
+  # ============================================================
+  - id: "S6-tool-failure-tolerance"
+    category: tool_failure
+    language: "zh-TW"
+    soft: true  # nemotron 對不存在的幣間歇性回空
+    turns:
+      - query: "XYZNOTEXIST 這個幣的價格？"
+        expect_nonempty: true
+        expect_not_keywords: ["模型沒有產生回應"]
+        notes: "不該崩潰；該嘗試查詢後明確說查無此幣"
+
+  # ============================================================
+  # 情境 7：小白問法（模糊、口語）
+  # ============================================================
+  - id: "S7-beginner-query"
+    category: beginner
+    language: "zh-TW"
+    turns:
+      - query: "我是新手，比特幣是什麼？聽說能賺錢但風險是什麼"
+        expect_nonempty: true
+        expect_keywords: ["比特幣"]
+        notes: "口語模糊問法，要能理解並給結構化回答"
+      - query: "那我要怎麼開始？"
+        expect_nonempty: true
+        notes: "代名詞 + 口語追問"
+
+  # ============================================================
+  # 情境 8：複雜推理（多標的比較 + 配置建議）
+  # ============================================================
+  - id: "S8-complex-reasoning"
+    category: complex_reasoning
+    language: "en"
+    soft: true  # nemotron 對英文 volatility 比較的遵從性不穩
+    turns:
+      - query: "Compare BTC and ETH volatility, which is more volatile?"
+        expect_tools: ["technical_analysis", "get_crypto_price", "web_search"]
+        expect_keywords: ["volatility"]
+        expect_nonempty: true
+        notes: "複雜比較 + 英文"
+      - query: "If I had $10000, how should I split between them based on risk?"
+        expect_nonempty: true
+        notes: "配置建議（不該反問 them 是什麼）"
+
+  # ============================================================
+  # 情境 9：閒聊（不該硬呼叫 tool）
+  # ============================================================
+  - id: "S9-smalltalk-no-tool"
+    category: smalltalk
+    language: "zh-TW"
+    turns:
+      - query: "你好"
+        expect_nonempty: true
+        expect_tools: []
+        notes: "閒聊不該呼叫 tool（response_quality 有規範）"
+      - query: "你能做什麼？"
+        expect_nonempty: true
+        notes: "能力詢問"
+
+  # ============================================================
+  # 情境 10：繁中稳定（確認 baseline 沒退化）
+  # ============================================================
+  - id: "S10-zh-tw-baseline"
+    category: baseline
+    language: "zh-TW"
+    turns:
+      - query: "比特幣最新新聞是什麼？"
+        expect_tools: ["aggregate_news", "google_news"]
+        expect_keywords: ["比特幣"]
+        expect_nonempty: true
+        notes: "基本查詢 + 繁中"
+
+  # ============================================================
+  # 情境 11：BTC 價格正確性（$0.00001047 垃圾價回歸）
+  # ============================================================
+  - id: "S11-btc-price-correctness"
+    category: price_sanity
+    language: "zh-TW"
+    turns:
+      - query: "比特幣現在多少錢？"
+        expect_tools: ["get_crypto_price"]
+        expect_keywords: ["比特幣", "BTC"]
+        # 核心斷言：不該出現仿冒幣垃圾價（修補前的 $0.00001047）
+        expect_not_keywords: ["0.000010", "0.000001", "找不到比特幣"]
+        expect_nonempty: true
+        notes: |
+          回歸測試：修補前 BTC 可能回 $0.00001047（CoinGecko 仿冒幣）。
+          合理 BTC 價應為五位數 USD（如 $63,000）。斷言不出現極小垃圾價。
+      - query: "以太坊呢？"
+        expect_tools: ["get_crypto_price"]
+        expect_keywords: ["以太坊", "ETH"]
+        expect_not_keywords: ["0.000010"]
+        expect_nonempty: true
+        notes: "連續追問 ETH，同樣驗證價格合理性"
+
+  # ============================================================
+  # 情境 12：韓股（之前完全沒測）
+  # ============================================================
+  - id: "S12-korean-stock"
+    category: global_stock
+    language: "zh-TW"
+    turns:
+      - query: "三星電子現在股價多少？"
+        expect_tools: ["global_stock_price", "resolve_symbol"]
+        expect_any_keyword: ["三星", "Samsung", "005930"]
+        expect_nonempty: true
+        notes: |
+          韓股之前完全沒測。三星 005930.KS 應回 KRW 價格（五位數如 70000）。
+          驗證韓股 provider 正常 + 不該把三星當加密或美股。
+      - query: "它的市值大概多少？"
+        expect_any_keyword: ["三星", "Samsung"]
+        expect_nonempty: true
+        notes: "代名詞「它」應指三星（測多輪上下文）"
+
+  # ============================================================
+  # 情境 13：美股正常查詢（之前只有 SNXX 未知代號）
+  # ============================================================
+  - id: "S13-us-stock-normal"
+    category: global_stock
+    language: "zh-TW"
+    turns:
+      - query: "蘋果（AAPL）現在多少錢？"
+        expect_tools: ["us_stock_price", "resolve_symbol"]
+        expect_any_keyword: ["蘋果", "Apple", "AAPL"]
+        expect_nonempty: true
+        notes: |
+          正常美股查詢。AAPL 應回兩~三位數 USD。
+          驗證不會誤把美股當加密（crypto guard 不該誤殺真美股）。
+      - query: "輝達呢？"
+        expect_any_keyword: ["輝達", "NVIDIA", "NVDA"]
+        expect_nonempty: true
+        notes: "中文名查詢 + 連續追問"
+
+  # ============================================================
+  # 情境 14：加密誤丟股票工具 regression（crypto guard 驗證）
+  # ============================================================
+  - id: "S14-crypto-not-misrouted"
+    category: price_sanity
+    language: "zh-TW"
+    turns:
+      - query: "幫我查比特幣的技術分析"
+        expect_keywords: ["比特幣", "BTC"]
+        # 不該出現美股技術分析工具的錯誤（代表被正確路由到 crypto 技術分析）
+        expect_not_keywords: ["是加密貨幣，無法用"]
+        expect_nonempty: true
+        notes: |
+          驗證 BTC 被正確路由到 crypto 技術分析工具，而非被丟給 us_technical_analysis
+          觸發 crypto guard（雖 guard 會擋，但正確路由根本不該觸發 guard）。
+
+  # ============================================================
+  # 情境 15：多市場混合比較（跨市場切換 + 多標的同時）
+  # ============================================================
+  - id: "S15-multi-market-compare"
+    category: multiturn_context
+    language: "zh-TW"
+    soft: true  # nemotron 對多標的同時查詢遵從性不穩
+    turns:
+      - query: "台積電、三星和蘋果現在分別多少錢？"
+        expect_any_keyword: ["台積電", "2330"]
+        expect_nonempty: true
+        notes: |
+          一次問三個不同市場（台/韓/美）的標的。測 agent 能否正確路由到
+          三個不同 provider（tw/kr/us），不混淆。最容易出錯的綜合對話。
+      - query: "那輝達呢？"
+        expect_any_keyword: ["輝達", "NVDA"]
+        expect_nonempty: true
+        notes: "連續追問第四個標的（美股），測不會跟前述混淆"
+      - query: "這幾檔哪個最近漲最多？"
+        expect_nonempty: true
+        expect_not_keywords: ["請問您想詢問", "請提供"]
+        notes: |
+          「這幾檔」要理解為前面所有股票。測多標的代名詞指代，
+          不該反問釐清（前面的上下文已足夠明確）。
+
+  # ============================================================
+  # 情境 16：加密 → 股票跨資產代名詞混淆
+  # ============================================================
+  - id: "S16-cross-asset-pronoun"
+    category: multiturn_context
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "比特幣和台積電哪個適合長期投資？"
+        expect_any_keyword: ["比特幣", "BTC"]
+        expect_nonempty: true
+        notes: "跨資產類別（加密 vs 股票）比較，建立兩者上下文"
+      - query: "它的風險主要在哪裡？"
+        expect_nonempty: true
+        expect_not_keywords: ["請問您想詢問"]
+        notes: |
+          「它」在跨資產類別時最易混淆。應理解為「兩者各自的風險」
+          或主動說明（修補前可能反問釐清）。
+
+  # ============================================================
+  # 情境 17：記憶連續性（說出偏好後後續是否記得）
+  # ============================================================
+  - id: "S17-memory-continuity"
+    category: memory
+    language: "zh-TW"
+    soft: true  # 記憶需 DB + 整合，nemotron 遵從性不穩
+    turns:
+      - query: "我比較偏好穩定的藍籌股，不喜歡太高風險"
+        expect_nonempty: true
+        notes: "建立使用者偏好（應觸發 remember 工具寫入記憶）"
+      - query: "那推薦我適合的投資標的"
+        expect_nonempty: true
+        notes: "測是否帶入上一輪的「穩定藍籌」偏好做推薦"
+      - query: "比特幣適合我嗎？"
+        expect_nonempty: true
+        expect_not_keywords: ["請問您想詢問"]
+        notes: |
+          高風險的 BTC 對照使用者「不喜歡高風險」偏好。
+          理想：應點出 BTC 高波動與使用者偏好不符。
+
+  # ============================================================
+  # 情境 18：極端短查詢 + 錯字（邊界容忍）
+  # ============================================================
+  - id: "S18-short-and-typo"
+    category: edge_case
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "btc"
+        expect_any_keyword: ["比特幣", "BTC", "Bitcoin"]
+        expect_nonempty: true
+        notes: "極端短查詢（全小寫），測能正確識別為比特幣"
+      - query: "2330"
+        expect_any_keyword: ["台積電", "2330"]
+        expect_nonempty: true
+        notes: "純數字（台股代號），測能正確路由到台股"
+      - query: "appl 價格"  # 故意打錯（Apple 的正確是 AAPL）
+        expect_nonempty: true
+        notes: |
+          錯字容忍。appl 不是有效 ticker，測 agent 會嘗試解析/模糊匹配，
+          或明確說查不到（不該崩潰或回垃圾）。
+
+  # ============================================================
+  # 情境 19：判斷型問題（investment-judgment skill 觸發）
+  # ============================================================
+  - id: "S19-judgment-structured"
+    category: judgment
+    language: "zh-TW"
+    soft: true  # 結構化判斷需強模型，nemotron 遵從性不穩
+    turns:
+      - query: "台積電現在適合買嗎？"
+        expect_any_keyword: ["台積電", "2330"]
+        expect_nonempty: true
+        expect_not_keywords: ["0.000010", "是加密貨幣"]
+        notes: |
+          判斷型問題，應觸發 investment-judgment skill（利多→利空→綜合結構）。
+          測不會回垃圾價、不會把台積電當加密。內容應含正反兩面觀點。
+      - query: "那以太坊呢？值不值得投資？"
+        expect_any_keyword: ["以太坊", "ETH"]
+        expect_nonempty: true
+        notes: "連續判斷型問題，測跨資產切換 + 結構化判斷"
+
+  # ============================================================
+  # 情境 20：中英混雜 + 代號（全球化用戶常見）
+  # ============================================================
+  - id: "S20-mixed-lang-ticker"
+    category: language_switch
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "NVDA 跟 TSM 的 technical 比較一下"
+        expect_any_keyword: ["NVDA", "TSM", "輝達", "台積"]
+        expect_nonempty: true
+        notes: |
+          中英混雜 + 英文 ticker。TSM 是台積電 ADR（美股），
+          測能正確識別兩個都是美股代號並比較技術面。
+      - query: "Samsung 和比特幣 recent news 呢？"
+        expect_nonempty: true
+        notes: "中英混雜 + 跨資產（韓股 + 加密）新聞查詢"
+
+  # ============================================================
+  # 情境 21：連續多輪深度追問（測不會半途崩潰/空回）
+  # ============================================================
+  - id: "S21-deep-multiturn"
+    category: multiturn_context
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "輝達最新財報表現如何？"
+        expect_any_keyword: ["輝達", "NVDA"]
+        expect_nonempty: true
+        notes: "建立 NVDA 上下文（基本面）"
+      - query: "技術面呢？"
+        expect_any_keyword: ["輝達", "NVDA"]
+        expect_nonempty: true
+        expect_not_keywords: ["請問您想詢問"]
+        notes: "「呢」追問技術面，測代名詞指代 NVDA"
+      - query: "機構怎麼看？"
+        expect_nonempty: true
+        expect_not_keywords: ["請問您想詢問"]
+        notes: "連續第三輪追問（機構持倉/評級），測不會在第3輪失憶"
+      - query: "綜合來說現在可以買嗎？"
+        expect_nonempty: true
+        expect_not_keywords: ["請問您想詢問"]
+        notes: |
+          第4輪要求綜合判斷。測 agent 能整合前3輪的基本/技術/機構資訊
+          給出結構化判斷，不該反問「綜合什麼」。
+
+  # ============================================================
+  # 情境 22：港股 + 日股（之前完全沒測的市場）
+  # ============================================================
+  - id: "S22-hk-jp-stock"
+    category: global_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "騰訊現在股價多少？"
+        expect_any_keyword: ["騰訊", "Tencent", "0700"]
+        expect_nonempty: true
+        notes: "港股（0700.HK），測港股市場正常運作"
+      - query: "豐田汽車呢？"
+        expect_any_keyword: ["豐田", "Toyota", "7203"]
+        expect_nonempty: true
+        notes: "日股（7203.T），測日股市場 + 連續追問切換市場"
+
+  # ============================================================
+  # 以下 S23-S30 基於網路真實使用者問題搜集（Reddit/財經顧問/論壇高頻問句）
+  # 來源：r/Bitcoin, r/CryptoCurrency, Investopedia, Fidelity, Suze Orman,
+  #       ZeroScam, 雪球, 騰訊雲等。涵蓋真實使用者最常問的 8 大面向。
+  # ============================================================
+
+  # ============================================================
+  # 情境 23：買賣時機判斷（Reddit/財經顧問最高頻問題）
+  # "Should I buy now or wait?" "Should I sell at this price?"
+  # ============================================================
+  - id: "S23-buy-sell-timing"
+    category: judgment
+    language: "zh-TW"
+    soft: true  # nemotron 對判斷型遵從性不穩
+    turns:
+      - query: "比特幣現在這個價位該買嗎？還是再等等？"
+        expect_any_keyword: ["比特幣", "BTC"]
+        expect_nonempty: true
+        expect_not_keywords: ["0.000010", "是加密貨幣，無法用"]
+        notes: |
+          Reddit r/Bitcoin 最高頻問題 "Should I buy now or wait?"。
+          應給出結構化判斷（利多/利空/觀察點），不該只回價格或空回應。
+      - query: "如果已經持有，現在該賣嗎？"
+        expect_nonempty: true
+        expect_not_keywords: ["請問您想詢問"]
+        notes: |
+          "Should I sell?" — 測 agent 對賣出時機的看法（連續上文 BTC），
+          不該反問「賣什麼」（上文已明確是 BTC）。
+
+  # ============================================================
+  # 情境 24：泡沫/風險質疑（AI 股票、加密常被問）
+  # "Is it a bubble?" "What are the biggest risks?"
+  # ============================================================
+  - id: "S24-bubble-risk-concern"
+    category: judgment
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "AI 概念股是不是泡沫？輝達漲太多了吧"
+        expect_any_keyword: ["輝達", "NVDA", "AI"]
+        expect_nonempty: true
+        notes: |
+          Suze Orman 常被問 "Is AI a bubble?"。測 agent 能平衡回應泡沫論
+          vs 實質成長，不該一面倒唱多或唱空。
+      - query: "加密貨幣最大的風險是什麼？"
+        expect_nonempty: true
+        expect_any_keyword: ["風險", "波動", "監管"]
+        notes: |
+          VanEck/Fidelity 高頻問題。應列具體風險（波動/監管/安全/流動性），
+          不該空泛說「有風險」。
+
+  # ============================================================
+  # 情境 25：詐騙偵測（CryptoMind 核心功能）
+  # "Is this legit?" "Is it a scam?"
+  # ============================================================
+  - id: "S25-scam-detection"
+    category: scam_safety
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "有人私訊說保證每月穩定獲利 30%，要我轉 USDT 到他的平台，這安全嗎？"
+        expect_nonempty: true
+        expect_any_keyword: ["詐騙", "風險", "小心", "可疑", "不要"]
+        notes: |
+          ZeroScam/r/CryptoScams 真實案例。保證高獲利 + 轉帳是典型詐騙特徵。
+          agent 應明確警告「高度可疑/疑似詐騙」，不該說「可以試試」。
+      - query: "那如果是朋友推薦的也是詐騙嗎？"
+        expect_nonempty: true
+        expect_not_keywords: ["請問您想詢問"]
+        notes: "連續追問，測不會反問釐清（上文明確）"
+
+  # ============================================================
+  # 情境 26：技術指標解讀（新手高頻）
+  # "What does RSI mean?" "How to read MACD?"
+  # ============================================================
+  - id: "S26-indicator-explanation"
+    category: education
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "台積電的 RSI 是多少？代表什麼意思？"
+        expect_any_keyword: ["台積電", "2330"]
+        expect_nonempty: true
+        notes: |
+          Investopedia/Reddit r/TradingView 高頻。應給 RSI 數值 + 解讀
+          （>70 超買/<30 超賣），不該只給數字不解釋。
+      - query: "MACD 又是什麼？怎麼看？"
+        expect_nonempty: true
+        expect_any_keyword: ["MACD", "均線", "動能"]
+        notes: "連續追問 MACD，測技術指標教育能力"
+
+  # ============================================================
+  # 情境 27：DeFi/鏈上數據（進階加密用戶）
+  # TVL, staking yield, gas fees
+  # ============================================================
+  - id: "S27-defi-onchain"
+    category: defi
+    language: "zh-TW"
+    soft: true  # 鏈上工具可能受限
+    turns:
+      - query: "以太坊現在的 Gas 費多少？適合轉帳嗎？"
+        expect_any_keyword: ["Gas", "gas", "手續", "以太坊", "ETH"]
+        expect_nonempty: true
+        notes: |
+          Deltec/Galaxy 高頻。測鏈上數據工具（gas 工具）正常運作，
+          不該把 ETH 當股票查。
+      - query: "ETH 質押的年化收益大概多少？"
+        expect_nonempty: true
+        notes: "staking yield 問題，測 DeFi 基本面工具"
+
+  # ============================================================
+  # 情境 28：資產配置建議（進階投資人）
+  # "How should I allocate?" "$10000 split"
+  # ============================================================
+  - id: "S28-portfolio-allocation"
+    category: judgment
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "我有 1萬美金想投資，比特幣和蘋果股票怎麼分配比較好？"
+        expect_nonempty: true
+        notes: |
+          Suze Orman/VanEck 配置建議問題。測 agent 能給比例建議 + 風險說明，
+          不該拒答或只說「請諮詢專業」（應至少給框架性建議）。
+      - query: "如果我是保守型投資人呢？"
+        expect_nonempty: true
+        expect_not_keywords: ["請問您想詢問"]
+        notes: "依風險承受度調整建議（連續上文）"
+
+  # ============================================================
+  # 情境 29：概念教育（新手最高頻）
+  # "What is Bitcoin?" "How does blockchain work?"
+  # ============================================================
+  - id: "S29-concept-education"
+    category: education
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "比特幣到底是什麼？為什麼有人說它是數位黃金？"
+        expect_nonempty: true
+        expect_any_keyword: ["比特幣", "BTC", "區塊鏈", "加密"]
+        notes: |
+          Fidelity/Charles Schwab 最高頻問題。測概念教育能力，
+          應解釋清楚但不過度技術化。
+      - query: "區塊鏈跟比特幣有什麼不同？"
+        expect_nonempty: true
+        expect_any_keyword: ["區塊鏈", "比特幣", "技術", "應用"]
+        notes: "連續追問區塊鏈 vs 比特幣區別（概念釐清）"
+
+  # ============================================================
+  # 情境 30：多市場連續深度對話（綜合壓力測）
+  # 混合加密+多國股票+判斷+新聞，測最長連續對話不崩潰
+  # ============================================================
+  - id: "S30-comprehensive-deep"
+    category: multiturn_context
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "幫我比較比特幣和台積電哪個今年表現比較好"
+        expect_nonempty: true
+        notes: "跨資產比較（加密 vs 台股），建立兩者上下文"
+      - query: "台積電最近有什麼重要新聞嗎？"
+        expect_any_keyword: ["台積電", "2330"]
+        expect_nonempty: true
+        notes: "切到新聞維度，測不會把新聞查成 BTC"
+      - query: "那比特幣呢？最近有什麼消息？"
+        expect_any_keyword: ["比特幣", "BTC"]
+        expect_nonempty: true
+        expect_not_keywords: ["請問您想詢問"]
+        notes: "「呢」追問 BTC 新聞，測代名詞切回 BTC（不是台積電）"
+      - query: "綜合來說，現在這兩個哪個比較值得投資？"
+        expect_nonempty: true
+        expect_not_keywords: ["請問您想詢問", "請提供"]
+        notes: |
+          第4輪綜合判斷，整合前3輪的表現/新聞資訊。測最長連續對話不失憶、
+          不崩潰、能跨資產給結構化判斷。
+
+
+
+  # ============================================================
+  # S31-S100：系統性擴充，覆蓋全市場/全資產/真實使用者問題場景
+  # 基於 Reddit/Investopedia/Fidelity/VanEck/ZeroScam 等真實問題搜集
+  # + 業界 AI 投資助理測試實務。共 70 題，加 S1-S30 共 100 題。
+  # ============================================================
+
+  - id: "S31-tw-etf"
+    category: tw_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "0050 ETF 現在多少錢？殖利率多少？"
+        expect_any_keyword: ["0050", "元大台灣50"]
+        expect_nonempty: true
+        notes: "台股 ETF 查詢"
+      - query: "跟 00878 比哪個配息比較高？"
+        expect_not_keywords: ["請問您想詢問"]
+        expect_nonempty: true
+        notes: "ETF 比較 + 連續追問"
+
+  - id: "S32-tw-financial"
+    category: tw_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "富邦金現在的本益比和殖利率是多少？"
+        expect_any_keyword: ["富邦金", "2881"]
+        expect_nonempty: true
+        notes: "金融股基本面"
+      - query: "國泰金呢？"
+        expect_any_keyword: ["國泰金", "2882"]
+        expect_nonempty: true
+        notes: "連續切換金融股"
+
+  - id: "S33-tw-shipping"
+    category: tw_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "長榮航運最近的營收表現如何？"
+        expect_any_keyword: ["長榮", "2603"]
+        expect_nonempty: true
+        notes: "航運股月營收"
+      - query: "陽明海運跟它比起來呢？"
+        expect_not_keywords: ["請問您想詢問"]
+        expect_nonempty: true
+        notes: "航運股比較"
+
+  - id: "S34-tw-institutional"
+    category: tw_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "台積電今天三大法人買賣超是多少？"
+        expect_any_keyword: ["台積電", "2330", "法人"]
+        expect_nonempty: true
+        notes: "法人籌碼"
+
+  - id: "S35-tw-dividend"
+    category: tw_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "中華電信的股利政策怎麼樣？適合存股嗎？"
+        expect_any_keyword: ["中華電", "2412"]
+        expect_nonempty: true
+        notes: "存股型高殖利率股"
+
+  - id: "S36-kr-lg"
+    category: global_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "LG Energy Solution 現在股價？"
+        expect_any_keyword: ["LG", "373220"]
+        expect_nonempty: true
+        notes: "韓股電池股"
+
+  - id: "S37-kr-hyundai"
+    category: global_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "現代汽車的技術面分析"
+        expect_any_keyword: ["現代", "Hyundai", "005380"]
+        expect_nonempty: true
+        notes: "韓股汽車"
+
+  - id: "S38-kr-sk"
+    category: global_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "SK hynix 記憶體大廠現在值得買嗎？"
+        expect_any_keyword: ["SK", "000660"]
+        expect_nonempty: true
+        notes: "韓股半導體 + 判斷"
+
+  - id: "S39-kr-compare"
+    category: global_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "三星和 SK hynix 哪個半導體前景比較好？"
+        expect_nonempty: true
+        notes: "韓股多標的比較"
+
+  - id: "S40-us-faang-msft"
+    category: us_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "微軟 MSFT 現在多少錢？"
+        expect_any_keyword: ["微軟", "MSFT", "Microsoft"]
+        expect_nonempty: true
+        notes: "FAANG+ 查價"
+      - query: "跟 Google GOOGL 比哪個本益比低？"
+        expect_not_keywords: ["請問您想詢問"]
+        expect_nonempty: true
+        notes: "FAANG 比較"
+
+  - id: "S41-us-semiconductor"
+    category: us_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "AMD 現在的技術指標怎麼樣？"
+        expect_any_keyword: ["AMD", "Advanced Micro"]
+        expect_nonempty: true
+        notes: "半導體對手"
+
+  - id: "S42-us-tsla"
+    category: us_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "特斯拉 TSLA 最近有什麼新聞？"
+        expect_any_keyword: ["特斯拉", "TSLA", "Tesla"]
+        expect_nonempty: true
+        notes: "熱門美股新聞"
+      - query: "現在適合買嗎？"
+        expect_not_keywords: ["請問您想詢問"]
+        expect_nonempty: true
+        notes: "連續判斷型"
+
+  - id: "S43-us-jpm-finance"
+    category: us_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "摩根大通 JPM 的財報表現如何？"
+        expect_any_keyword: ["摩根", "JPM", "JPMorgan"]
+        expect_nonempty: true
+        notes: "美國金融股財報"
+
+  - id: "S44-us-consumer"
+    category: us_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "可口可樂 KO 適合長期投資嗎？"
+        expect_any_keyword: ["可口可樂", "KO", "Coca"]
+        expect_nonempty: true
+        notes: "消費股 + 判斷"
+
+  - id: "S45-us-biotech"
+    category: us_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "輝瑞 PFE 現在的估值合理嗎？"
+        expect_any_keyword: ["輝瑞", "PFE", "Pfizer"]
+        expect_nonempty: true
+        notes: "生技股估值"
+
+  - id: "S46-us-energy"
+    category: us_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "埃克森美孚 XOM 跟油價的關係？"
+        expect_any_keyword: ["埃克森", "XOM", "Exxon"]
+        expect_nonempty: true
+        notes: "能源股 + 油價關聯"
+
+  - id: "S47-us-etf"
+    category: us_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "SPY 和 QQQ 哪個適合定期定額？"
+        expect_any_keyword: ["SPY", "QQQ", "ETF"]
+        expect_nonempty: true
+        notes: "美股 ETF 比較"
+
+  - id: "S48-hk-alibaba"
+    category: global_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "阿里巴巴 9988 現在股價多少？"
+        expect_any_keyword: ["阿里巴巴", "9988", "Alibaba"]
+        expect_nonempty: true
+        notes: "港股科技巨頭"
+
+  - id: "S49-hk-meituan"
+    category: global_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "美團 3690 最近表現如何？"
+        expect_any_keyword: ["美團", "3690", "Meituan"]
+        expect_nonempty: true
+        notes: "港股外送平台"
+
+  - id: "S50-hk-compare"
+    category: global_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "騰訊和阿里哪個比較值得投資？"
+        expect_any_keyword: ["騰訊", "阿里"]
+        expect_nonempty: true
+        notes: "港股雙雄比較 + 判斷"
+
+  - id: "S51-jp-sony"
+    category: global_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "Sony 6758 現在股價多少？"
+        expect_any_keyword: ["Sony", "索尼", "6758"]
+        expect_nonempty: true
+        notes: "日股科技娛樂"
+
+  - id: "S52-jp-softbank"
+    category: global_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "軟銀 9984 的投資組合有哪些？"
+        expect_any_keyword: ["軟銀", "SoftBank", "9984"]
+        expect_nonempty: true
+        notes: "日股投資控股"
+
+  - id: "S53-jp-compare"
+    category: global_stock
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "豐田和 Sony 哪個產業前景好？"
+        expect_nonempty: true
+        notes: "跨產業日股比較"
+
+  - id: "S54-cn-moutai"
+    category: global_stock
+    language: "zh-CN"
+    soft: true
+    turns:
+      - query: "贵州茅台现在多少钱？"
+        expect_any_keyword: ["茅台", "600519", "Moutai"]
+        expect_nonempty: true
+        notes: "A股白酒龍頭（簡中）"
+
+  - id: "S55-cn-byd"
+    category: global_stock
+    language: "zh-CN"
+    soft: true
+    turns:
+      - query: "比亚迪 BYD 跟特斯拉比谁更有潜力？"
+        expect_any_keyword: ["比亚迪", "BYD", "比亞迪"]
+        expect_nonempty: true
+        notes: "A股電動車 + 跨市場比較（簡中）"
+
+  - id: "S56-cn-catl"
+    category: global_stock
+    language: "zh-CN"
+    soft: true
+    turns:
+      - query: "宁德时代 CATL 现在值得投资吗？"
+        expect_any_keyword: ["宁德", "CATL", "寧德"]
+        expect_nonempty: true
+        notes: "A股電池（簡中）"
+
+  - id: "S57-crypto-sol"
+    category: crypto
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "SOL 現在多少錢？技術面如何？"
+        expect_any_keyword: ["SOL", "Solana", "索拉納"]
+        expect_nonempty: true
+        notes: "熱門 L1"
+
+  - id: "S58-crypto-stablecoin"
+    category: crypto
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "USDT 和 USDC 哪個比較安全？"
+        expect_any_keyword: ["USDT", "USDC", "穩定幣"]
+        expect_nonempty: true
+        notes: "穩定幣比較"
+
+  - id: "S59-crypto-meme"
+    category: crypto
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "DOGE 和 SHIB 這種 meme 幣值得買嗎？"
+        expect_any_keyword: ["DOGE", "SHIB", "狗狗幣"]
+        expect_nonempty: true
+        notes: "meme 幣 + 判斷"
+
+  - id: "S60-crypto-defi-token"
+    category: crypto
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "UNI 和 AAVE 這些 DeFi 代幣現在表現如何？"
+        expect_any_keyword: ["UNI", "AAVE", "DeFi"]
+        expect_nonempty: true
+        notes: "DeFi 治理代幣"
+
+  - id: "S61-crypto-layer2"
+    category: crypto
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "Arbitrum ARB 和 Optimism OP 哪個 Layer 2 比較好？"
+        expect_any_keyword: ["ARB", "OP", "Layer", "Arbitrum", "Optimism"]
+        expect_nonempty: true
+        notes: "Layer2 比較"
+
+  - id: "S62-crypto-ton"
+    category: crypto
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "TON 幣現在適合買嗎？"
+        expect_any_keyword: ["TON", "Toncoin"]
+        expect_nonempty: true
+        notes: "TON 生態 + 判斷（專案核心幣）"
+
+  - id: "S63-crypto-xrp"
+    category: crypto
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "XRP 瑞波幣最近有什麼消息？"
+        expect_any_keyword: ["XRP", "瑞波", "Ripple"]
+        expect_nonempty: true
+        notes: "支付型加密"
+
+  - id: "S64-crypto-bnb"
+    category: crypto
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "BNB 幣安幣的用途和價值？"
+        expect_any_keyword: ["BNB", "幣安", "Binance"]
+        expect_nonempty: true
+        notes: "交易所平台幣"
+
+  - id: "S65-crypto-whale"
+    category: crypto
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "最近比特幣有大戶異動嗎？鯨魚交易"
+        expect_nonempty: true
+        notes: "鏈上鯨魚監控（測 whale 工具）"
+
+  - id: "S66-crypto-newcoin"
+    category: crypto
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "PI Network 派幣現在多少錢？"
+        expect_any_keyword: ["PI", "派幣", "Pi Network"]
+        expect_nonempty: true
+        notes: "新興冷門幣（測 fallback）"
+
+  - id: "S67-commodity-gold"
+    category: commodity
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "黃金現在多少錢一盎司？"
+        expect_any_keyword: ["黃金", "gold", "Gold"]
+        expect_nonempty: true
+        notes: "避險商品查價"
+      - query: "現在適合買黃金避險嗎？"
+        expect_not_keywords: ["請問您想詢問"]
+        expect_nonempty: true
+        notes: "連續判斷型"
+
+  - id: "S68-commodity-silver"
+    category: commodity
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "白銀現在的價格？跟黃金的金銀比多少？"
+        expect_any_keyword: ["白銀", "silver", "Silver"]
+        expect_nonempty: true
+        notes: "白銀 + 金銀比"
+
+  - id: "S69-commodity-oil"
+    category: commodity
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "原油 WTI 現在一桶多少錢？"
+        expect_any_keyword: ["原油", "WTI", "oil", "Oil"]
+        expect_nonempty: true
+        notes: "能源商品"
+
+  - id: "S70-commodity-copper"
+    category: commodity
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "銅價現在多少？銅被稱為經濟風向球"
+        expect_any_keyword: ["銅", "copper", "Copper"]
+        expect_nonempty: true
+        notes: "工業金屬"
+
+  - id: "S71-commodity-compare"
+    category: commodity
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "黃金和比特幣哪個避險效果更好？"
+        expect_any_keyword: ["黃金", "比特幣", "gold", "BTC"]
+        expect_nonempty: true
+        notes: "跨資產避險比較（常見問題）"
+
+  - id: "S72-forex-usdjpy"
+    category: forex
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "美元兌日圓 USD/JPY 現在匯率多少？"
+        expect_any_keyword: ["日圓", "JPY", "日元"]
+        expect_nonempty: true
+        notes: "主要貨幣對"
+
+  - id: "S73-forex-eurusd"
+    category: forex
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "歐元兌美元 EUR/USD 匯率？"
+        expect_any_keyword: ["歐元", "EUR"]
+        expect_nonempty: true
+        notes: "歐美貨幣對"
+
+  - id: "S74-forex-usdtwd"
+    category: forex
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "美元兌台幣現在多少？"
+        expect_any_keyword: ["台幣", "TWD", "美元"]
+        expect_nonempty: true
+        notes: "台灣用戶最關注匯率"
+
+  - id: "S75-forex-gbp"
+    category: forex
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "英鎊 GBP 最近走勢如何？"
+        expect_any_keyword: ["英鎊", "GBP", "鎊"]
+        expect_nonempty: true
+        notes: "英鎊匯率"
+
+  - id: "S76-forex-rmb"
+    category: forex
+    language: "zh-CN"
+    soft: true
+    turns:
+      - query: "人民币兑美元现在多少？（离岸）"
+        expect_any_keyword: ["人民币", "民幣", "CNY", "CNH"]
+        expect_nonempty: true
+        notes: "人民幣匯率（簡中）"
+
+  - id: "S77-macro-fed-rate"
+    category: macro
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "美國聯準會 Fed 現在的基準利率是多少？"
+        expect_any_keyword: ["利率", "Fed", "聯準會", "rate"]
+        expect_nonempty: true
+        notes: "央行利率（影響所有市場）"
+
+  - id: "S78-macro-cpi"
+    category: macro
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "美國最新 CPI 通膨數據是多少？"
+        expect_any_keyword: ["CPI", "通膨", "通胀"]
+        expect_nonempty: true
+        notes: "通膨指標"
+
+  - id: "S79-macro-nonfarm"
+    category: macro
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "美國非農就業數據最近如何？"
+        expect_any_keyword: ["非農", "就業", "nonfarm"]
+        expect_nonempty: true
+        notes: "就業數據（影響 Fed 決策）"
+
+  - id: "S80-macro-vix"
+    category: macro
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "VIX 恐慌指數現在是多少？代表什麼？"
+        expect_any_keyword: ["VIX", "恐慌", "volatility"]
+        expect_nonempty: true
+        notes: "市場情緒指標 + 教育"
+
+  - id: "S81-macro-gdp"
+    category: macro
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "美國 GDP 成長率最新數據？"
+        expect_any_keyword: ["GDP", "成長率", "经济"]
+        expect_nonempty: true
+        notes: "經濟成長指標"
+
+  - id: "S82-scam-phishing"
+    category: scam_safety
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "我收到一封 email 說我的幣安帳號被凍結，要我點連結驗證，這是真的嗎？"
+        expect_any_keyword: ["釣魚", "詐騙", "可疑", "不要", "假的"]
+        expect_nonempty: true
+        notes: "釣魚郵件（最常見詐騙）"
+
+  - id: "S83-scam-pig-butchering"
+    category: scam_safety
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "網路上認識的人帶我投資加密貨幣，保證獲利，這是什麼套路？"
+        expect_any_keyword: ["殺豬盤", "詐騙", "可疑", "不要", "風險"]
+        expect_nonempty: true
+        notes: "殺豬盤（社交工程詐騙）"
+
+  - id: "S84-scam-airdrop"
+    category: scam_safety
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "錢包突然收到不明代幣空投，要我連結 dApp 領取，安全嗎？"
+        expect_any_keyword: ["詐騙", "可疑", "不要", "釣魚", "授權"]
+        expect_nonempty: true
+        notes: "空投詐騙（惡意授權）"
+
+  - id: "S85-scam-customer-service"
+    category: scam_safety
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "有人打電話說是交易所客服，要我的 2FA 驗證碼，該給嗎？"
+        expect_any_keyword: ["詐騙", "不要", "可疑", "假的", "絕對"]
+        expect_nonempty: true
+        notes: "冒充客服詐騙"
+
+  - id: "S86-scam-contract"
+    category: scam_safety
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "群組裡有人教學合約交易，說穩賺不賠，這可信嗎？"
+        expect_any_keyword: ["詐騙", "風險", "可疑", "不要", "槓桿"]
+        expect_nonempty: true
+        notes: "合約交易詐騙教學"
+
+  - id: "S87-edu-blockchain"
+    category: education
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "區塊鏈技術除了加密貨幣還能用在哪裡？"
+        expect_any_keyword: ["區塊鏈", "blockchain", "應用"]
+        expect_nonempty: true
+        notes: "區塊鏈應用教育"
+
+  - id: "S88-edu-defi"
+    category: education
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "DeFi 去中心化金融是什麼？跟傳統銀行有什麼不同？"
+        expect_any_keyword: ["DeFi", "去中心化", "金融"]
+        expect_nonempty: true
+        notes: "DeFi 概念教育"
+
+  - id: "S89-edu-staking"
+    category: education
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "什麼是質押 staking？跟挖礦有什麼不同？"
+        expect_any_keyword: ["質押", "staking", "挖礦"]
+        expect_nonempty: true
+        notes: "質押概念"
+
+  - id: "S90-edu-leverage"
+    category: education
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "槓桿交易是什麼？為什麼有人會爆倉？"
+        expect_any_keyword: ["槓桿", "槓桿", "保證金", "爆倉"]
+        expect_nonempty: true
+        notes: "槓桿風險教育"
+
+  - id: "S91-edu-pe-ratio"
+    category: education
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "本益比 P/E 是什麼？怎麼用來判斷股票貴不貴？"
+        expect_any_keyword: ["本益比", "P/E", "PE"]
+        expect_nonempty: true
+        notes: "股票估值概念"
+
+  - id: "S92-edu-dollar-cost"
+    category: education
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "定期定額投資好嗎？跟單筆投入哪個好？"
+        expect_any_keyword: ["定期定額", "單筆", "DCA"]
+        expect_nonempty: true
+        notes: "投資策略教育"
+
+  - id: "S93-multi-portfolio-review"
+    category: multiturn_context
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "我的投資組合有台積電、蘋果和比特幣，幫我看看"
+        expect_nonempty: true
+        notes: "多標的組合（建立上下文）"
+      - query: "哪個風險最高？"
+        expect_not_keywords: ["請問您想詢問"]
+        expect_nonempty: true
+        notes: "組合風險評估（連續）"
+      - query: "如果要減碼應該先賣哪個？"
+        expect_not_keywords: ["請問您想詢問"]
+        expect_nonempty: true
+        notes: "減碼建議（連續判斷）"
+
+  - id: "S94-multi-market-tour"
+    category: multiturn_context
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "台股今天大盤指數多少？"
+        expect_any_keyword: ["大盤", "指數", "加權"]
+        expect_nonempty: true
+        notes: "台股大盤"
+      - query: "美股呢？S&P 500"
+        expect_any_keyword: ["S&P", "500", "標普"]
+        expect_nonempty: true
+        notes: "切換美股大盤"
+      - query: "兩個市場現在氣氛如何？"
+        expect_not_keywords: ["請問您想詢問"]
+        expect_nonempty: true
+        notes: "跨市場情緒（連續整合）"
+
+  - id: "S95-multi-crypto-deepdive"
+    category: multiturn_context
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "比特幣現在多少？"
+        expect_any_keyword: ["比特幣", "BTC"]
+        expect_nonempty: true
+        notes: "BTC 建立上下文"
+      - query: "鏈上數據呢？活躍地址數"
+        expect_nonempty: true
+        notes: "切換鏈上數據維度"
+      - query: "跟歷史比起來現在算活躍嗎？"
+        expect_not_keywords: ["請問您想詢問"]
+        expect_nonempty: true
+        notes: "歷史比較判斷（連續）"
+
+  - id: "S96-multi-switch-confusion"
+    category: multiturn_context
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "台積電技術面分析"
+        expect_any_keyword: ["台積電", "2330"]
+        expect_nonempty: true
+        notes: "台積電上下文"
+      - query: "比特幣呢？"
+        expect_any_keyword: ["比特幣", "BTC"]
+        expect_nonempty: true
+        notes: "切到 BTC"
+      - query: "台積電的 RSI 是多少？"
+        expect_any_keyword: ["台積電", "2330"]
+        expect_nonempty: true
+        notes: "切回台積電（測不會混淆成 BTC）"
+
+  - id: "S97-edge-empty-query"
+    category: edge_case
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: " "
+        expect_nonempty: true
+        notes: "空白查詢（測不崩潰，該引導使用者）"
+
+  - id: "S98-edge-special-chars"
+    category: edge_case
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "@#$%^&* BTC ！！！？？？"
+        expect_any_keyword: ["BTC", "比特幣"]
+        expect_nonempty: true
+        notes: "特殊字元混雜（測能從噪音中提取 BTC）"
+
+  - id: "S99-edge-multilingual"
+    category: edge_case
+    language: "en"
+    soft: true
+    turns:
+      - query: "ビットコインの価格は？ BTC 황금 비트코인"
+        expect_any_keyword: ["BTC", "Bitcoin", "比特幣", "ビットコイン"]
+        expect_nonempty: true
+        notes: "日韓混合查詢（測多語言處理）"
+
+  - id: "S100-edge-very-long"
+    category: edge_case
+    language: "zh-TW"
+    soft: true
+    turns:
+      - query: "我想請問一下就是說呢比特幣的部分就是那個現在到底適不適合買進因為我之前有聽朋友說好像會跌然後又有另一個朋友說會漲所以我真的很困擾不知道該怎麼辦你能幫我分析一下現在的狀況嗎順便告訴我技術面基本面還有市場情緒的數據謝謝"
+        expect_any_keyword: ["比特幣", "BTC"]
+        expect_nonempty: true
+        notes: "超長口語查詢（測能提取意圖 + 標的）"

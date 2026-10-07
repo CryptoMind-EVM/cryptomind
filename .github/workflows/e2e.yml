@@ -1,0 +1,52 @@
+name: E2E Tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://test:test@localhost:5432/test
+      REDIS_URL: memory://
+      SECRET_KEY: test-secret-key-for-testing
+      JWT_SECRET_KEY: test-jwt-secret-key-for-testing-1234567890
+      TEST_MODE: "true"
+      TEST_MODE_CONFIRMATION: I_UNDERSTAND_THE_RISKS
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-asyncio pytest-timeout playwright
+
+      - name: Build frontend
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+
+      - name: Install Playwright browsers
+        run: python -m playwright install chromium
+
+      - name: Run E2E tests
+        run: |
+          pytest -o addopts='-v --tb=short --no-cov' -m e2e \
+            --ignore=tests/test_agent_scenarios.py \
+            --ignore=tests/test_pi_routing_fix.py \
+            --ignore=tests/test_router_governance_routes.py \
+            --ignore=tests/test_router_market.py \
+            --ignore=tests/test_router_market_extended.py \
+            --ignore=tests/e2e/test_static_asset_load_smoke.py \
+            --timeout=120

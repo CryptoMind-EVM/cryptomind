@@ -1,0 +1,1603 @@
+/* ── Theme tokens (color channels, theme-switchable) ─────────────────────
+   色頻格式（"R G B" 而非 hex/rgb()），讓 Tailwind 的 /<alpha> 透明度修飾詞生效。
+   :root = 預設淺色（top.co 風格）；html.dark 覆寫深色。
+   切換由 ThemeSwitcher + early-init.js 對 <html> toggle .dark class 控制。 */
+:root {
+    color-scheme: light;
+    /* 淺色：亮灰底（非純白，降低長時間觀看的刺眼感）+ 純白卡片（浮出層次）+
+       深化文字（確保 WCAG 對比）。靈感：GitHub/Notion/Apple HIG 淺色模式。 */
+    --color-background: 245 245 247;       /* #F5F5F7 中性亮灰底 */
+    --color-surface: 255 255 255;          /* 純白卡片，在灰底上浮出 */
+    --color-surface-highlight: 238 238 240;/* hover/elevated */
+    --color-text-primary: 23 23 28;        /* 加深主文字，提升對比 */
+    --color-text-secondary: 55 55 60;      /* 次文字加深，確保可讀 */
+    --color-text-muted: 74 76 84;          /* #4A4C54 輔助文字加深至 AAA 對比 */
+    --color-border: 0 0 0;                 /* 色頻（給 Tailwind /<alpha>） */
+    --color-border-subtle: 0 0 0;          /* 色頻（給 Tailwind /<alpha>） */
+    --color-border-light: 0 0 0;
+    /* legacy 完整 rgba（給舊 CSS 直接當 background/border 用，非色頻） */
+    --border-subtle-color: rgba(0, 0, 0, 0.08);
+    --border-light-color: rgba(0, 0, 0, 0.14);
+    --color-surface-elevated: 248 248 250;
+    --color-surface-deep: 235 235 238;
+    /* accent 語意色：兩 theme 共用（不隨深淺變） */
+    --color-primary: 37 99 235;            /* #2563EB 加深藍，確保白字 on 藍底達 AA 對比 */
+    --color-secondary: 20 22 31;
+    --color-accent: 29 78 216;            /* #1D4ED8 淺色需要深藍——原 #7EABF5 在白底只有 2.14:1，text-accent 幾乎看不見 */
+    --color-success: 21 128 61;           /* #15803D 原 #16A34A 只有 3.03:1；白字實心鈕也不合格 */
+    --color-danger: 185 28 28;            /* #B91C1C 原 #DC2626 在 background 上 4.44:1 差一點 */
+    /* legacy 別名（指向色頻 var，供 styles.css 內部 var(--bg-color) 等舊引用） */
+    --bg-color: rgb(var(--color-background));
+    --surface-color: rgb(var(--color-surface));
+    --primary-color: rgb(var(--color-primary));
+    --secondary-color: rgb(var(--color-secondary));
+    --accent-color: rgb(var(--color-accent));
+    /* 手機 home 指示條的高度：iPhone 34px、Android 手勢列最多約 48px。
+       宿主 WebView（Base App 2026-09-13 實測）會把自己底欄的空間也算進 safe-area，
+       回 100px 以上，畫面底下就多出一大塊空白——用 min() 封頂。 */
+    --mobile-safe-bottom: min(env(safe-area-inset-bottom, 0px), 48px);
+    /* ui-shell 量到之前的保守值：輸入列（約 5.75rem）＋安全區。
+       2026-09-24 手機底部導覽列拔除，不再加導覽列高度。 */
+    --mobile-stack-fallback: calc(var(--mobile-safe-bottom) + 5.75rem);
+    --mobile-toast-clearance: calc(var(--mobile-safe-bottom) + 1rem);
+    --chat-keyboard-offset: 0px;
+}
+
+html.dark {
+    color-scheme: dark;
+    /* 深色（既有配色：墨色底 + 研究藍 accent + 暖白字） */
+    --color-background: 20 22 31;
+    --color-surface: 29 32 43;
+    --color-surface-highlight: 41 45 56;
+    --color-text-primary: 255 253 249;
+    --color-text-secondary: 215 216 220;
+    --color-text-muted: 167 169 178;
+    --color-border: 255 253 249;
+    --color-border-subtle: 255 253 249;
+    --color-border-light: 255 253 249;
+    /* legacy 完整 rgba（深色用暖白透明） */
+    --border-subtle-color: rgba(255, 253, 249, 0.08);
+    --border-light-color: rgba(255, 253, 249, 0.14);
+    --color-surface-elevated: 41 45 56;
+    --color-surface-deep: 16 18 26;
+    --color-secondary: 255 253 249;
+    /* 2026-08-25：原本整組沿用 :root，但一組值服務不了兩個主題——
+       深色下 text-primary 3.14:1、text-danger 3.36:1 都讀不到（text-danger
+       用了 276 次、text-success 214 次，全是使用者要讀的損益數字）。
+       這裡按主題各給一組，兩邊都達 AA。accent 深色維持原值（6.98:1 本來就過）。
+       守衛：tests/js/theme_contrast.mjs 直接讀這些值算 WCAG。 */
+    --color-primary: 96 165 250;           /* #60A5FA */
+    --color-accent: 126 171 245;           /* #7EABF5 深色原值 */
+    --color-success: 74 222 128;           /* #4ADE80 */
+    --color-danger: 248 113 113;           /* #F87171 */
+}
+
+body {
+    font-family: 'Inter', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6, .font-serif {
+    font-family: 'Inter Tight', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+}
+
+code, pre, .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+    /* tabular-nums: 數字等寬，金融數字上下對齊。見 docs/DESIGN_SYSTEM.md */
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+}
+
+/* Display heading utilities — editorial 排版（參考 top.co：
+   大字級 + 收緊 letter-spacing + 600 字重，不靠超粗）。
+   用 utility class（.h1/.h2/.h3）而非套用所有 h1-h6，避免影響 modal/卡片小標。 */
+.h1 {
+    font-family: 'Inter Tight', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+}
+.h2 {
+    font-family: 'Inter Tight', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+}
+.h3 {
+    font-family: 'Inter Tight', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+/* Smooth Transitions - Only for interactive elements (performance fix) */
+button, a, input, select, textarea, .btn, .tab-btn, .card, .modal, .toast, [role="button"] {
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+/* Custom Scrollbar - Minimal */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--border-light-color);
+    border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--color-text-primary) / 0.2);
+}
+
+/* Chat Interface */
+/* ── Chat message layout ─────────────────────────────────────── */
+
+/* Shared message row */
+.chat-row {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    max-width: 48rem;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* User row — right side */
+.chat-row-user {
+    justify-content: flex-end;
+}
+
+/* AI row — left side, full width */
+.chat-row-ai {
+    align-items: flex-start;
+}
+
+/* AI avatar circle */
+.chat-avatar {
+    width: 1.625rem;
+    height: 1.625rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+.chat-avatar svg {
+    width: 0.9rem;
+    height: 0.9rem;
+    fill: white;
+}
+
+/* User bubble */
+.chat-bubble-user {
+    max-width: min(72%, 32rem);
+    background: rgb(var(--color-text-primary) / 0.09);
+    border: 1px solid rgb(var(--color-text-primary) / 0.1);
+    border-radius: 1.125rem 1.125rem 0.25rem 1.125rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-text-primary);
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: normal;
+}
+
+/* AI content — no bubble, just text */
+.chat-content-ai {
+    flex: 1;
+    min-width: 0;
+    padding-top: 0.05rem;
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    color: var(--color-text-secondary, var(--color-text-primary));
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: normal;
+}
+
+/* ── Legacy classes kept for backward compat ─────────────────── */
+.message-bubble { max-width: 72%; padding: 0.625rem 1rem; border-radius: 1.125rem; }
+.bot-message { background: transparent; padding-left: 0; padding-right: 0; }
+.bot-bubble {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin-right: auto;
+    max-width: 100%;
+    min-width: 0;
+}
+
+/* Markdown Styling (Softer) */
+.prose h1, .prose h2, .prose h3 {
+    font-family: 'Inter Tight', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+    color: var(--color-text-primary);
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+.prose p {
+    margin-bottom: 0.75rem;
+    font-weight: 300;
+}
+.prose strong {
+    color: var(--primary-color); /* Primary - TON blue */
+    font-weight: 600;
+}
+.prose code {
+    background: var(--border-subtle-color);
+    padding: 0.2em 0.4em;
+    border-radius: 6px;
+    font-size: 0.85em;
+    color: var(--primary-color);
+    font-family: 'JetBrains Mono', monospace;
+}
+.prose pre {
+    background: var(--color-surface-deep);
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 1px solid var(--border-subtle-color);
+    overflow-x: auto;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.prose ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+.prose ul li {
+    position: relative;
+    padding-left: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+.prose ul li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+}
+
+/* Welcome screen stagger animations
+   延遲總長壓在 0.15s 內（2026-09-27）：LCP 不算還看不見的元素，原本 0.35～0.6s 的延遲
+   直接把訪客首屏的 LCP 往後推。chat-sessions.js showWelcomeScreen 的 inline 延遲同步。 */
+@keyframes welcomeTitle {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes welcomeSub {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.welcome-title { opacity: 0; animation: welcomeTitle 0.3s  cubic-bezier(0.2, 0.8, 0.2, 1)    0s forwards; }
+.welcome-sub   { opacity: 0; animation: welcomeSub   0.3s  cubic-bezier(0.2, 0.8, 0.2, 1)    0.05s forwards; }
+
+/* 私訊「正在輸入…」氣泡：跟對方訊息同款灰底，三點一直都在、依序上下跳
+   （AI 聊天那組 .typing-dots 會縮到 0，截圖常常只剩一點，看起來不像在打字） */
+.dm-typing-bubble {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 14px;
+    border-radius: 1rem;
+    background: rgb(var(--color-surface-highlight));
+}
+.dm-typing-bubble span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgb(var(--color-text-muted));
+    opacity: 0.45;
+    animation: dmTypingBounce 1.2s infinite ease-in-out;
+}
+.dm-typing-bubble span:nth-child(2) { animation-delay: 0.15s; }
+.dm-typing-bubble span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes dmTypingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.45; }
+    30% { transform: translateY(-3px); opacity: 1; }
+}
+
+/* 私訊「↓ 新訊息」：往上翻舊訊息時來了新訊息，不硬拉回底部，改浮這顆（LINE／Teams 式）。
+   sticky 在捲動區最後一列；bottom 由 JS 依捲動區 padding-bottom 算（手機要避開固定輸入列） */
+.dm-new-pill {
+    position: sticky;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: fit-content;
+    margin: 8px auto 0;
+    padding: 6px 14px;
+    border: 0;
+    border-radius: 9999px;
+    background: rgb(var(--color-primary));
+    color: rgb(var(--color-background));
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 0 4px 14px rgb(0 0 0 / 0.18);
+    cursor: pointer;
+}
+
+/* 私訊「對話清單＋聊天」：1024 以上並排；以下（手機＋768–1023 的窄桌機）一次一欄。
+   以前 768 就並排，860 寬時網站側欄 288＋清單 320，聊天欄只剩 218px（DANNY 2026-10-01）。
+   外框 data-pane 由 JS 標（messages_page.js／friends.js），顯示哪欄交給這裡，視窗寬度跨過 1024 不會卡住 */
+@media (max-width: 1023.98px) {
+    [data-dm-panes][data-pane="chat"] [data-dm-list] { display: none !important; }
+    [data-dm-panes][data-pane="list"] [data-dm-chat] { display: none !important; }
+    [data-dm-panes][data-pane="chat"] [data-dm-chat] { display: flex !important; }
+    [data-dm-list-toggle] { display: none !important; }
+}
+@media (min-width: 1024px) {
+    [data-dm-panes] [data-dm-chat] { display: flex !important; }
+    [data-dm-back] { display: none !important; }
+    /* 好友頁並排時收合對話清單（friends.js toggleConvList）：只在聊天中收，沒開對話時照樣顯示清單 */
+    [data-dm-panes][data-list-collapsed="1"][data-pane="chat"] [data-dm-list] { display: none !important; }
+}
+.dm-list-icon-expand { display: none; }
+[data-list-collapsed="1"] .dm-list-icon-collapse { display: none; }
+[data-list-collapsed="1"] .dm-list-icon-expand { display: block; }
+
+/* 訊息區不橫向捲動：hover 工具列（絕對定位）在極窄聊天欄超出時裁掉，不撐出橫向捲軸 */
+#messages-container, #social-messages-container { overflow-x: hidden; }
+
+/* 私訊氣泡最寬 36rem：大螢幕上 75% 會到 720px，一行太長不好讀（手機 75% 本來就更窄） */
+.msg-row .msg-bubble { max-width: min(75%, 36rem); }
+
+/* 表情膠囊掛在氣泡下緣外（dm-message-actions.js reactionsHtml，絕對定位不撐大氣泡）：
+   那一列底下留出膠囊露在外面的 16px，不蓋到下一則 */
+.msg-row:has(.msg-reactions) { padding-bottom: 1.125rem; }
+
+/* 桌機（有滑鼠）：滑鼠停 0.2 秒，時間淡出、hover 工具列接在同一個位置（dm-message-actions.js
+   messageToolsHtml），不蓋到任何訊息；氣泡最寬扣掉工具列寬度，窄的聊天欄長訊息旁也放得下 */
+@media (hover: hover) {
+    /* 保底 60%：極窄的聊天欄（約 260px 以下）閱讀優先，工具列最外側那顆被裁（「⋯」最靠氣泡、右鍵也能開） */
+    .msg-row .msg-bubble { max-width: min(75%, 36rem, max(60%, calc(100% - 6.5rem))); }
+    /* 全站 button 最小 36px 是給觸控點的；滑鼠用的工具列 28px 就夠，整排從 118px 縮到約 94px */
+    .msg-tools button { min-width: 0; min-height: 0; }
+    .msg-row .msg-meta { transition: opacity 150ms; }
+    .msg-row:hover .msg-meta, .msg-row:focus-within .msg-meta { opacity: 0; transition-delay: 200ms; }
+}
+
+/* 私訊選單（dm-message-actions.js）：觸控裝置沒有 hover，「⋯」工具列不顯示，改長按氣泡；
+   長按時不要跳原生選字、iOS 放大鏡／分享選單（複製走選單的「複製」） */
+@media (hover: none) {
+    .msg-tools, .msg-tools-anchor { display: none !important; }
+    .msg-row .msg-bubble { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+}
+
+/* 條款同意卡（legal-consent.js）：貼底（DANNY 2026-10-01：以前手機釘在頂部、蓋住標題列）、置中
+   （2026-10-05：原本桌機貼右下角，跟置中的輸入列對不齊、看起來歪）。
+   手機底邊跟 toast 同一條基準線（ui-shell 算好的輸入列高度＋1rem），不蓋輸入框，左右置中（inset-x-3＋mx-auto）；
+   桌機置中在聊天欄：視窗中心往右移左側選單寬度的一半（選單 18rem、收合成圖示列時 4rem），
+   抬到聊天輸入列之上（7rem，不蓋送出鈕） */
+#legal-consent-card { bottom: var(--shell-toast-bottom, calc(7rem + env(safe-area-inset-bottom, 0px))); }
+@media (min-width: 768px) {
+    #legal-consent-card {
+        bottom: 7rem;
+        left: calc(50% + 9rem);
+        right: auto;
+        width: min(28rem, calc(100vw - 21rem));
+        max-width: none;
+        margin-inline: 0;
+        transform: translateX(-50%);
+    }
+    html.sidebar-collapsed #legal-consent-card {
+        left: calc(50% + 2rem);
+        width: min(28rem, calc(100vw - 7rem));
+    }
+}
+
+/* 彩色頭像（web/js/avatar.js 依 user_id 選 avatar-c0～7）：白字對比都 ≥ 4.5，亮暗模式同一組。
+   改色要同步改 avatar.js 的 AVATAR_COLORS（tests/js/avatar.mjs 會核對） */
+.avatar-c0 { background-color: #DC2626; color: #fff; }
+.avatar-c1 { background-color: #B45309; color: #fff; }
+.avatar-c2 { background-color: #047857; color: #fff; }
+.avatar-c3 { background-color: #0E7490; color: #fff; }
+.avatar-c4 { background-color: #2563EB; color: #fff; }
+.avatar-c5 { background-color: #7C3AED; color: #fff; }
+.avatar-c6 { background-color: #A21CAF; color: #fff; }
+.avatar-c7 { background-color: #DB2777; color: #fff; }
+
+/* 對話列表那一列的「輸入中…」（LINE 式）：蓋過預覽的 text-textMuted／opacity-80 */
+.conv-typing {
+    color: rgb(var(--color-primary));
+    opacity: 1;
+    font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dm-typing-bubble span { animation: none; opacity: 0.7; }
+}
+
+/* Typing Indicator (Pulse) */
+.typing-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 16px;
+    background: rgb(var(--color-text-primary) / 0.03);
+    border-radius: 20px;
+}
+.typing-dots span {
+    width: 6px;
+    height: 6px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    animation: typing 1.4s infinite ease-in-out both;
+}
+.typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+.typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+@keyframes typing {
+    0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
+/* Table Styling (Clean) */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+th {
+    font-family: 'Inter', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+    font-weight: 800;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-subtle-color);
+}
+td {
+    padding: 16px;
+    border-bottom: 1px solid rgb(var(--color-text-primary) / 0.02);
+    color: var(--color-text-primary);
+    font-size: 0.9rem;
+}
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* Range Input for Settings */
+input[type=range] {
+    -webkit-appearance: none; 
+    background: transparent; 
+}
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+}
+input[type=range]:focus {
+    outline: none;
+}
+
+/* Starred Section (Favorites) */
+.starred-section summary {
+    list-style: none;
+}
+
+.starred-section summary::-webkit-details-marker {
+    display: none;
+}
+
+.starred-section .starred-chevron {
+    transition: transform 0.2s ease;
+}
+
+.starred-section[open] .starred-chevron {
+    transform: rotate(90deg);
+}
+
+.starred-list {
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Process Container (Analysis Steps) */
+.process-container {
+    background: rgb(var(--color-text-primary) / 0.02);
+    border: 1px solid var(--border-subtle-color);
+    border-radius: 1.25rem; /* Softer corners */
+    overflow: hidden;
+}
+
+/* 進度卡標頭（轉圈圈＋標籤＋「階段名 已花秒數」）。
+   2026-10-03 使用者回報：標籤很長（例如「這題需要較深入的分析，請稍候」）又加上階段名稱時，
+   右側計時被擠成「29.7」「s」兩行、階段名「網路搜尋」也被拆開。
+   做法：標籤吃剩下的寬度、可以折行；計時那一組不拆開，放不下就整組換到下一行靠右。 */
+.process-container .process-head {
+    flex-wrap: wrap;
+    row-gap: 0.25rem;
+}
+
+.process-container .process-head > svg,
+.process-container .process-head > i {
+    flex: 0 0 auto;
+}
+
+.process-container .process-head-label {
+    flex: 1 1 10rem;
+    min-width: 0;
+}
+
+.process-container .process-head-meta {
+    flex: 0 0 auto;
+    max-width: 100%;
+    white-space: nowrap;
+}
+
+/* 階段名稱再長也只能單行，超過就省略，不要撐破卡片 */
+.process-container .process-head-meta .elapsed-stage {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 計時數字（「29.7s」）所有地方一律不拆行 */
+#loading-timer {
+    white-space: nowrap;
+}
+
+.process-container summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-family: 'Inter', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+    transition: color 0.2s, background-color 0.2s, opacity 0.2s;
+    list-style: none;
+}
+
+.process-container summary::-webkit-details-marker {
+    display: none;
+}
+
+.process-container summary:hover {
+    color: var(--color-text-primary);
+    background: rgb(var(--color-text-primary) / 0.03);
+}
+
+.process-container summary .chevron {
+    transition: transform 0.2s;
+}
+
+.process-container[open] summary .chevron {
+    transform: rotate(90deg);
+}
+
+.process-content {
+    padding: 1rem;
+    border-top: 1px solid var(--border-subtle-color);
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    background: rgb(var(--color-surface-deep));
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* ── 思考過程（可摺疊）─────────────────────────────────────────────────
+   推理模型在最後一次呼叫要先產 1000+ 個 reasoning token（實測 ≈9 秒）才吐第一
+   個可見字元，中間前端全空白——就是「卡很久才出字」的來源。把思考串出來當進度。
+   樣式刻意比 .process-container 更低調（虛線、字更小、等寬）：它是輔助資訊，
+   不該跟答案搶視線。 */
+.thinking-container {
+    background: rgb(var(--color-text-primary) / 0.015);
+    border: 1px dashed var(--border-subtle-color);
+    border-radius: 1rem;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+}
+
+.thinking-container summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.875rem;
+    cursor: pointer;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    transition: color 0.2s, background-color 0.2s;
+    list-style: none;
+}
+
+.thinking-container summary::-webkit-details-marker {
+    display: none;
+}
+
+.thinking-container summary:hover {
+    color: var(--color-text-primary);
+    background: rgb(var(--color-text-primary) / 0.03);
+}
+
+.thinking-label {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.thinking-chevron {
+    transition: transform 0.2s;
+}
+
+.thinking-container[open] .thinking-chevron {
+    transform: rotate(180deg);
+}
+
+.thinking-body {
+    padding: 0.75rem 0.875rem;
+    border-top: 1px dashed var(--border-subtle-color);
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    background: rgb(var(--color-surface-deep));
+    /* 思考是模型的自言自語，常常很長：給上限並可捲動，不要把答案推到看不見 */
+    max-height: 240px;
+    overflow-y: auto;
+    /* 純文字插入（renderThinkingBlock 走 escapeHtml），保留換行 */
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.process-step-item {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+}
+
+/* Result Container */
+.result-container {
+    margin-top: 1.5rem; /* Distinct separation */
+}
+
+/* Prose: Table inside chat bubble */
+.prose .table-wrapper {
+    overflow-x: auto;
+    margin: 1rem 0;
+    border-radius: 0.75rem;
+    border: 1px solid rgb(var(--color-text-primary) / 0.12);
+    border-left: 3px solid rgba(0, 152, 234, 0.55);
+    background: rgb(var(--color-text-primary) / 0.03);
+}
+.prose table {
+    /* 欄位多時照內容撐開、超出就在 .table-wrapper 內橫向捲動，不要把每欄擠成一字一行
+       （2026-10-05 帳本表格在手機上「10/ 05」「oth er」逐字斷行） */
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+}
+.prose th {
+    background: rgba(0, 152, 234, 0.1);
+    padding: 10px 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    text-align: left;
+}
+.prose td {
+    padding: 10px 12px;
+    /* 長備註欄限寬換行；短欄位保持單行 */
+    max-width: 18rem;
+    font-size: 0.85rem;
+    /* tabular-nums: 表格內數字等寬對齊（見 docs/DESIGN_SYSTEM.md）*/
+    font-variant-numeric: tabular-nums;
+}
+.prose,
+.prose p,
+.prose li,
+.prose blockquote,
+.prose div,
+.prose span {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: normal;
+}
+/* 表格儲存格不繼承上面的「任意處斷行」：否則每欄最小寬度縮成一個字，
+   「10/05」「other」被逐字拆開（見 .prose table） */
+.prose th,
+.prose td {
+    overflow-wrap: normal;
+    word-break: normal;
+}
+.prose pre,
+.prose code {
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+/* 第一欄（標籤欄）較暗 */
+.prose td:first-child, .prose th:first-child {
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+}
+/* 兩欄「項目／數值」表才讓數值欄醒目；多欄表的最後一欄常是備註，不加粗 */
+.prose td:last-child:nth-child(2) {
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+/* Zebra stripe 取代每行 border-bottom——分行但不雜亂（見 docs/DESIGN_SYSTEM.md）*/
+.prose tbody tr:nth-child(even) td {
+    background: rgb(var(--color-text-primary) / 0.02);
+}
+.prose tr:hover td {
+    background: rgb(var(--color-text-primary) / 0.05);
+}
+
+/* Prose: Ordered list inside chat bubble */
+.prose ol {
+    list-style: none;
+    padding-left: 0;
+    counter-reset: prose-counter;
+}
+.prose ol li {
+    position: relative;
+    padding-left: 2rem;
+    margin-bottom: 0.5rem;
+    counter-increment: prose-counter;
+}
+.prose ol li::before {
+    content: counter(prose-counter);
+    position: absolute;
+    left: 0;
+    top: 0.05em;
+    width: 1.35rem;
+    height: 1.35rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 152, 234, 0.15);
+    color: var(--primary-color);
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    font-family: 'Inter', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+    flex-shrink: 0;
+}
+
+/* Prose: Links */
+.prose a {
+    color: var(--primary-color);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: rgba(0, 152, 234, 0.35);
+}
+.prose a:hover {
+    text-decoration-color: var(--primary-color);
+}
+
+/* Prose: h4 (smaller heading level in analysis results) */
+.prose h4 {
+    font-family: 'Inter Tight', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+    color: var(--color-text-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-top: 1rem;
+    margin-bottom: 0.4rem;
+}
+
+/* Spinner */
+.spinner {
+    border: 2px solid var(--border-light-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Input/Select Styling */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23a1a1aa'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+}
+
+/* Price Flash Animation (WebSocket Updates) */
+@keyframes priceFlash {
+    0% { background-color: rgba(0, 152, 234, 0.3); }
+    100% { background-color: transparent; }
+}
+
+.price-flash {
+    animation: priceFlash 0.3s ease-out;
+    border-radius: 4px;
+}
+
+/* Prevent initial white flash */
+body {
+    background-color: var(--bg-color);
+    opacity: 0;
+    animation: bodyFadeIn 0.5s ease-out forwards;
+}
+
+@keyframes bodyFadeIn {
+    to { opacity: 1; }
+}
+
+/* Tab Transition Animations
+
+   只淡入、不位移 —— 這是刻意的，不是少寫。
+   .tab-content 是所有分頁內容的容器，底部的固定 chrome（輸入框、提示條）
+   都住在裡面。只要這裡出現 transform 或 will-change: transform，tab 就會
+   成為 position: fixed 子孫的 containing block，那些元素會改成相對 tab 定位
+   而不是相對視窗，整組位移並跟著動畫漂（見 #256）。
+   注意 animation-fill-mode: forwards 結束後留下的 translateY(0) 仍然是
+   transform，參考框不會消失；will-change: transform 更是自己就會建立參考框。
+   opacity 不會有這個問題，所以位移效果整個拿掉。 */
+.tab-content {
+    animation: fadeInOnly 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    will-change: opacity;
+}
+
+/* 手機非聊天分頁的底部留白：iPhone home 指示條（安全區）＋ 1rem 呼吸空間。
+   2026-09-24 底部導覽列拔除——原本安全區只由導覽列自己墊，拔掉後由內容自己墊。
+   chat 分頁有自己的精細機制（輸入列）。 */
+@media (max-width: 767px) {
+    .tab-content:not(#chat-tab) {
+        padding-bottom: calc(var(--mobile-safe-bottom) + 1rem);
+    }
+}
+
+@keyframes fadeInOnly {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Premium Modal Animation */
+.modal-content-active {
+    animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Sidebar Smooth Transition */
+#chat-sidebar {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s;
+    will-change: transform;
+}
+/* Hide browser default password reveal button */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+
+/* ========================================
+ * Feature Menu - Navigation Customization
+ * ======================================== */
+
+/* Modal Active State */
+#feature-menu-modal:not(.hidden) .feature-menu-content {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+/* Feature Menu Item */
+.feature-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgb(var(--color-text-primary) / 0.03);
+    border: 1px solid var(--border-subtle-color);
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.feature-menu-item:hover {
+    background: var(--border-subtle-color);
+    border-color: var(--border-light-color);
+}
+
+.feature-menu-item.disabled {
+    opacity: 0.5;
+}
+
+.feature-menu-item.disabled .feature-item-icon {
+    opacity: 0.3;
+}
+
+.feature-menu-item.disabled .feature-item-label {
+    color: rgb(var(--color-text-primary) / 0.3);
+}
+
+/* Feature Item Icon */
+.feature-item-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--border-subtle-color);
+    transition: color 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.feature-menu-item:hover .feature-item-icon {
+    background: rgba(0, 152, 234, 0.1);
+}
+
+.feature-item-icon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+/* Feature Item Label
+   2026-08-22：長標籤（ru「Монитор кошелька」等）與系統字體放大下手機會
+   撐破按鈕/兩行歪斜——min-width:0 讓 flex 子項可收縮 + line-clamp 2 行
+   封頂，超過截斷。 */
+.feature-item-label {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.3;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    transition: color 0.2s ease;
+}
+
+/* Toggle Switch */
+.feature-toggle {
+    position: relative;
+    width: 3rem;
+    height: 1.75rem;
+    background: var(--border-light-color);
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feature-toggle::after {
+    content: '';
+    position: absolute;
+    top: 0.125rem;
+    left: 0.125rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.feature-toggle.enabled {
+    background: var(--primary-color);
+}
+
+.feature-toggle.enabled::after {
+    transform: translateX(1.25rem);
+}
+
+/* Shake Animation for Invalid Action */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-4px); }
+    40%, 80% { transform: translateX(4px); }
+}
+
+.feature-menu-item.shake {
+    animation: shake 0.4s ease-in-out;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Warning Banner Animation */
+@keyframes warningPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+#feature-menu-warning:not(.hidden) {
+    animation: warningPulse 2s ease-in-out infinite;
+}
+
+/* ========================================
+ * Language Switcher Styles (Compact Nav Bar)
+ * ======================================== */
+
+.lang-switcher {
+    position: relative;
+    display: inline-flex;
+}
+
+.lang-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    background: rgb(var(--color-surface-highlight));
+    border: 1px solid var(--border-subtle-color);
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
+    user-select: none;
+    color: rgb(var(--color-text-muted));
+}
+
+.lang-trigger:hover {
+    background: rgb(var(--color-surface-elevated));
+}
+
+.lang-trigger:focus {
+    outline: 2px solid rgb(var(--color-primary) / 0.5);
+    outline-offset: 2px;
+}
+
+.lang-flag {
+    font-size: 1.125rem;
+    line-height: 1;
+}
+
+/* Dropdown opens UPWARD since nav is at bottom */
+.lang-dropdown {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    right: 0;
+    min-width: 10rem;
+    background: var(--surface-color);
+    border: 1px solid var(--border-light-color);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    z-index: 1000;
+    box-shadow: 0 -4px 24px rgb(var(--color-text-primary) / 0.12);
+}
+
+.lang-dropdown.hidden {
+    display: none;
+}
+
+.lang-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 1rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.lang-option:hover {
+    background: var(--border-subtle-color);
+}
+
+.lang-option:focus {
+    outline: none;
+    background: var(--border-subtle-color);
+}
+
+.lang-option.active {
+    background: rgb(var(--color-primary) / 0.1);
+}
+
+.lang-option-name {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: rgb(var(--color-text-muted));
+}
+
+.lang-option.active .lang-option-name {
+    color: var(--primary-color);
+}
+
+/* ========================================
+ * Theme Switcher Styles（結構同 lang-switcher，共用 CSS var 故 dual-theme 相容）
+ * ======================================== */
+
+.theme-switcher {
+    position: relative;
+    display: inline-flex;
+}
+
+.theme-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    background: rgb(var(--color-surface-highlight));
+    border: 1px solid var(--border-subtle-color);
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
+    user-select: none;
+    color: rgb(var(--color-text-muted));
+}
+
+.theme-trigger:hover {
+    background: rgb(var(--color-surface-elevated));
+}
+
+.theme-trigger:focus {
+    outline: 2px solid rgb(var(--color-primary) / 0.5);
+    outline-offset: 2px;
+}
+
+/* Dropdown opens UPWARD since nav is at bottom */
+.theme-dropdown {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    right: 0;
+    min-width: 10rem;
+    background: rgb(var(--color-surface));
+    border: 1px solid var(--border-light-color);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    z-index: 1000;
+    box-shadow: 0 -4px 24px rgb(var(--color-text-primary) / 0.12);
+}
+
+.theme-dropdown.hidden {
+    display: none;
+}
+
+.theme-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 1rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.theme-option:hover {
+    background: var(--border-subtle-color);
+}
+
+.theme-option:focus {
+    outline: none;
+    background: var(--border-subtle-color);
+}
+
+.theme-option.active {
+    background: rgb(var(--color-primary) / 0.1);
+}
+
+.theme-option-name {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: rgb(var(--color-text-muted));
+}
+
+.theme-option.active .theme-option-name {
+    color: rgb(var(--color-primary));
+}
+
+/* ========================================
+ * Header Switcher（手機版頂欄變體）
+ * 手機底欄的 switcher 被 CSS 隱藏（見手機 media query 段），語言/主題
+ * 改掛 mobile header：dropdown 改向下開（頂欄在畫面上緣）、trigger 縮至
+ * 與通知鈴同尺寸（2.25rem = w-9）。
+ * ======================================== */
+.header-lang-switcher .lang-trigger,
+.header-theme-switcher .theme-trigger {
+    width: 2.25rem;
+    height: 2.25rem;
+}
+
+.header-lang-switcher .lang-dropdown,
+.header-theme-switcher .theme-dropdown {
+    bottom: auto;
+    top: calc(100% + 0.5rem);
+    box-shadow: 0 4px 24px rgb(var(--color-text-primary) / 0.12);
+}
+
+/* 論壇首頁／儀表板：底部只留安全區＋呼吸空間（2026-09-24 浮動導覽 pill 退場，
+   不再為它預留 120px） */
+body[data-page="index"] main,
+body[data-page="dashboard"] main {
+    padding-bottom: calc(var(--mobile-safe-bottom) + 1.5rem);
+}
+
+/* Deep content pages - no bottom padding needed (nav is hidden) */
+body[data-page="post"] main,
+body[data-page="create"] main,
+body[data-page="profile"] main,
+body[data-page="messages"] main,
+body[data-page="wallet"] main,
+body[data-page="premium"] main {
+    padding-bottom: 0;
+}
+
+/* Forum page sticky navbars */
+nav.sticky {
+    z-index: 50;
+}
+
+/* Toast/Modal containers stay above page chrome */
+#toast-container,
+#confirm-modal,
+#report-modal {
+    z-index: 10000;
+}
+
+@media (max-width: 767px) {
+    /* 整個 shell 的高度必須跟著「當下可見的視窗」走。
+       原本一路是 h-full（height:100%），而 100% 是對 initial containing block 解析的 ——
+       Chrome Android 的 ICB 用的是**大視窗**（網址列收起時的高度），可是網址列正顯示時
+       實際可見的只有小視窗。兩者差一個網址列的高度,於是整個 column 比可見區高一截,
+       底部連同捲動區的下緣一起沉到看不見的地方。
+
+       實機（POCO F8 Ultra / Chrome）量到的就是這個:
+           視窗 clientHeight 718、捲動區 clientHeight 713、頁首 56
+           → 捲動區底邊落在 774,比視窗低 56px
+           → 捲到底時最後一列停在 y=600,而輸入框上緣在 560 → 被蓋住 40px
+       桌機模擬量不到,因為那裡沒有會伸縮的瀏覽器工具列（超出 0px）。
+
+       dvh 就是為這件事設計的:它跟著動態視窗（工具列顯示時的可見高度）。
+       vh 的那行是給不支援 dvh 的舊瀏覽器的 fallback,行為與現況相同。 */
+    #main-content {
+        height: 100vh;
+        height: 100dvh;
+    }
+
+    /* 非聊天分頁量到的底部佔位是 0（輸入列在隱藏的 #chat-tab 裡）——2026-09-24 底部導覽列
+       拔除前這裡量到的是導覽列（含安全區）。取 max 確保至少讓開 iPhone home 指示條。 */
+    #toast-container {
+        bottom: max(
+            var(--shell-toast-bottom, var(--mobile-toast-clearance)),
+            var(--mobile-toast-clearance)
+        ) !important;
+    }
+
+    main .tab-content.overflow-y-auto {
+        padding-bottom: calc(
+            max(var(--shell-content-clearance, var(--mobile-stack-fallback)), var(--mobile-safe-bottom)) + 1rem
+        ) !important;
+    }
+
+    #chat-messages {
+        padding-bottom: calc(var(--shell-content-clearance, var(--mobile-stack-fallback)) + 1rem);
+    }
+
+    /* 貼在輸入框上緣。自身高度由 data-shell-bottom-layer 計入 --shell-content-clearance,
+       所以捲動內容會讓開它,不會再蓋住卡片按鈕。 */
+    #no-llm-key-warning {
+        /* 同上:值是距視窗底部,所以不能留在 absolute(相對 #chat-tab)。 */
+        position: fixed;
+        bottom: calc(var(--shell-fixed-stack-offset, var(--mobile-stack-fallback)) + 0.5rem);
+    }
+
+    #chat-tab > .fixed.bottom-0,
+    [data-shell-fixed-input] {
+        /* 必須是 fixed:本區塊(含 chat-keyboard-open)的 bottom 全部是「距視窗底部」的值。
+           HTML 上是 sticky bottom-0(桌面版隨捲動貼底),而 sticky 的 bottom 是相對
+           捲動容器的黏著門檻,不是視窗偏移 — 沿用 sticky 會讓輸入框落在導覽列上面幾 px,
+           鍵盤打開時的位移也會失效。 */
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        /* 貼齊視窗底部。iPhone home 指示條（安全區）由輸入列自己的 padding 讓開——
+           2026-09-24 底部導覽列拔除前，這段空間是導覽列墊的（當時這裡加的是量出來的
+           導覽列高度）。貼底之後輸入框的 rect 必定含到視窗底部,ui-shell 量到的
+           底部佔位就是輸入列本身。 */
+        bottom: 0 !important;
+        /* 底部只讓出安全區（沒有安全區就留 0.5rem），不再「安全區＋0.5rem」疊加：
+           home 指示條那 34px 本身就是留白，再加會在免責聲明下多一條空帶。 */
+        padding: 0.5rem 0.75rem max(0.5rem, var(--mobile-safe-bottom));
+    }
+
+    /* 選擇器要比 .shell-fade-bottom(檔案後面、同權重)強,否則漸層會蓋回來。
+       貼底之後漸層的透明段會讓訊息透在輸入列後面,改實心底 + 一條髮絲線。 */
+    [data-shell-fixed-input].shell-fade-bottom {
+        background: var(--bg-color);
+        border-top: 1px solid var(--border-subtle-color);
+    }
+
+    [data-shell-fixed-input] > div {
+        width: 100%;
+        max-width: min(100%, 42rem);
+        min-width: 0;
+    }
+
+    /* HTML 上的 pb-4 是桌面版輸入框下緣的呼吸空間；手機版底部由上面
+       [data-shell-fixed-input] 的 padding 負責，兩層疊起來免責聲明底下會空 24px
+       （2026-09-24 底部導覽列拔除後才露出來，以前被導覽列蓋住）。 */
+    [data-shell-fixed-input] .chat-input-row {
+        align-items: center;
+        padding-bottom: 0;
+    }
+
+    .chat-input-shell {
+        min-width: 0;
+        min-height: 3rem;
+        border-radius: 1.4rem;
+    }
+
+    #user-input {
+        width: 100%;
+        min-width: 0;
+        font-size: 16px;
+        line-height: 1.4;
+        padding-left: 0.125rem;
+        padding-right: 0.125rem;
+    }
+
+    #send-btn,
+    .chat-send-btn {
+        width: 2.75rem;
+        height: 2.75rem;
+    }
+
+    #settings-tab {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+        padding-top: 1rem;
+    }
+
+    #settings-llm-card {
+        border-radius: 1.5rem;
+    }
+
+    #settings-llm-card #test-llm-key-btn,
+    #settings-llm-card #save-llm-key-btn,
+    #settings-tab button[onclick="FeatureMenu.open()"] {
+        min-height: 44px;
+    }
+
+    html.chat-keyboard-open [data-shell-fixed-input] {
+        /* 貼齊鍵盤上緣；鍵盤蓋住 home 指示條，不再墊安全區。 */
+        bottom: var(--chat-keyboard-offset) !important;
+        padding-bottom: 0.5rem;
+    }
+
+    html.chat-keyboard-open #toast-container {
+        bottom: calc(var(--chat-keyboard-offset) + 1rem) !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+    outline: 2px solid var(--primary-color, #3480F1);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible) {
+    outline: none;
+}
+
+button, [role="button"] {
+    min-height: 36px;
+    min-width: 36px;
+}
+
+/* ========================================
+ * Smooth Empty State
+ * ======================================== */
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    color: var(--color-text-muted);
+}
+
+.empty-state svg,
+.empty-state [data-lucide] {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+
+/* ── Moved from inline styles for CSP compliance ────────────────────────── */
+
+html, body {
+    margin: 0;
+    background: var(--bg-color);
+}
+
+.shell-body { background: var(--bg-color); }
+
+
+.shell-safe-area-x {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+}
+
+.shell-fade-bottom {
+    background: linear-gradient(to bottom, transparent 0%, var(--bg-color) 35%);
+}
+
+#toast-container {
+    bottom: var(--shell-toast-bottom, calc(7rem + env(safe-area-inset-bottom, 0px)));
+}
+
+.hidden-init { display: none; }
+
+/* ── Dialog / Toast 淡入動畫(ui-shell.js 的 showToast / showConfirmDialog / showInfoDialog 使用)── */
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in { animation: fade-in 0.2s ease-out both; }
+.animate-fade-in-up { animation: fade-in-up 0.25s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+
+/* Telegram Mini App「TON 模式」（tma-mode.js）：Telegram 規定 Mini App 內只能 TON，
+   EVM 登入／綁定與 USDC 付款入口在 Telegram 裡藏起來 */
+html.tma [data-tma-hide] { display: none !important; }
+/* Google Play 版（platform-context.js）：數位服務只能走 Play Billing，加密付款入口藏起來 */
+html.play [data-play-hide] { display: none !important; }
+
+/* 功能選單項目：未讀標示（nav-badges.js）收合時要以按鈕為定位基準 */
+[data-nav-item] { position: relative; }
+
+/* ── 桌機側欄收合成圖示列（Teams 式，2026-09-29）──────────────────────────────
+   <html class="sidebar-collapsed"> 由 early-init.js／GlobalNav／site-sidebar.js 設定。
+   只在 md+ 生效；手機抽屜照舊。收合時保留：Logo、展開鈕、新對話、對話歷史（點了展開）、
+   功能選單圖示（hover 看名稱）、頭像；對話清單、標籤、語言主題切換收起 */
+#chat-sidebar { transition: width 0.2s ease; }
+.sb-icon-expand { display: none; }
+@media (min-width: 768px) {
+    html.sidebar-collapsed #chat-sidebar { width: 4rem; }
+    html.sidebar-collapsed #chat-sidebar .sb-label,
+    html.sidebar-collapsed #chat-sidebar .brand-mark,
+    html.sidebar-collapsed #chat-sidebar .sb-switchers,
+    html.sidebar-collapsed #chat-session-list,
+    html.sidebar-collapsed #sidebar-tab-menu,
+    html.sidebar-collapsed #sidebar-nav-more { display: none !important; }
+    html.sidebar-collapsed .sb-icon-collapse { display: none; }
+    html.sidebar-collapsed .sb-icon-expand { display: block; }
+    html.sidebar-collapsed #sidebar-header { flex-direction: column; padding: 0.75rem 0.5rem; }
+    html.sidebar-collapsed #sidebar-newchat,
+    html.sidebar-collapsed #sidebar-tabs { padding: 0.5rem; }
+    html.sidebar-collapsed #sidebar-newchat button { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+    html.sidebar-collapsed #sidebar-tabs > div { grid-template-columns: 1fr; background: transparent; padding: 0; }
+    html.sidebar-collapsed #sidebar-tab-history { background: transparent; box-shadow: none; padding: 0.625rem 0; }
+    /* 未讀標示（nav-badges.js）在圖示列縮成圖示右上角的紅點（數字放不下） */
+    html.sidebar-collapsed [data-nav-item] .nav-badge {
+        position: absolute; top: 4px; right: 6px;
+        min-width: 0; width: 8px; height: 8px; padding: 0; font-size: 0; line-height: 0;
+    }
+    /* 導覽區（功能選單）在圖示列一律顯示，不管上次停在哪個分頁 */
+    html.sidebar-collapsed #sidebar-nav-section { display: block !important; padding-left: 0.5rem; padding-right: 0.5rem; }
+    html.sidebar-collapsed #sidebar-nav-items > button { justify-content: center; padding: 0.625rem 0; }
+    html.sidebar-collapsed #sidebar-footer { padding: 0.5rem; }
+    html.sidebar-collapsed #sidebar-footer button { justify-content: center; padding: 0.5rem 0; }
+}
+
+/* 獨立頁（site-sidebar.js，全 inline style）的收合：同一個 html class，!important 蓋過 inline */
+@media (min-width: 768px) {
+    html.sidebar-collapsed #site-sidebar .ss-label,
+    html.sidebar-collapsed #site-sidebar .site-sidebar-lang,
+    html.sidebar-collapsed #site-sidebar .ss-tab-menu,
+    html.sidebar-collapsed #site-sidebar .ss-more,
+    html.sidebar-collapsed #site-sidebar-history { display: none !important; }
+    html.sidebar-collapsed #site-sidebar-menu { display: block !important; padding: 0 0.5rem 0.75rem !important; }
+    html.sidebar-collapsed #site-sidebar .ss-brand { flex-direction: column; gap: 0.5rem; padding: 0.75rem 0.5rem !important; }
+    html.sidebar-collapsed #site-sidebar .ss-pad { padding: 0.5rem !important; }
+    html.sidebar-collapsed #site-sidebar .ss-tabs > div { grid-template-columns: 1fr !important; background: transparent !important; padding: 0 !important; }
+    html.sidebar-collapsed #site-sidebar-menu button,
+    html.sidebar-collapsed #site-sidebar .ss-foot a { justify-content: center !important; padding-left: 0 !important; padding-right: 0 !important; }
+    html.sidebar-collapsed #site-sidebar .ss-foot { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
+}
+
+/* 拖拉排序（drag-reorder.js：社群的置頂對話、聊天側欄的收藏）：按住把手不捲動；
+   拖的那列浮起來，其他列滑開讓位 */
+[data-reorder-handle] { touch-action: none; cursor: grab; }
+.reorder-active, .reorder-active [data-reorder-handle] { cursor: grabbing; }
+.reorder-active [data-reorder-item] { transition: transform 150ms ease; }
+.reorder-active .reorder-dragging {
+    transition: none; position: relative; z-index: 3;
+    border-radius: 0.75rem; box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+}
+/* 社群列表長按開選單（list-row-menu.js）：手機長按不要跳選字、iOS 放大鏡／分享選單 */
+@media (hover: none) {
+    #social-conv-list [data-pin-key] { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+}
+
+/* 社群搜尋中（social-search.js 給 #social-conv-sidebar 加 data-searching）：分類列收起來，
+   結果蓋在列表的位置。群組開關的 hidden 由 social-groups.js 管，這裡只蓋在上面 */
+#social-conv-sidebar[data-searching] #social-group-bar { display: none !important; }
+
+/* 聊天室 AI 助理的回答（chat-assistant.js；markdown-it 產生的標籤，Tailwind preflight 把清單樣式拿掉了） */
+.assistant-answer p { margin: 0.25rem 0; }
+.assistant-answer ul { list-style: disc; padding-left: 1.25rem; margin: 0.25rem 0; }
+.assistant-answer ol { list-style: decimal; padding-left: 1.25rem; margin: 0.25rem 0; }
+.assistant-answer a { color: rgb(var(--color-primary)); text-decoration: underline; }
+/* 回答下面的動作列：時間＋複製／分享／刪除（純文字按鈕；tailwind-built.css 是 build 產物，新 hover 類別要靠這裡） */
+.assistant-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.125rem 0.75rem; font-size: 11px; color: rgb(var(--color-text-muted)); }
+.assistant-actions button { padding: 0.25rem 0; background: none; border: 0; color: inherit; cursor: pointer; }
+.assistant-actions button:hover { color: rgb(var(--color-text-primary)); text-decoration: underline; }
+
+/* AI 回答的排版（ai-markdown.js 產生，助理抽屜與 AI 分析卡片共用；Tailwind preflight 把清單、表格樣式拿掉了）
+   表格寬了就在自己的框裡橫向捲，不撐破氣泡 */
+.assistant-answer { min-width: 0; }
+.ai-md { overflow-wrap: anywhere; }
+.ai-md > :first-child { margin-top: 0; }
+.ai-md > :last-child { margin-bottom: 0; }
+.ai-md p { margin: 0.25rem 0; }
+.ai-md .ai-md-h { margin: 0.6rem 0 0.2rem; font-weight: 700; }
+.ai-md .ai-md-h1 { font-size: 1.06em; }
+.ai-md ul { list-style: disc; padding-left: 1.25rem; margin: 0.25rem 0; }
+.ai-md ol { list-style: decimal; padding-left: 1.25rem; margin: 0.25rem 0; }
+.ai-md li > ul, .ai-md li > ol { margin: 0.1rem 0; }
+.ai-md blockquote { margin: 0.35rem 0; padding-left: 0.6rem; border-left: 3px solid var(--border-light-color); color: rgb(var(--color-text-muted)); }
+.ai-md a { color: rgb(var(--color-primary)); text-decoration: underline; }
+.ai-md code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; padding: 0 0.25em; border-radius: 4px; background: rgb(var(--color-surface-highlight)); }
+.ai-md pre { margin: 0.35rem 0; padding: 0.5rem 0.6rem; border-radius: 0.5rem; overflow-x: auto; font-size: 12px; background: rgb(var(--color-surface-highlight)); }
+.ai-md pre code { padding: 0; background: none; }
+.ai-md hr { margin: 0.5rem 0; border: 0; border-top: 1px solid var(--border-subtle-color); }
+.ai-md-table-wrap { margin: 0.4rem 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.ai-md-table { min-width: 100%; border-collapse: collapse; font-size: 12.5px; line-height: 1.45; }
+.ai-md-table th, .ai-md-table td { padding: 0.25rem 0.5rem; border: 1px solid var(--border-light-color); text-align: left; vertical-align: top; }
+.ai-md-table th { font-weight: 600; white-space: nowrap; background: rgb(var(--color-surface-highlight)); }
+.ai-md-table .ai-md-c { text-align: center; }
+.ai-md-table .ai-md-r { text-align: right; }
+
+/* AI 分析卡片（ai-card.js：聊天室裡分享出來的 AI 回答）：比一般氣泡寬，長的預設收合 */
+.msg-row .msg-bubble.ai-card { max-width: min(92%, 40rem); }
+@media (hover: hover) {
+    .msg-row .msg-bubble.ai-card { max-width: min(92%, 40rem, max(60%, calc(100% - 6.5rem))); }
+}
+.ai-card-head { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.35rem; font-size: 12px; font-weight: 600; color: rgb(var(--color-primary)); }
+.ai-card-collapsed { max-height: 11.5rem; overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, #000 68%, transparent); mask-image: linear-gradient(to bottom, #000 68%, transparent); }
+.ai-card-toggle { display: block; margin-top: 0.15rem; padding: 0.25rem 0; background: none; border: 0; font-size: 12px; font-weight: 600; color: rgb(var(--color-primary)); cursor: pointer; }
+.ai-card-note { margin-top: 0.35rem; font-size: 11px; color: rgb(var(--color-text-muted)); }

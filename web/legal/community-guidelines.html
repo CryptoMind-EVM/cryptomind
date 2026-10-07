@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Guidelines - CryptoMind</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <script src="/js/early-init.js"></script>
+<style>
+        :root {
+            color-scheme: light;
+            --legal-bg: #F5F5F7;
+            --legal-surface: #FFFFFF;
+            --legal-text: #17171C;
+            --legal-text-muted: #4A4C54;
+            --legal-border: rgba(0,0,0,0.1);
+            --legal-primary: #2563EB;
+            --legal-code-bg: #EEEEF0;
+            --legal-accent-soft: rgba(37,99,235,0.08);
+        }
+        html.dark {
+            color-scheme: dark;
+            --legal-bg: #14161F;
+            --legal-surface: #1D202B;
+            --legal-text: #FFFDF9;
+            --legal-text-muted: #A7A9B2;
+            --legal-border: rgba(255,253,249,0.1);
+            --legal-primary: #2563EB;
+            --legal-code-bg: #10121A;
+            --legal-accent-soft: rgba(37,99,235,0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+            background: var(--legal-bg);
+            color: var(--legal-text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: var(--legal-surface);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--legal-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: var(--legal-accent-soft);
+            border: 1px solid var(--legal-primary);
+            color: var(--legal-text);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .back-btn:hover {
+            background: var(--legal-accent-soft);
+        }
+
+        .navbar h1 {
+            font-size: 1.2rem;
+            font-family: 'Inter Tight', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+            font-weight: 600;
+        }
+
+        .lang-toggle {
+            background: var(--legal-primary);
+            border: none;
+            color: #FFFFFF;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            transition: transform 0.3s;
+        }
+
+        .lang-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        /* 語言直選：原生 select 去掉外觀，色與字型跟著鈕走；
+           option 在 Firefox 會繼承白字，要明確給深色 */
+        .lang-toggle select {
+            appearance: none;
+            -webkit-appearance: none;
+            background: transparent;
+            border: none;
+            color: inherit;
+            font: inherit;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .lang-toggle select:focus-visible {
+            outline: 2px solid #FFFFFF;
+            outline-offset: 2px;
+        }
+
+        .lang-toggle option {
+            color: #111111;
+            background: #FFFFFF;
+        }
+
+        .lang-toggle::after {
+            content: '▾';
+            font-size: 0.8em;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 6rem;
+        }
+
+        .prose h2 {
+            color: var(--legal-text);
+            margin: 2rem 0 1rem;
+            font-size: 1.5rem;
+            font-family: 'Inter Tight', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+            border-bottom: 2px solid var(--legal-primary);
+            padding-bottom: 0.5rem;
+        }
+
+        .prose h3 {
+            color: var(--legal-text-muted);
+            margin: 1.5rem 0 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .prose p,
+        .prose ul,
+        .prose ol {
+            margin: 0.8rem 0;
+            color: var(--legal-text-muted);
+        }
+
+        .prose ul,
+        .prose ol {
+            padding-left: 2rem;
+        }
+
+        .prose li {
+            margin: 0.5rem 0;
+        }
+
+        .prose strong {
+            color: var(--legal-text);
+        }
+
+        .prose a {
+            color: var(--legal-primary);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .prose a:hover {
+            color: var(--legal-primary);
+        }
+
+        .footer {
+            background: var(--legal-surface);
+            padding: 2rem 1.5rem;
+            border-top: 1px solid var(--legal-border);
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--legal-primary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--legal-primary);
+        }
+
+        .copyright {
+            color: var(--legal-text-muted);
+            font-size: 0.9rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .effective-date {
+            background: var(--legal-accent-soft);
+            padding: 1rem;
+            border-left: 3px solid var(--legal-primary);
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .legal-notice {
+            background: var(--legal-accent-soft);
+            border-left: 3px solid var(--legal-primary);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .violation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: var(--legal-surface);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .violation-table th,
+        .violation-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--legal-border);
+        }
+
+        .violation-table th {
+            background: var(--legal-accent-soft);
+            color: var(--legal-text);
+            font-weight: 600;
+        }
+
+        .severity-mild {
+            color: #ffd700;
+        }
+
+        .severity-medium {
+            color: #ffa500;
+        }
+
+        .severity-severe {
+            color: #ff6347;
+        }
+
+        .severity-critical {
+            color: #dc143c;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <button class="back-btn" data-click="goHome"><span data-zh="← 返回" data-zh-cn="← 返回" data-en="← Back" data-ru="← Назад">← 返回</span></button>
+            <h1 id="nav-title"><span data-zh="社群守則" data-zh-cn="社群守则" data-en="Community Guidelines" data-ru="Правила сообщества">社群守則</span></h1>
+        </div>
+        <label class="lang-toggle">
+            🌐 <select id="legal-lang-select" aria-label="Language">
+                <option value="zh-TW">繁體中文</option>
+                <option value="zh-CN">简体中文</option>
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+            </select>
+        </label>
+    </nav>
+
+    <div class="container">
+        <!-- Chinese Content -->
+        <div id="content" class="prose">
+
+            <div class="effective-date">
+                <strong data-zh="生效日期：" data-zh-cn="生效日期：" data-en="Effective Date:" data-ru="Дата вступления в силу: ">生效日期：</strong><span data-zh="2026年9月25日（最後更新）" data-zh-cn="2026年9月25日（最后更新）" data-en="September 25, 2026 (Last Updated)" data-ru="25 сентября 2026 г. (последнее обновление)">2026年9月25日（最後更新）</span><br>
+                <strong data-zh="版本：" data-zh-cn="版本：" data-en="Version:" data-ru="Версия: ">版本：</strong><span data-zh="v3.1" data-zh-cn="v3.1" data-en="v3.1" data-ru="v3.1">v3.1</span>
+            </div>
+
+            <div class="legal-notice">
+                <strong data-zh="🔗 錢包登入與鏈上付款" data-zh-cn="🔗 钱包登录与链上付款" data-en="🔗 Wallet Sign-In &amp; On-Chain Payments" data-ru="🔗 Вход через кошелёк и ончейн-платежи">🔗 錢包登入與鏈上付款</strong><br>
+                <span data-zh="CryptoMind 是市場資料整理與 AI 分析工具。網頁版以 EVM 錢包透過 Sign-In with Ethereum（SIWE）登入，Telegram Mini App 內以 Telegram 帳號登入；論壇付費發文與打賞以 Base 網路上的 USDC 支付。請遵守本平台社群守則與當地法規。" data-zh-cn="CryptoMind 是市场资料整理与 AI 分析工具。网页版以 EVM 钱包通过 Sign-In with Ethereum（SIWE）登录，Telegram Mini App 内以 Telegram 账号登录；论坛付费发文与打赏以 Base 网络上的 USDC 支付。请遵守本平台社群守则与当地法规。" data-en="CryptoMind is a market data and AI analysis tool. On the web you sign in with an EVM wallet using Sign-In with Ethereum (SIWE); inside the Telegram Mini App you sign in with your Telegram account. Paid forum posts and tips are paid in USDC on the Base network. Please comply with this Platform's Community Guidelines and local regulations." data-ru="CryptoMind — это инструмент для работы с рыночными данными и AI-анализа. В веб-версии вход выполняется с EVM-кошелька через Sign-In with Ethereum (SIWE), в Telegram Mini App — через ваш аккаунт Telegram. Платные посты на форуме и чаевые оплачиваются в USDC в сети Base. Соблюдайте Правила сообщества Платформы и местное законодательство.">CryptoMind 是市場資料整理與 AI 分析工具。網頁版以 EVM 錢包透過 Sign-In with Ethereum（SIWE）登入，Telegram Mini App 內以 Telegram 帳號登入；論壇付費發文與打賞以 Base 網路上的 USDC 支付。請遵守本平台社群守則與當地法規。</span>
+            </div>
+
+            <p data-zh="CryptoMind 致力於打造安全、友善、高品質的加密貨幣社群。所有用戶都應遵守以下守則。" data-zh-cn="CryptoMind 致力于打造安全、友善、高品质的加密货币社群。所有用户都应遵守以下守则。" data-en="CryptoMind is committed to building a safe, friendly, and high-quality cryptocurrency community. All users must comply with these guidelines." data-ru="CryptoMind стремится создать безопасное, дружелюбное и качественное криптовалютное сообщество. Все пользователи обязаны соблюдать следующие правила.">CryptoMind 致力於打造安全、友善、高品質的加密貨幣社群。所有用戶都應遵守以下守則。</p>
+
+            <h2 data-zh="1. 核心原則" data-zh-cn="1. 核心原则" data-en="1. Core Principles" data-ru="1. Основные принципы">1. 核心原則</h2>
+            <ul>
+                <li><strong data-zh="尊重他人" data-zh-cn="尊重他人" data-en="Respect Others" data-ru="Уважайте других">尊重他人</strong>：<span data-zh="避免人身攻擊、歧視、騷擾行為" data-zh-cn="避免人身攻击、歧视、骚扰行为" data-en="Avoid personal attacks, discrimination, harassment" data-ru="Избегайте личных нападок, дискриминации и домогательств">避免人身攻擊、歧視、騷擾行為</span></li>
+                <li><strong data-zh="誠實透明" data-zh-cn="诚实透明" data-en="Honesty &amp; Transparency" data-ru="Честность и прозрачность">誠實透明</strong>：<span data-zh="不發布虛假資訊或操縱市場數據" data-zh-cn="不发布虚假信息或操纵市场数据" data-en="Do not post false information or manipulate market data" data-ru="Не публикуйте ложную информацию и не манипулируйте рыночными данными">不發布虛假資訊或操縱市場數據</span></li>
+                <li><strong data-zh="保護社群" data-zh-cn="保护社群" data-en="Protect Community" data-ru="Защита сообщества">保護社群</strong>：<span data-zh="舉報詐騙、濫用行為，共同維護安全環境" data-zh-cn="举报诈骗、滥用行为，共同维护安全环境" data-en="Report scams and abuse, work together to maintain a safe environment" data-ru="Сообщайте о мошенничестве и злоупотреблениях, вместе поддерживайте безопасную среду">舉報詐騙、濫用行為，共同維護安全環境</span></li>
+                <li><strong data-zh="理性討論" data-zh-cn="理性讨论" data-en="Rational Discussion" data-ru="Рациональное обсуждение">理性討論</strong>：<span data-zh="歡迎不同觀點，但請以建設性方式表達" data-zh-cn="欢迎不同观点，但请以建设性方式表达" data-en="Different viewpoints are welcome, but please express them constructively" data-ru="Различные точки зрения приветствуются, но выражайте их конструктивно">歡迎不同觀點，但請以建設性方式表達</span></li>
+                <li><strong data-zh="平台合規" data-zh-cn="平台合规" data-en="Platform Compliance" data-ru="Соблюдение правил платформы">平台合規</strong>：<span data-zh="遵守本平台服務條款與當地法規" data-zh-cn="遵守本平台服务条款与当地法规" data-en="Comply with this Platform's Terms of Service and local regulations" data-ru="Соблюдайте Условия обслуживания Платформы и местные законы">遵守本平台服務條款與當地法規</span></li>
+            </ul>
+
+            <h2 data-zh="2. 違規類型與嚴重程度" data-zh-cn="2. 违规类型与严重程度" data-en="2. Violation Types &amp; Severity" data-ru="2. Типы нарушений и степень серьёзности">2. 違規類型與嚴重程度</h2>
+            <table class="violation-table">
+                <thead>
+                    <tr>
+                        <th data-zh="違規類型" data-zh-cn="违规类型" data-en="Violation Type" data-ru="Тип нарушения">違規類型</th>
+                        <th data-zh="說明" data-zh-cn="说明" data-en="Description" data-ru="Описание">說明</th>
+                        <th data-zh="示例" data-zh-cn="示例" data-en="Examples" data-ru="Примеры">示例</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong data-zh="spam" data-zh-cn="spam" data-en="spam" data-ru="spam">spam</strong></td>
+                        <td><span data-zh="垃圾訊息、重複發文、無意義內容" data-zh-cn="垃圾讯息、重复发文、无意义内容" data-en="Spam messages, repetitive posts, meaningless content" data-ru="Спам, повторяющиеся посты, бессмысленный контент">垃圾訊息、重複發文、無意義內容</span></td>
+                        <td><span data-zh="連續發布相同廣告、一句話「頂」" data-zh-cn="连续发布相同广告、一句话「顶」" data-en="Repeated ads, one-word 'bump' posts" data-ru="Повторяющаяся реклама, посты из одного слова «ап»">連續發布相同廣告、一句話「頂」</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong data-zh="harassment" data-zh-cn="harassment" data-en="harassment" data-ru="harassment">harassment</strong></td>
+                        <td><span data-zh="騷擾、霸凌，人身攻擊" data-zh-cn="骚扰、霸凌，人身攻击" data-en="Harassment, bullying, personal attacks" data-ru="Домогательства, травля, личные нападки">騷擾、霸凌，人身攻擊</span></td>
+                        <td><span data-zh="辱罵、跟蹤騷擾、仇恨言論" data-zh-cn="辱骂、跟踪骚扰、仇恨言论" data-en="Insults, stalking, hate speech" data-ru="Оскорбления, преследование, язык вражды">辱罵、跟蹤騷擾、仇恨言論</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong data-zh="misinformation" data-zh-cn="misinformation" data-en="misinformation" data-ru="misinformation">misinformation</strong></td>
+                        <td><span data-zh="故意散布虛假市場資訊" data-zh-cn="故意散布虚假市场资讯" data-en="Deliberately spreading false market info" data-ru="Намеренное распространение ложной рыночной информации">故意散布虛假市場資訊</span></td>
+                        <td><span data-zh="捏造項目破產消息、假冒官方公告" data-zh-cn="捏造项目破产消息、假冒官方公告" data-en="Fabricated bankruptcy news, fake announcements" data-ru="Выдуманные новости о банкротстве, фальшивые официальные объявления">捏造項目破產消息、假冒官方公告</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong data-zh="scam" data-zh-cn="scam" data-en="scam" data-ru="scam">scam</strong></td>
+                        <td><span data-zh="詐騙、釣魚、傳銷" data-zh-cn="诈骗、钓鱼、传销" data-en="Scams, phishing, pyramid schemes" data-ru="Мошенничество, фишинг, финансовые пирамиды">詐騙、釣魚、傳銷</span></td>
+                        <td><span data-zh="假投資平台、龐氏騙局、假空投" data-zh-cn="假投资平台、庞氏骗局、假空投" data-en="Fake investment platforms, Ponzi schemes, fake airdrops" data-ru="Фальшивые инвестиционные платформы, схемы Понци, фальшивые аирдропы">假投資平台、龐氏騙局、假空投</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong data-zh="illegal" data-zh-cn="illegal" data-en="illegal" data-ru="illegal">illegal</strong></td>
+                        <td><span data-zh="違法內容" data-zh-cn="违法内容" data-en="Illegal content" data-ru="Незаконный контент">違法內容</span></td>
+                        <td><span data-zh="洗錢、販毒、侵犯智財權" data-zh-cn="洗钱、贩毒、侵犯智财权" data-en="Money laundering, drugs, IP infringement" data-ru="Отмывание денег, наркотики, нарушение интеллектуальных прав">洗錢、販毒、侵犯智財權</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong data-zh="other" data-zh-cn="other" data-en="other" data-ru="other">other</strong></td>
+                        <td><span data-zh="其他違反守則行為" data-zh-cn="其他违反守则行为" data-en="Other guideline violations" data-ru="Другие нарушения правил">其他違反守則行為</span></td>
+                        <td><span data-zh="未分類的不當行為" data-zh-cn="未分类的不当行为" data-en="Uncategorized misconduct" data-ru="Некатегоризированные проступки">未分類的不當行為</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 data-zh="違規等級與積分" data-zh-cn="违规等级与积分" data-en="Severity Levels &amp; Points" data-ru="Уровни нарушений и баллы">違規等級與積分</h3>
+            <ul>
+                <li><span class="severity-mild">1 分</span> - <span data-zh="初次無意違規、輕微不當用語" data-zh-cn="初次无意违规、轻微不当用语" data-en="First-time unintentional violation, minor inappropriate language" data-ru="Первое непреднамеренное нарушение, незначительные некорректные выражения">初次無意違規、輕微不當用語</span></li>
+                <li><span class="severity-medium">3 分</span> - <span data-zh="重複垃圾訊息、輕度騷擾" data-zh-cn="重复垃圾讯息、轻度骚扰" data-en="Repeated spam, mild harassment" data-ru="Повторяющийся спам, лёгкие домогательства">重複垃圾訊息、輕度騷擾</span></li>
+                <li><span class="severity-severe">5 分</span> - <span data-zh="故意散布假消息、嚴重騷擾" data-zh-cn="故意散布假消息、严重骚扰" data-en="Deliberately spreading misinformation, severe harassment" data-ru="Намеренное распространение дезинформации, серьёзные домогательства">故意散布假消息、嚴重騷擾</span></li>
+                <li><span class="severity-critical">30 分</span> - <span data-zh="詐騙、違法行為" data-zh-cn="诈骗、违法行为" data-en="Scams, illegal activities" data-ru="Мошенничество, противоправные действия">詐騙、違法行為</span></li>
+            </ul>
+
+            <h2 data-zh="3. 處罰機制" data-zh-cn="3. 处罚机制" data-en="3. Penalty System" data-ru="3. Система наказаний">3. 處罰機制</h2>
+            <p data-zh="違規積分累計達到以下門檻將觸發自動處罰：" data-zh-cn="违规积分累计达到以下门槛将触发自动处罚：" data-en="Accumulated violation points trigger automatic penalties at these thresholds:" data-ru="Накопленные баллы нарушений автоматически вызывают наказания при достижении порогов:">違規積分累計達到以下門檻將觸發自動處罰：</p>
+            <table class="violation-table">
+                <thead>
+                    <tr>
+                        <th data-zh="積分門檻" data-zh-cn="积分门槛" data-en="Point Threshold" data-ru="Порог баллов">積分門檻</th>
+                        <th data-zh="處罰措施" data-zh-cn="处罚措施" data-en="Penalty" data-ru="Наказание">處罰措施</th>
+                        <th data-zh="說明" data-zh-cn="说明" data-en="Description" data-ru="Описание">說明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span data-zh="5 分" data-zh-cn="5 分" data-en="5 pts" data-ru="5 баллов">5 分</span></td>
+                        <td><strong><span data-zh="警告 (Warning)" data-zh-cn="警告 (Warning)" data-en="Warning" data-ru="Предупреждение">警告 (Warning)</span></strong></td>
+                        <td><span data-zh="系統發送警告通知，無其他限制" data-zh-cn="系统发送警告通知，无其他限制" data-en="System sends warning notification, no other restrictions" data-ru="Система отправляет предупреждение, иных ограничений нет">系統發送警告通知，無其他限制</span></td>
+                    </tr>
+                    <tr>
+                        <td><span data-zh="10 分" data-zh-cn="10 分" data-en="10 pts" data-ru="10 баллов">10 分</span></td>
+                        <td><strong><span data-zh="暫停 3 天" data-zh-cn="暂停 3 天" data-en="3-day Suspension" data-ru="Приостановка на 3 дня">暫停 3 天</span></strong></td>
+                        <td><span data-zh="禁止發文、評論、檢舉" data-zh-cn="禁止发文、评论、检举" data-en="Cannot post, comment, or report" data-ru="Запрет на посты, комментарии и жалобы">禁止發文、評論、檢舉</span></td>
+                    </tr>
+                    <tr>
+                        <td><span data-zh="20 分" data-zh-cn="20 分" data-en="20 pts" data-ru="20 баллов">20 分</span></td>
+                        <td><strong><span data-zh="暫停 7 天" data-zh-cn="暂停 7 天" data-en="7-day Suspension" data-ru="Приостановка на 7 дней">暫停 7 天</span></strong></td>
+                        <td><span data-zh="禁止除閱讀外所有互動功能" data-zh-cn="禁止除阅读外所有互动功能" data-en="All interactions blocked except reading" data-ru="Все взаимодействия заблокированы, кроме чтения">禁止除閱讀外所有互動功能</span></td>
+                    </tr>
+                    <tr>
+                        <td><span data-zh="30 分" data-zh-cn="30 分" data-en="30 pts" data-ru="30 баллов">30 分</span></td>
+                        <td><strong><span data-zh="暫停 30 天" data-zh-cn="暂停 30 天" data-en="30-day Suspension" data-ru="Приостановка на 30 дней">暫停 30 天</span></strong></td>
+                        <td><span data-zh="嚴重違規，長期禁止社群參與" data-zh-cn="严重违规，长期禁止社群参与" data-en="Serious violation, long-term community ban" data-ru="Серьёзное нарушение, долгосрочный запрет на участие">嚴重違規，長期禁止社群參與</span></td>
+                    </tr>
+                    <tr>
+                        <td><span data-zh="40 分" data-zh-cn="40 分" data-en="40 pts" data-ru="40 баллов">40 分</span></td>
+                        <td><strong><span data-zh="永久封禁 (Ban)" data-zh-cn="永久封禁 (Ban)" data-en="Permanent Ban" data-ru="Постоянная блокировка">永久封禁 (Ban)</span></strong></td>
+                        <td><span data-zh="帳戶永久停用，無法申訴" data-zh-cn="账户永久停用，无法申诉" data-en="Account permanently disabled, no appeals" data-ru="Аккаунт навсегда отключён, апелляции невозможны">帳戶永久停用，無法申訴</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 data-zh="4. 檢舉系統" data-zh-cn="4. 检举系统" data-en="4. Report System" data-ru="4. Система жалоб">4. 檢舉系統</h2>
+            <h3 data-zh="4.1 檢舉次數限制" data-zh-cn="4.1 检举次数限制" data-en="4.1 Report Limits" data-ru="4.1 Лимиты жалоб">4.1 檢舉次數限制</h3>
+            <ul>
+                <li><strong data-zh="Free 用戶" data-zh-cn="Free 用户" data-en="Free Users" data-ru="Пользователи Free">Free 用戶</strong>：<span data-zh="5 次/天" data-zh-cn="5 次/天" data-en="5 times/day" data-ru="5 раз/день">5 次/天</span></li>
+                <li><strong data-zh="Premium 用戶" data-zh-cn="Premium 用户" data-en="Premium Users" data-ru="Пользователи Premium">Premium 用戶</strong>：<span data-zh="15 次/天" data-zh-cn="15 次/天" data-en="15 times/day" data-ru="15 раз/день">15 次/天</span></li>
+            </ul>
+            <h3 data-zh="4.2 檢舉流程" data-zh-cn="4.2 检举流程" data-en="4.2 Report Process" data-ru="4.2 Процесс подачи жалобы">4.2 檢舉流程</h3>
+            <ol>
+                <li><span data-zh="點擊違規內容的「檢舉」按鈕" data-zh-cn="点击违规内容的「检举」按钮" data-en="Click 'Report' button on violating content" data-ru="Нажмите кнопку «Жалоба» на нарушающем контенте">點擊違規內容的「檢舉」按鈕</span></li>
+                <li><span data-zh="選擇違規類型（spam, harassment, misinformation, scam, illegal, other）" data-zh-cn="选择违规类型（spam, harassment, misinformation, scam, illegal, other）" data-en="Select violation type (spam, harassment, misinformation, scam, illegal, other)" data-ru="Выберите тип нарушения (spam, harassment, misinformation, scam, illegal, other)">選擇違規類型（spam, harassment, misinformation, scam, illegal, other）</span></li>
+                <li><span data-zh="評估嚴重程度（mild, medium, severe, critical）" data-zh-cn="评估严重程度（mild, medium, severe, critical）" data-en="Assess severity (mild, medium, severe, critical)" data-ru="Оцените серьёзность (mild, medium, severe, critical)">評估嚴重程度（mild, medium, severe, critical）</span></li>
+                <li><span data-zh="提供證據說明（截圖、連結、文字描述）" data-zh-cn="提供证据说明（截图、链接、文字描述）" data-en="Provide evidence (screenshots, links, text description)" data-ru="Предоставьте доказательства (скриншоты, ссылки, текстовое описание)">提供證據說明（截圖、連結、文字描述）</span></li>
+                <li><span data-zh="提交檢舉" data-zh-cn="提交检举" data-en="Submit report" data-ru="Отправьте жалобу">提交檢舉</span></li>
+            </ol>
+            <h3 data-zh="4.3 PRO 審核員制度" data-zh-cn="4.3 PRO 审核员制度" data-en="4.3 PRO Moderator System" data-ru="4.3 Система модераторов PRO">4.3 PRO 審核員制度</h3>
+            <ul>
+                <li><span data-zh="Premium 用戶可擔任社群審核員" data-zh-cn="Premium 用户可担任社群审核员" data-en="Premium users can serve as community moderators" data-ru="Пользователи Premium могут быть модераторами сообщества">Premium 用戶可擔任社群審核員</span></li>
+                <li><span data-zh="每個檢舉案件需 3 位審核員投票" data-zh-cn="每个检举案件需 3 位审核员投票" data-en="Each report case requires 3 moderator votes" data-ru="Каждое дело требует голосов 3 модераторов">每個檢舉案件需 <strong>3 位審核員</strong>投票</span></li>
+                <li><span data-zh="達到 70% 共識（至少 2/3 票同意）即執行處罰" data-zh-cn="达到 70% 共识（至少 2/3 票同意）即执行处罚" data-en="70% consensus (at least 2/3 votes) is required to execute the penalty" data-ru="Для исполнения наказания нужен консенсус 70% (не менее 2/3 голосов)">達到 <strong>70% 共識</strong>（至少 2/3 票同意）即執行處罰</span></li>
+                <li><span data-zh="若審核員惡意投票將被取消資格" data-zh-cn="若审核员恶意投票将被取消资格" data-en="Malicious voting revokes moderator status" data-ru="Злоумышленное голосование лишает статуса модератора">若審核員惡意投票將被取消資格</span></li>
+            </ul>
+
+            <h2 data-zh="5. 申訴流程" data-zh-cn="5. 申诉流程" data-en="5. Appeal Process" data-ru="5. Процесс апелляции">5. 申訴流程</h2>
+            <h3 data-zh="5.1 誰可以申訴" data-zh-cn="5.1 谁可以申诉" data-en="5.1 Who Can Appeal" data-ru="5.1 Кто может подать апелляцию">5.1 誰可以申訴</h3>
+            <p><span data-zh="被處罰（暫停或警告）的用戶可在 7 天內提交申訴。" data-zh-cn="被处罚（暂停或警告）的用户可在 7 天内提交申诉。" data-en="Users who have been penalized (suspended or warned) can submit an appeal within 7 days." data-ru="Наказанные (приостановленные или предупреждённые) пользователи могут подать апелляцию в течение 7 дней.">被處罰（暫停或警告）的用戶可在 <strong>7 天內</strong>提交申訴。</span></p>
+            <h3 data-zh="5.2 如何申訴" data-zh-cn="5.2 如何申诉" data-en="5.2 How to Appeal" data-ru="5.2 Как подать апелляцию">5.2 如何申訴</h3>
+            <ol>
+                <li><span data-zh="前往「個人設定」→「治理記錄」" data-zh-cn="前往「个人设定」→「治理记录」" data-en="Go to 'Settings' → 'Governance Records'" data-ru="Перейдите в «Настройки» → «Записи управления»">前往「個人設定」→「治理記錄」</span></li>
+                <li><span data-zh="找到爭議處罰記錄，點擊「申訴」" data-zh-cn="找到争议处罚记录，点击「申诉」" data-en="Find disputed penalty, click 'Appeal'" data-ru="Найдите спорное наказание и нажмите «Апелляция»">找到爭議處罰記錄，點擊「申訴」</span></li>
+                <li><span data-zh="提供證據說明為何該處罰不當" data-zh-cn="提供证据说明为何该处罚不当" data-en="Provide evidence why the penalty is unjust" data-ru="Предоставьте доказательства неправомерности наказания">提供證據說明為何該處罰不當</span></li>
+                <li><span data-zh="等待管理員審核（通常 3 個工作日內回覆）" data-zh-cn="等待管理员审核（通常 3 个工作日内回复）" data-en="Wait for admin review (usually within 3 business days)" data-ru="Ожидайте проверки администратором (обычно в течение 3 рабочих дней)">等待管理員審核（通常 3 個工作日內回覆）</span></li>
+            </ol>
+            <h3 data-zh="5.3 申訴結果" data-zh-cn="5.3 申诉结果" data-en="5.3 Appeal Outcomes" data-ru="5.3 Результаты апелляции">5.3 申訴結果</h3>
+            <ul>
+                <li><strong><span data-zh="申訴成立" data-zh-cn="申诉成立" data-en="Appeal Granted" data-ru="Апелляция удовлетворена">申訴成立</span></strong>：<span data-zh="撤銷處罰，扣除積分" data-zh-cn="撤销处罚，扣除积分" data-en="Penalty revoked, points deducted" data-ru="Наказание отменено, баллы вычтены">撤銷處罰，扣除積分</span></li>
+                <li><strong><span data-zh="部分成立" data-zh-cn="部分成立" data-en="Partially Granted" data-ru="Частично удовлетворена">部分成立</span></strong>：<span data-zh="降低處罰等級" data-zh-cn="降低处罚等级" data-en="Penalty level reduced" data-ru="Уровень наказания снижен">降低處罰等級</span></li>
+                <li><strong><span data-zh="申訴駁回" data-zh-cn="申诉驳回" data-en="Appeal Denied" data-ru="Апелляция отклонена">申訴駁回</span></strong>：<span data-zh="維持原處罰" data-zh-cn="维持原处罚" data-en="Original penalty maintained" data-ru="Первоначальное наказание сохраняется">維持原處罰</span></li>
+            </ul>
+
+            <h2 data-zh="6. 特殊規則" data-zh-cn="6. 特殊规则" data-en="6. Special Rules" data-ru="6. Особые правила">6. 特殊規則</h2>
+            <h3 data-zh="6.1 論壇發文規範" data-zh-cn="6.1 论坛发文规范" data-en="6.1 Forum Posting Guidelines" data-ru="6.1 Правила публикации на форуме">6.1 論壇發文規範</h3>
+            <ul>
+                <li><span data-zh="標題需清晰描述內容，不得使用誤導性標題" data-zh-cn="标题需清晰描述内容，不得使用误导性标题" data-en="Titles must clearly describe content, no clickbait" data-ru="Заголовки должны ясно описывать содержание, без кликбейта">標題需清晰描述內容，不得使用誤導性標題</span></li>
+                <li><span data-zh="禁止發布純圖片無文字說明的帖子" data-zh-cn="禁止发布纯图片无文字说明的帖子" data-en="No image-only posts without text explanation" data-ru="Запрещены посты только с изображениями без текста">禁止發布純圖片無文字說明的帖子</span></li>
+                <li><span data-zh="引用他人內容需註明來源" data-zh-cn="引用他人内容需注明来源" data-en="Cite sources when quoting others" data-ru="Указывайте источник при цитировании">引用他人內容需註明來源</span></li>
+                <li><span data-zh="討論幣種時應基於事實，避免無根據的「喊單」" data-zh-cn="讨论币种时应基于事实，避免无根据的「喊单」" data-en="Coin discussions should be fact-based, avoid baseless 'shilling'" data-ru="Обсуждение монет должно опираться на факты, избегайте бездоказательного «шиллинга»">討論幣種時應基於事實，避免無根據的「喊單」</span></li>
+            </ul>
+            <h3 data-zh="6.2 打賞功能" data-zh-cn="6.2 打赏功能" data-en="6.2 Tipping Feature" data-ru="6.2 Функция чаевых">6.2 打賞功能</h3>
+            <ul>
+                <li><span data-zh="打賞是自願行為，一旦發送不可撤回" data-zh-cn="打赏是自愿行为，一旦发送不可撤回" data-en="Tipping is voluntary and irreversible once sent" data-ru="Чаевые добровольны и необратимы после отправки">打賞是自願行為，</span><strong data-zh="一旦發送不可撤回" data-zh-cn="一旦发送不可撤回" data-en="irreversible once sent" data-ru="необратимы после отправки">一旦發送不可撤回</strong></li>
+                <li><span data-zh="不得以打賞進行賄賂或操縱投票" data-zh-cn="不得以打赏进行贿赂或操纵投票" data-en="No bribery or vote manipulation via tips" data-ru="Запрещены подкуп и манипуляция голосами через чаевые">不得以打賞進行賄賂或操縱投票</span></li>
+                <li><span data-zh="發現異常打賞模式（刷票，洗錢）將凍結帳戶" data-zh-cn="发现异常打赏模式（刷票，洗钱）将冻结账户" data-en="Abnormal tipping patterns (vote manipulation, money laundering) will freeze account" data-ru="Аномальные схемы чаевых (накрутка голосов, отмывание) приводят к заморозке аккаунта">發現異常打賞模式（刷票，洗錢）將凍結帳戶</span></li>
+            </ul>
+            <h3 data-zh="6.3 詐騙檢舉特別提醒" data-zh-cn="6.3 诈骗检举特别提醒" data-en="6.3 Scam Reporting Reminder" data-ru="6.3 Особое напоминание о жалобах на мошенничество">6.3 詐騙檢舉特別提醒</h3>
+            <ul>
+                <li><span data-zh="檢舉詐騙時請提供具體證據（網站截圖、對話記錄）" data-zh-cn="检举诈骗时请提供具体证据（网站截图、对话记录）" data-en="When reporting scams, please provide concrete evidence (website screenshots, chat records)" data-ru="При жалобе на мошенничество предоставляйте конкретные доказательства (скриншоты, переписку)">檢舉詐騙時請提供</span><strong data-zh="具體證據" data-zh-cn="具体证据" data-en="concrete evidence" data-ru="конкретные доказательства">具體證據</strong>（<span data-zh="網站截圖、對話記錄" data-zh-cn="网站截图、对话记录" data-en="website screenshots, chat records" data-ru="скриншоты сайтов, переписка">網站截圖、對話記錄</span>）</li>
+                <li><span data-zh="被檢舉者有權查看檢舉理由（匿名處理檢舉人身份）" data-zh-cn="被检举者有权查看检举理由（匿名处理检举人身份）" data-en="Reported users can view report reasons (reporter identity anonymized)" data-ru="Обвиняемый вправе видеть причину жалобы (личность жалобщика анонимна)">被檢舉者有權查看檢舉理由（匿名處理檢舉人身份）</span></li>
+                <li><span data-zh="誣告詐騙將受到比一般惡意檢舉更嚴重的處罰" data-zh-cn="诬告诈骗将受到比一般恶意检举更严重的处罚" data-en="False scam reports receive harsher penalties than general malicious reports" data-ru="Ложные жалобы на мошенничество наказываются строже обычных злоумышленных">誣告詐騙將受到比一般惡意檢舉更嚴重的處罰</span></li>
+            </ul>
+
+            <h3 data-zh="6.4 聊天附圖規範" data-zh-cn="6.4 聊天附图规范" data-en="6.4 Chat Image Attachment Rules" data-ru="6.4 Правила для изображений в чате">6.4 聊天附圖規範</h3>
+            <ul>
+                <li><span data-zh="對話附圖不得包含違法內容、他人個人資料、侵權素材、色情或暴力內容" data-zh-cn="对话附图不得包含违法内容、他人个人资料、侵权素材、色情或暴力内容" data-en="Chat image attachments must not contain illegal content, others' personal data, infringing material, or pornographic/violent content" data-ru="Изображения в чате не должны содержать незаконный контент, персональные данные других лиц, материалы с нарушением авторских прав, порнографию или насилие">對話附圖不得包含違法內容、他人個人資料、侵權素材、色情或暴力內容</span></li>
+                <li><span data-zh="附圖會經 AI 分析處理；違規附圖比照論壇違規處罰（見第 3 節）" data-zh-cn="附图会经 AI 分析处理；违规附图比照论坛违规处罚（见第 3 节）" data-en="Attached images are processed by AI analysis; violating attachments are penalized under forum rules (see Section 3)" data-ru="Прикреплённые изображения обрабатываются AI-анализом; нарушения наказываются по правилам форума (см. раздел 3)">附圖會經 AI 分析處理；違規附圖比照論壇違規處罰（見第 3 節）</span></li>
+            </ul>
+
+            <h2 data-zh="7. 管理員權限" data-zh-cn="7. 管理员权限" data-en="7. Administrator Powers" data-ru="7. Полномочия администраторов">7. 管理員權限</h2>
+            <p data-zh="管理員保留以下權力：" data-zh-cn="管理员保留以下权力：" data-en="Administrators reserve rights to:" data-ru="Администраторы оставляют за собой право:">管理員保留以下權力：</p>
+            <ul>
+                <li><span data-zh="直接處罰明顯違規內容，無需 PRO 審核流程" data-zh-cn="直接处罚明显违规内容，无需 PRO 审核流程" data-en="Directly penalize obvious violations without PRO review" data-ru="Наказывать очевидные нарушения напрямую без проверки PRO">直接處罰明顯違規內容，無需 PRO 審核流程</span></li>
+                <li><span data-zh="調整違規積分（若發現系統誤判）" data-zh-cn="调整违规积分（若发现系统误判）" data-en="Adjust violation points (if system misjudgment found)" data-ru="Корректировать баллы нарушений (при обнаружении ошибки системы)">調整違規積分（若發現系統誤判）</span></li>
+                <li><span data-zh="永久封禁涉嫌犯罪的帳戶並報警" data-zh-cn="永久封禁涉嫌犯罪的账户并报警" data-en="Permanently ban accounts suspected of crimes and report to authorities" data-ru="Навсегда блокировать аккаунты с признаками преступлений и сообщать в органы">永久封禁涉嫌犯罪的帳戶並報警</span></li>
+                <li><span data-zh="修改社群守則（重大變更將公告）" data-zh-cn="修改社群守则（重大变更将公告）" data-en="Modify community guidelines (major changes will be announced)" data-ru="Изменять правила сообщества (существенные изменения объявляются)">修改社群守則（重大變更將公告）</span></li>
+                <li><span data-zh="對嚴重違規用戶採取帳號限制" data-zh-cn="对严重违规用户采取账号限制" data-en="Take account restrictions against serious violators" data-ru="Ограничивать аккаунты серьёзных нарушителей">對嚴重違規用戶採取帳號限制</span></li>
+            </ul>
+
+            <h2 data-zh="8. 免責聲明" data-zh-cn="8. 免责声明" data-en="8. Disclaimers" data-ru="8. Отказ от ответственности">8. 免責聲明</h2>
+            <ul>
+                <li><span data-zh="平台不對用戶發布的內容準確性負責" data-zh-cn="平台不对用户发布的内容准确性负责" data-en="Platform not responsible for accuracy of user-generated content" data-ru="Платформа не отвечает за точность пользовательского контента">平台不對用戶發布的內容準確性負責</span></li>
+                <li><span data-zh="檢舉系統依賴社群自治，可能存在誤判" data-zh-cn="检举系统依赖社群自治，可能存在误判" data-en="Report system relies on community governance, may have misjudgments" data-ru="Система жалоб опирается на самоуправление и может ошибаться">檢舉系統依賴社群自治，可能存在誤判</span></li>
+                <li><span data-zh="被檢舉不代表有罪，需經審核流程" data-zh-cn="被检举不代表有罪，需经审核流程" data-en="Being reported doesn't imply guilt, requires review process" data-ru="Жалоба не означает вину — требуется процесс проверки">被檢舉不代表有罪，需經審核流程</span></li>
+                <li><span data-zh="平台不對因治理系統產生的爭議承擔法律責任" data-zh-cn="平台不对因治理系统产生的争议承担法律责任" data-en="Platform not liable for disputes arising from governance system" data-ru="Платформа не несёт правовой ответственности за споры из системы управления">平台不對因治理系統產生的爭議承擔法律責任</span></li>
+            </ul>
+
+            <h2 data-zh="9. 更新記錄" data-zh-cn="9. 更新记录" data-en="9. Update Log" data-ru="9. Журнал изменений">9. 更新記錄</h2>
+            <ul>
+                <li><strong data-zh="v3.1 (2026/09/25)" data-zh-cn="v3.1 (2026/09/25)" data-en="v3.1 (2026/09/25)" data-ru="v3.1 (25.09.2026)">v3.1 (2026/09/25)</strong>：<span data-zh="平台說明改為 EVM 錢包登入（SIWE）與 Base 網路 USDC 付款，移除 TON 生態系聲明" data-zh-cn="平台说明改为 EVM 钱包登录（SIWE）与 Base 网络 USDC 付款，移除 TON 生态系统声明" data-en="Updated the platform statement to EVM wallet sign-in (SIWE) and USDC payments on Base; removed the TON ecosystem statement" data-ru="Описание платформы обновлено: вход через EVM-кошелёк (SIWE) и оплата в USDC в сети Base; удалено заявление об экосистеме TON">平台說明改為 EVM 錢包登入（SIWE）與 Base 網路 USDC 付款，移除 TON 生態系聲明</span></li>
+                <li><strong data-zh="v3.0 (2026/08/28)" data-zh-cn="v3.0 (2026/08/28)" data-en="v3.0 (2026/08/28)" data-ru="v3.0 (28.08.2026)">v3.0 (2026/08/28)</strong>：<span data-zh="新增聊天附圖規範" data-zh-cn="新增聊天附图规范" data-en="Added chat image attachment rules" data-ru="Добавлены правила для изображений в чате">新增聊天附圖規範</span></li>
+                <li><strong data-zh="v2.0 (2026/03/05)" data-zh-cn="v2.0 (2026/03/05)" data-en="v2.0 (2026/03/05)" data-ru="v2.0 (05.03.2026)">v2.0 (2026/03/05)</strong>：<span data-zh="新增 TON (The Open Network) 生態系合規聲明、更新三級會員制度" data-zh-cn="新增 TON (The Open Network) 生态系统合规声明、更新三级会员制度" data-en="Added TON (The Open Network) ecosystem compliance statement, updated three-tier membership system" data-ru="Добавлено заявление о соответствии экосистеме TON (The Open Network), обновлена трёхуровневая система членства">新增 TON (The Open Network) 生態系合規聲明、更新三級會員制度</span></li>
+                <li><strong data-zh="v1.0 (2026/02/08)" data-zh-cn="v1.0 (2026/02/08)" data-en="v1.0 (2026/02/08)" data-ru="v1.0 (08.02.2026)">v1.0 (2026/02/08)</strong>：<span data-zh="初始版本" data-zh-cn="初始版本" data-en="Initial version" data-ru="Первоначальная версия">初始版本</span></li>
+            </ul>
+
+            <h2 data-zh="10. 聯絡我們" data-zh-cn="10. 联络我们" data-en="10. Contact Us" data-ru="10. Связь с нами">10. 聯絡我們</h2>
+            <p data-zh="若對治理系統有疑問或發現漏洞，請聯絡：" data-zh-cn="若对治理系统有疑问或发现漏洞，请联络：" data-en="For governance questions or to report system bugs, contact:" data-ru="По вопросам системы управления или об обнаруженных уязвимостях обращайтесь:">若對治理系統有疑問或發現漏洞，請聯絡：</p>
+            <ul>
+                <li><span data-zh="平台論壇私訊：" data-zh-cn="平台论坛私讯：" data-en="Platform Forum DM:" data-ru="Личное сообщение на форуме: ">平台論壇私訊：</span><strong>@Admin</strong></li>
+                <li><span data-zh="平台網址：" data-zh-cn="平台网址：" data-en="Platform URL:" data-ru="Сайт платформы: ">平台網址：</span><strong>getcryptomind.com</strong></li>
+            </ul>
+
+            <div class="legal-notice" style="margin-top: 2rem;">
+                <strong data-zh="📎 相關連結" data-zh-cn="📎 相关链接" data-en="📎 Related Links" data-ru="📎 Связанные ссылки">📎 相關連結</strong>
+                <ul style="margin-top: 0.5rem;">
+                    <li><a href="terms-of-service.html" style="color: #0098EA;"><span data-zh="CryptoMind 服務條款" data-zh-cn="CryptoMind 服务条款" data-en="CryptoMind Terms of Service" data-ru="Условия обслуживания CryptoMind">CryptoMind 服務條款</span></a></li>
+                    <li><a href="privacy-policy.html" style="color: #0098EA;"><span data-zh="CryptoMind 隱私政策" data-zh-cn="CryptoMind 隐私政策" data-en="CryptoMind Privacy Policy" data-ru="Политика конфиденциальности CryptoMind">CryptoMind 隱私政策</span></a></li>
+                </ul>
+            </div>
+            <div class="legal-notice" style="margin-top: 1.5rem;">
+                <span data-zh="語言版本說明：本守則提供繁體中文、簡體中文、英文及俄文版本。若各語言版本之間存在歧異，以英文版本為準。" data-zh-cn="语言版本说明：本守则提供繁体中文、简体中文、英文及俄文版本。若各语言版本之间存在歧异，以英文版本为准。" data-en="Language versions: These Guidelines are provided in Traditional Chinese, Simplified Chinese, English, and Russian. In case of any discrepancy between versions, the English version shall prevail." data-ru="Языковые версии: настоящие Правила предоставляются на традиционном китайском, упрощённом китайском, английском и русском языках. В случае расхождений преимущественную силу имеет английская версия.">語言版本說明：本守則提供繁體中文、簡體中文、英文及俄文版本。若各語言版本之間存在歧異，以英文版本為準。</span>
+            </div>
+        
+    </div>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="terms-of-service.html">Terms of Service</a>
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="community-guidelines.html">Community Guidelines</a>
+            <a href="/static/index.html"><span data-zh="返回平台" data-zh-cn="返回平台" data-en="Back to Platform" data-ru="Вернуться на платформу">返回平台</span></a>
+        </div>
+        <div class="copyright">
+            © 2026 CryptoMind. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="/static/legal/legal-lang.js?v=1"></script>
+    <script src="/js/components/ThemeToggle.js"></script>
+</body>
+
+</html>

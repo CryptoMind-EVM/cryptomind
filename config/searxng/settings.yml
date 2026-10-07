@@ -1,0 +1,61 @@
+# =============================================================
+# SearXNG — 自架聚合搜尋設定
+# -------------------------------------------------------------
+# 掛載位置：/etc/searxng/settings.yml（唯讀，見 docker-compose.prod.yml）
+# 用途：web_search 工具在使用者沒設任何 BYOK 金鑰時的預設引擎。
+#
+# 這個實例只掛在 compose 內網，不對外開 port、不給人用瀏覽器開——
+# 它唯一的客戶是 app / analysis-worker / cron-worker 的 /search?format=json。
+#
+# 改完要重啟服務：
+#   docker compose -f docker-compose.prod.yml --env-file .env.production \
+#       restart searxng
+# =============================================================
+
+# 只覆寫下面列到的項目，其餘沿用上游預設（引擎清單很長，不整份複製）
+use_default_settings: true
+
+general:
+  instance_name: "CryptoMind Search"
+  # 內部服務，不需要統計頁
+  enable_metrics: false
+
+server:
+  # 佔位值：實際祕密由 compose 的 SEARXNG_SECRET 注入後覆寫此處。
+  # 這不是真祕密，不要往這裡填真值（check_secrets.py 會掃）。
+  secret_key: "ultrasecretkey"
+  # 只有內網後端打得到，沒有外部流量要擋。開著的話我們自己的連續查詢
+  # 會被自家 bot 偵測擋成 HTTP 429（而且 limiter 還要額外接一顆 Valkey）。
+  limiter: false
+  public_instance: false
+  # 圖片代理對純 JSON 取用毫無意義，只會多吃頻寬
+  image_proxy: false
+
+search:
+  # ⚠️ 必須含 json，否則 /search?format=json 直接回 403 —— 這是整合的命脈
+  formats:
+    - html
+    - json
+  safe_search: 0
+  # auto = 依查詢本身的語言判定。平台有 en / zh-TW / zh-CN / ru 四語使用者，
+  # 寫死任何一種都會害到其他三種。
+  default_lang: "auto"
+  # 我們不用搜尋框，關掉省一次對外請求
+  autocomplete: ""
+
+engines:
+  # 預設就開的 general 引擎：duckduckgo、brave、qwant。下面再補兩大引擎。
+  #
+  # Google 從單一出口 IP 容易吃 captcha；吃到時 SearXNG 只會少回它的結果，
+  # 不會讓整筆查詢失敗，所以當加分項開著就好，不要當主力。
+  - name: google
+    disabled: false
+  - name: bing
+    disabled: false
+
+  # 簡體中文來源。台股／繁中查詢用不到，開了只會灌進雜訊；
+  # 之後真的要查陸港澳內容再把 disabled 改成 false。
+  - name: baidu
+    disabled: true
+  - name: sogou
+    disabled: true

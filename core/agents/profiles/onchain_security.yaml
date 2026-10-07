@@ -1,0 +1,21 @@
+id: onchain_security
+version: "1.1.0"
+display_name: "On-chain & Security"
+description: "地址、Token、錢包、報價與經同意的鏈上查詢"
+tier: free
+capabilities:
+  - onchain_lookup
+  - security_check
+default_analysis_mode: quick
+default_action_policy: read_only
+allowed_data_sources:
+  - onchain
+  - web
+allowed_tool_categories:
+  - onchain
+  - crypto_basic
+  - technical
+default_skills: []
+required_tools:
+  - check_address_safety
+  - check_token_security

@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- CSP is enforced via HTTP header in api/middleware_setup.py (security_headers_middleware) -->
+    <!-- No <meta> CSP tag here to avoid conflicts with the stricter HTTP header -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <!-- theme-color：由 ThemeSwitcher.applyTheme 依「實際生效主題」動態設定，
+         不用 media=prefers-color-scheme（那會跟 OS 走，與 app 可選主題不一致） -->
+    <meta name="theme-color" content="#FFFDF9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="mobile-web-app-capable" content="yes">
+    <!-- Base Dashboard domain verification (2026-09-08): proves ownership of this site -->
+    <meta name="base:app_id" content="6a9fa6ae4c012fbda3fe70d7" />
+
+    <!-- SEO Meta Tags -->
+    <title data-i18n="seo.index">CryptoMind - AI Crypto Analyst | AI-Powered Crypto Analysis Platform</title>
+    <meta name="description" content="CryptoMind is an AI market analyst for crypto, US and Taiwan stocks: live data and research-backed analysis, one ledger for all your holdings with onchain-verified Base wallets, and a daily brief with earnings and token unlocks. Analysis, not financial advice.">
+    <meta name="keywords" content="AI market analysis, cryptocurrency, Bitcoin, Ethereum, US stocks, Taiwan stocks, portfolio ledger, Base, onchain, market calendar">
+    <meta name="author" content="CryptoMind">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://getcryptomind.com/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://getcryptomind.com/">
+    <meta property="og:title" content="CryptoMind - AI Crypto Analyst">
+    <meta property="og:description" content="AI market analyst for crypto, US and Taiwan stocks: live data, one ledger for all your holdings, and a daily brief. Analysis, not financial advice.">
+    <!-- summary_large_image 要配 1200×630 大圖（小方圖示會被裁成糊的一角） -->
+    <meta property="og:image" content="https://getcryptomind.com/img/miniapp/hero-1200x630.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Base App／Farcaster mini app 嵌入 meta：伺服器依請求來源注入（api/routers/system.py read_index） -->
+    <!-- FC_MINIAPP_META -->
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://getcryptomind.com/">
+    <meta name="twitter:title" content="CryptoMind - AI Crypto Analyst">
+    <meta name="twitter:description" content="AI market analyst for crypto, US and Taiwan stocks: live data, one ledger for all your holdings, and a daily brief. Analysis, not financial advice.">
+    <meta name="twitter:image" content="https://getcryptomind.com/img/miniapp/hero-1200x630.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/static/img/title_icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/img/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/static/img/icon-512.png">
+
+    <!-- PWA: web app manifest + iOS apple-touch-icon -->
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/img/apple-touch-icon.png">
+
+    <!-- PWA: service worker 註冊（只快取 app shell，API/WebSocket 一律 network-only） -->
+    <script defer src="/static/sw-register.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS (pre-built, includes custom theme) -->
+    <link rel="stylesheet" href="/static/css/tailwind-built.css?v=52">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/static/styles.css?v=46">
+
+    <!-- CDN Libraries (defer = 並行下載，DOM 解析完成後依序執行，不阻塞渲染) -->
+    <script defer src="https://unpkg.com/lucide@0.577.0/dist/umd/lucide.min.js" crossorigin="anonymous" integrity="sha384-orgVf2eX2+m1zKAOIi09hD0W6GtVhoOUmqDK+sysYB2JTZ4vS86j4jm+X7a4Nnei"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/i18next@23.7.6/i18next.min.js" crossorigin="anonymous" integrity="sha384-OCCT+KZFt2FsqTxlTd8CUSq86zW/ZKmV0oe7qj36oye2CDbbVuxIXTY20t/u9LJt"></script>
+    <!-- markdown-it: chat message and history rendering (app.js initializes window.md) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js" crossorigin="anonymous" integrity="sha384-wLhprpjsmjc/XYIcF+LpMxd8yS1gss6jhevOp6F6zhiIoFK6AmHtm4bGKtehTani"></script>
+
+    <!-- Charting libs（全域 LightweightCharts / Chart）：交易對 K 線圖、歷史走勢圖、admin 統計圖。
+         cbf802f 曾誤刪這幾個 CDN → 點交易對時 LightweightCharts is not defined → 被 catch 成「連接錯誤，請檢查您的連線」+ 圖表空白。 -->
+    <script defer src="https://unpkg.com/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js" crossorigin="anonymous" integrity="sha384-rcCMiCptH4kTlEbg0euOTUKWe72TESbrjElatnG+9BfbmUIV268UK/Pro5biJdGm"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous" integrity="sha384-9nhczxUqK87bcKHh20fSQcTGD4qq5GhayNYSYWqwBkINBhOfQLg/P5HG5lF1urn4"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js" crossorigin="anonymous" integrity="sha384-zPzbVRXfR492Sd5D+HydTYCxxgHAfgVO8KERbLlpeH5unsmbAEXrscGUUqLZG9BM"></script>
+
+    <script defer src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js" crossorigin="anonymous" integrity="sha384-Htz1SE4Sl5aitpvFgr2j0sfsGUIuSXI6t8hEyrlQ93zflEF3a29bH2AvkUROUw7J"></script>
+
+    <!-- Telegram Mini App SDK (external). The app-side integration lives in
+         web/js/telegram-webapp.js, imported first by main.js so Vite bundles
+         it into the production build (a plain /js/ script tag 404s on deploy). -->
+    <script defer src="https://telegram.org/js/telegram-web-app.js"></script>
+
+</head>
+
+<body class="shell-body h-screen w-screen overflow-hidden flex bg-background text-textMain selection:bg-primary/30">
+    <!-- config.js 先於一切：APP_CONFIG.DEBUG_MODE 由 hostname 推導，
+         logger.js 依它決定要不要把 console.log 換成 noop（正式站靜音）。 -->
+    <script src="/static/config.js"></script>
+    <script src="/js/logger.js"></script>
+    <script src="/js/early-init.js"></script>
+    <script src="/js/platform-context.js"></script>
+    <script src="/js/tma-mode.js"></script>
+    <script src="/js/miniapp-host.js"></script>
+    <script src="/js/click-delegator.js"></script>
+    <script src="/js/error-boundary.js"></script>
+    <script src="/js/offline-banner.js"></script>
+    <!-- Skip to main content link for keyboard users -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-primary focus:text-background focus:rounded-lg focus:font-bold" data-i18n="common.skipToContent">Skip to main content</a>
+    <!-- Sidebar (Chat History) -->
+    <aside id="chat-sidebar" role="complementary" aria-label="Chat history sidebar" data-i18n="sidebar.ariaLabel" data-i18n-attr="aria-label"
+        class="fixed inset-y-0 left-0 z-[60] w-64 bg-surface/95 backdrop-blur-xl border-r border-borderSubtle transform -translate-x-full transition-transform duration-300 md:translate-x-0 md:static md:relative md:w-72 md:flex-shrink-0 flex flex-col">
+        <div id="sidebar-header" class="p-4 border-b border-borderSubtle flex items-center justify-between gap-2">
+            <button data-click="switchTab" data-click-arg="chat" class="flex items-center gap-2 text-secondary font-serif hover:opacity-80 transition">
+                <img src="/static/img/title_icon.png" alt="CryptoMind Logo" data-i18n="common.logoAlt" data-i18n-attr="alt" class="w-7 h-7 rounded-lg object-cover">
+                <span class="brand-mark text-lg tracking-tight">CryptoMind</span>
+            </button>
+            <button data-click="toggleSidebar" aria-label="Close sidebar" data-i18n="common.closeSidebar" data-i18n-attr="aria-label" class="md:hidden p-2 hover:bg-surfaceHighlight rounded-full text-textMuted"><i
+                    data-lucide="x" class="w-5 h-5"></i></button>
+            <!-- 桌機收合成圖示列（Teams 式）。aria-label／title 由 GlobalNav 依狀態與語言改寫；
+                 不掛 data-i18n：語言重套會把「展開側欄」蓋回「收合側欄」 -->
+            <button id="sidebar-collapse-btn" type="button" data-click="GlobalNav.toggleSidebarCollapsed" aria-expanded="true"
+                aria-label="Collapse sidebar" title="Collapse sidebar"
+                class="hidden md:flex p-1.5 rounded-lg text-textMuted hover:text-secondary hover:bg-surfaceHighlight transition shrink-0">
+                <i data-lucide="panel-left-close" class="sb-icon-collapse w-4 h-4"></i>
+                <i data-lucide="panel-left-open" class="sb-icon-expand w-4 h-4"></i>
+            </button>
+        </div>
+
+        <div id="sidebar-newchat" class="p-4">
+            <button data-click="createNewChat" data-i18n="sidebar.newChat" data-i18n-attr="title"
+                class="w-full py-3 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-xl flex items-center justify-center gap-2 transition font-bold text-sm">
+                <i data-lucide="plus" class="w-4 h-4"></i> <span class="sb-label" data-i18n="sidebar.newChat">New Chat</span>
+            </button>
+        </div>
+
+        <!-- 側欄雙分頁（DANNY 2026-08-23 回饋）：導覽與對話歷史不再上下硬擠，
+             改為「對話歷史 / 功能選單」兩個 tab 由使用者切換，各佔全高。
+             手機抽屜與桌機共用。2026-09-24 手機底部導覽列拔除——功能選單是唯一導覽入口。 -->
+        <div id="sidebar-tabs" class="px-4 pb-3" role="tablist" aria-label="Sidebar sections" data-i18n="sidebar.sectionsAria" data-i18n-attr="aria-label">
+            <div class="grid grid-cols-2 gap-1 p-1 rounded-xl bg-surfaceHighlight/60">
+                <button id="sidebar-tab-history" type="button" role="tab" aria-selected="true"
+                    aria-controls="chat-session-list" data-i18n="sidebar.tabHistory" data-i18n-attr="title"
+                    data-click="GlobalNav.setSidebarTab" data-click-arg="history"
+                    class="flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition bg-background text-secondary shadow-sm">
+                    <i data-lucide="history" class="w-3.5 h-3.5"></i>
+                    <span class="sb-label" data-i18n="sidebar.tabHistory">History</span>
+                </button>
+                <button id="sidebar-tab-menu" type="button" role="tab" aria-selected="false"
+                    aria-controls="sidebar-nav-section" data-nav-dot-host
+                    data-click="GlobalNav.setSidebarTab" data-click-arg="menu"
+                    class="relative flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition text-textMuted hover:text-secondary">
+                    <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+                    <span data-i18n="sidebar.tabMenu">Menu</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 功能選單 tab 內容（2026-08-20 設計 docs/plans/2026-08-20-sidebar-nav-design.md）：
+             由 sidebar tab 切換顯示，啟用時佔全高；「更多分頁」popover 錨定按鈕下方。
+             min-h-0 + overflow-y-auto——矮視窗時區塊可收縮內滾（flex min-height:auto 陷阱）。 -->
+        <div id="sidebar-nav-section" class="hidden flex-1 min-h-0 overflow-y-auto custom-scrollbar px-2 pb-3">
+            <div class="sb-label flex items-center justify-between gap-2 px-2 pt-1 pb-1.5">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-textMuted/50" data-i18n="sidebar.navigation">Navigation</span>
+                <!-- 調整順序 ⇄ 完成（global-nav.js toggleNavReorder；訪客、少於 2 項時藏起來） -->
+                <button type="button" id="sidebar-nav-reorder" data-click="GlobalNav.toggleNavReorder"
+                    class="hidden px-2 py-0.5 rounded-full text-[10px] font-semibold text-primary hover:bg-primary/10 transition">Reorder</button>
+            </div>
+            <div id="sidebar-nav-items" class="flex flex-col gap-0.5"></div>
+            <!-- 更多分頁 popover：列全部未隱藏分頁，點擊切換啟用（至少 3 個，由 NavPreferences 把關）；
+                 maxHeight 由 toggleSidebarNavMore 依視窗動態夾限 -->
+            <div class="relative mt-0.5">
+                <button id="sidebar-nav-more" data-click="GlobalNav.toggleSidebarNavMore"
+                    class="w-full flex items-center gap-3 p-2.5 rounded-xl text-textMuted hover:text-secondary hover:bg-surfaceHighlight transition text-sm font-medium text-left">
+                    <i data-lucide="layout-grid" class="w-4 h-4 shrink-0"></i>
+                    <span data-i18n="sidebar.moreTabs">More tabs</span>
+                </button>
+                <div id="sidebar-nav-popover"
+                    class="hidden absolute left-0 right-0 top-full z-50 mt-1 bg-surface border border-borderLight rounded-2xl shadow-xl p-2 max-h-72 overflow-y-auto custom-scrollbar">
+                    <div id="sidebar-nav-popover-list" class="flex flex-col gap-0.5"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-2 space-y-1" id="chat-session-list">
+            <!-- Sessions injected via JS -->
+            <div class="text-center text-xs text-textMuted/40 py-4" data-i18n="sidebar.noHistory">No history</div>
+        </div>
+
+        <div id="sidebar-footer" class="p-4 border-t border-borderSubtle" style="padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));">
+            <!-- 用戶卡與語言/主題切換同一列（DANNY 2026-08-24 回饋：切換鈕獨立一排、
+                 兩側留白難看）——用戶卡 flex-1 帶點擊區，切換鈕右側收緊；
+                 手機隱藏切換鈕（沿用頂欄）。dropdown 往上開（styles.css footer 設計） -->
+            <div class="flex items-center gap-2">
+                <button data-click="switchTab" data-click-arg="settings" data-i18n="sidebar.settings" data-i18n-attr="title"
+                    class="flex-1 min-w-0 flex items-center gap-3 p-3 hover:bg-surfaceHighlight rounded-xl text-textMuted hover:text-secondary transition text-sm">
+                    <div class="w-8 h-8 rounded-full bg-surfaceHighlight flex items-center justify-center text-xs font-bold overflow-hidden"
+                        id="sidebar-user-avatar">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                    </div>
+                    <div class="sb-label flex-1 text-left min-w-0">
+                        <div class="flex items-center gap-1.5">
+                            <div class="font-bold truncate" id="sidebar-user-name" data-i18n="auth.loginRequired">Login required</div>
+                            <div id="sidebar-premium-badge"
+                                class="hidden px-1 py-0.5 rounded bg-primary/15 border border-primary/30 leading-none flex items-center">
+                                <svg viewBox="0 0 24 24" class="w-3 h-3" aria-hidden="true" focusable="false"><defs><linearGradient id="cmg-sb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7EABF5"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><path d="M7 3h10l5 6-10 12L2 9l5-6z" fill="url(#cmg-sb)"/><path d="M2 9h5.5L12 21 2 9z" fill="#1D4ED8" opacity=".72"/><path d="M22 9h-5.5L12 21 22 9z" fill="#1D4ED8" opacity=".72"/><path d="M7.5 9h9L12 21 7.5 9z" fill="#3B82F6" opacity=".9"/><path d="M7 3h2.5L7.5 9H2L7 3z" fill="#93C5FD" opacity=".85"/><path d="M17 3h-2.5l2 6H22l-5-6z" fill="#93C5FD" opacity=".85"/><path d="M9.5 3h5l2 6h-9l2-6z" fill="#DBEAFE" opacity=".95"/><path d="M20.4 1.2l.5 1.3 1.3.5-1.3.5-.5 1.3-1.3-.5 1.3-.5.5-1.3z" fill="#FBBF24"/></svg>
+                                <span class="sr-only">PRO</span>
+                            </div>
+                        </div>
+                        <div class="text-[10px] opacity-60" data-i18n="sidebar.settings">Settings</div>
+                    </div>
+                </button>
+                <!-- 語言/主題切換：桌機側欄底部、與用戶卡同列；手機沿用頂欄 -->
+                <div class="sb-switchers hidden md:flex items-center gap-1.5 shrink-0 self-center">
+                    <div class="lang-switcher-container shrink-0"></div>
+                    <div class="theme-switcher-container shrink-0"></div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Click outside sidebar to close -->
+    <div id="sidebar-backdrop" class="fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm hidden md:hidden"
+        data-click="toggleSidebar"></div>
+
+    <!-- Main Content Container -->
+    <main id="main-content" role="main" aria-label="Main content" data-i18n="common.mainContent" data-i18n-attr="aria-label" class="flex-1 relative h-full flex flex-col w-full overflow-hidden">
+
+        <!-- Mobile Header -->
+        <header
+            class="md:hidden flex items-center justify-between px-4 py-3 border-b border-borderSubtle bg-background/80 backdrop-blur-sm z-40">
+            <button id="mobile-drawer-toggle" data-click="toggleSidebar" aria-controls="chat-sidebar" aria-expanded="false"
+                aria-label="Menu" data-i18n="common.menu" data-i18n-attr="aria-label" data-nav-dot-host
+                class="relative p-2 -ml-2 hover:bg-surfaceHighlight rounded-full text-textMuted"><i
+                    data-lucide="menu" class="w-5 h-5"></i></button>
+            <span class="font-serif text-secondary">CryptoMind</span>
+            <!-- 手機的語言/主題切換掛頂欄：底欄 switcher 在手機被 CSS 隱藏（避免擠壓分頁） -->
+            <div class="flex items-center gap-1.5">
+                <div class="header-lang-switcher shrink-0"></div>
+                <div class="header-theme-switcher shrink-0"></div>
+                <div id="notification-bell-mobile" class="flex items-center"></div>
+            </div>
+        </header>
+
+        <!-- Desktop Notification Bell (fixed top-right, visible on all pages) -->
+        <div id="notification-bell-desktop" class="hidden md:block fixed top-4 right-4 z-50"></div>
+
+
+        <div class="flex-1 relative w-full h-full overflow-hidden">
+
+            <!-- Tab: Chat (Home) -->
+            <div id="chat-tab" class="tab-content h-full flex flex-col relative">
+                <!-- Messages Area -->
+                <div id="chat-messages" data-shell-scroll data-shell-scroll-extra="1rem"
+                    class="shell-safe-area-x flex-1 overflow-y-auto custom-scrollbar py-6"
+                    aria-live="polite" aria-atomic="false">
+                    <span id="greeting-time" class="hidden"></span>
+                </div>
+
+                <!-- Warning Overlay (No Key) -- changed to bottom hint bar, does not block content -->
+                <div id="no-llm-key-warning" data-shell-bottom-layer
+                    class="hidden absolute bottom-0 left-0 right-0 z-30 px-4 pb-2">
+                    <div class="max-w-3xl mx-auto">
+                        <div class="flex items-center gap-3 bg-surface/90 backdrop-blur-md border border-amber-600/20 rounded-2xl px-4 py-3 shadow-lg">
+                            <i data-lucide="key" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
+                            <p class="text-xs text-textMuted flex-1" data-i18n="chat.unlockDesc">Connect an API key to enable AI analysis.</p>
+                            <button data-click="switchTab" data-click-arg="settings"
+                                class="flex-shrink-0 px-3 py-1.5 bg-primary/15 hover:bg-primary/25 border border-primary/30 text-primary text-xs font-semibold rounded-xl transition whitespace-nowrap">
+                                <span data-i18n="chat.configureApiKey">Set API Key</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div data-shell-fixed-input
+                    class="shell-fade-bottom sticky bottom-0 z-40 px-3 md:px-6 flex-shrink-0">
+                    <div class="relative w-full">
+                        <!-- Guest banner（訪客模式引導：JS 依登入狀態顯示） -->
+                        <div id="guest-banner" class="hidden px-4 py-2.5 mb-1 mx-4 rounded-xl bg-primary/8 border border-primary/20 flex items-center gap-3 flex-wrap">
+                            <i data-lucide="zap" class="w-4 h-4 text-primary flex-shrink-0"></i>
+                            <p class="flex-1 min-w-[12rem] text-xs text-textMuted leading-relaxed">
+                                <span data-i18n="guest.bannerText">Guest mode: a few free AI questions every day</span>
+                            </p>
+                            <!-- 公開功能入口：詐騙檢查分頁（2026-09-27 自獨立頁 /scam-tracker/ 搬進 SPA） -->
+                            <button type="button" data-click="switchTab" data-click-arg="scamcheck"
+                                class="flex-shrink-0 text-xs text-primary/80 hover:text-primary underline underline-offset-2 transition"
+                                data-i18n="nav.scamcheck">Scam Check</button>
+                            <button type="button" id="guest-connect-btn"
+                                class="flex-shrink-0 text-xs font-medium px-3 py-1.5 rounded-full bg-primary/15 text-primary hover:bg-primary/25 transition"
+                                data-i18n="guest.connect">Connect Wallet</button>
+                        </div>
+
+                        <!-- 舊 TON 身份提醒（legacy-ton-notice.js）：TON 登入已拔除，TON 身份且還沒綁
+                             EVM 錢包／Google 才顯示；綁定沿用 safeEvmBind 與連接頁，關掉就不再出現 -->
+                        <div id="legacy-ton-banner" class="hidden px-4 py-2.5 mb-1 mx-4 rounded-xl bg-primary/10 border border-primary/20 flex items-center gap-3 flex-wrap" role="status">
+                            <i data-lucide="shield-alert" class="w-4 h-4 text-primary flex-shrink-0"></i>
+                            <p class="flex-1 min-w-[12rem] text-xs text-textMuted leading-relaxed">
+                                <span data-i18n="auth.legacyTonNotice.text">TON sign-in has been retired. Bind an EVM wallet or Google so you can keep signing in to this account.</span>
+                            </p>
+                            <button type="button" data-click="safeEvmBind" data-tma-hide
+                                class="flex-shrink-0 text-xs font-medium px-3 py-1.5 rounded-full bg-primary/15 text-primary hover:bg-primary/25 transition whitespace-nowrap"
+                                data-i18n="auth.legacyTonNotice.bindEvm">Bind EVM wallet</button>
+                            <button type="button" id="legacy-ton-link-google" data-click="GlobalNav.navigateToTab" data-click-arg="connections"
+                                class="flex-shrink-0 text-xs text-primary/80 hover:text-primary underline underline-offset-2 transition whitespace-nowrap"
+                                data-i18n="auth.legacyTonNotice.linkGoogle">Link Google</button>
+                            <button type="button" data-click="LegacyTonNotice.dismiss" aria-label="Dismiss"
+                                data-i18n="auth.legacyTonNotice.dismiss" data-i18n-attr="aria-label"
+                                class="w-6 h-6 rounded-full flex items-center justify-center text-textMuted/60 hover:text-primary transition flex-shrink-0">
+                                <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+
+                        <!-- 附圖預覽 chip（vision Tier 1）— 送出或移除後隱藏 -->
+                        <div id="chat-image-chip" class="hidden pb-1 pt-1">
+                            <div
+                                class="inline-flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-xl bg-surfaceHighlight/60 border border-borderSubtle/40 max-w-[85%]">
+                                <img id="chat-image-chip-thumb" alt="" class="w-9 h-9 rounded-lg object-cover shrink-0 cursor-zoom-in" style="display:none">
+                                <i data-lucide="image" class="w-3.5 h-3.5 text-primary flex-shrink-0"></i>
+                                <span id="chat-image-chip-name"
+                                    class="text-xs text-secondary truncate max-w-[200px]"></span>
+                                <button type="button" id="chat-image-remove" aria-label="Remove image" data-i18n="chat.removeImage" data-i18n-attr="aria-label"
+                                    class="w-5 h-5 rounded-full flex items-center justify-center text-textMuted/60 hover:text-danger hover:bg-danger/10 transition flex-shrink-0">
+                                    <i data-lucide="x" class="w-3 h-3"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Main input row — unified pill -->
+                        <div class="chat-input-row pb-4 pt-2">
+                            <div class="chat-input-shell flex items-center gap-1 bg-surface border border-borderSubtle rounded-2xl px-2 focus-within:border-primary/40 transition-all">
+                                <button type="button" id="chat-attach-btn" aria-label="Attach image"
+                                    data-i18n="chat.attachImage" data-i18n-attr="aria-label"
+                                    class="w-9 h-9 rounded-xl flex items-center justify-center text-textMuted/40 hover:text-primary transition flex-shrink-0">
+                                    <i data-lucide="paperclip" class="w-3.5 h-3.5"></i>
+                                </button>
+                                <input type="file" id="chat-image-input" accept="image/png,image/jpeg,image/webp"
+                                    class="hidden" aria-hidden="true" tabindex="-1">
+                                <!-- 手機：相機直達（capture）；與 📎（相簿/檔案）並存 -->
+                                <!-- 2026-09-06：相機直達鈕在手機上撤下。實測 375px 螢幕
+                                     輸入列只有 351px，左邊三顆 icon(108) + preset(36) + 送出(44)
+                                     吃掉 188px，**輸入框只剩 123px（約 8 個中文字）**。
+                                     而 📎 的 accept="image/*" 在 Android/iOS 的系統選檔器
+                                     本來就提供「拍照」，這顆是功能重疊。
+                                     input 保留（JS 仍可程式化觸發），只撤按鈕。 -->
+                                <input type="file" id="chat-camera-input" accept="image/png,image/jpeg,image/webp" capture="environment"
+                                    class="hidden" aria-hidden="true" tabindex="-1">
+                                <button type="button" id="chat-attach-cam-btn" hidden aria-label="Take photo" data-i18n="chat.takePhoto" data-i18n-attr="aria-label"
+                                    class="hidden w-9 h-9 rounded-xl flex items-center justify-center text-textMuted/40 hover:text-primary transition flex-shrink-0">
+                                    <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                                </button>
+                                <label for="user-input" class="sr-only" data-i18n="chat.inputLabel">Chat input</label>
+                                <input type="text" id="user-input" disabled aria-label="Chat input" data-i18n="chat.inputLabel" data-i18n-attr="aria-label"
+                                    class="flex-1 min-w-0 w-full bg-transparent border-none outline-none text-[14px] text-secondary placeholder-textMuted/30 font-normal py-3.5 opacity-50 cursor-not-allowed"
+                                    placeholder="Send command to AI Agent..."
+                                    autocomplete="off">
+                                <div id="chat-preset-wrap" class="relative flex-shrink-0">
+                                    <!-- 手機上這顆 pill 的文字標籤會吃掉輸入框寬度：左邊 3 顆
+                                         icon + pill + 送出鍵擠在同一列時，375px 螢幕只剩約 8 個字
+                                         可見。sm 以下只留圖示（仍可點開選單），文字在 sm 以上才顯示。 -->
+                                    <button type="button" id="chat-preset-pill" aria-label="Agent preset" data-i18n="chat.presetAria" data-i18n-attr="aria-label"
+                                        class="h-8 px-2 sm:px-2.5 rounded-xl bg-surfaceHighlight/60 hover:bg-surfaceHighlight text-[11px] text-textMuted hover:text-secondary transition sm:max-w-36 truncate flex items-center gap-1 my-1.5">
+                                        <i data-lucide="users-round" class="w-3 h-3 flex-shrink-0"></i>
+                                        <span class="truncate hidden sm:inline" data-i18n="chatPreset.official">Official default</span>
+                                    </button>
+                                    <div id="chat-preset-menu" class="hidden absolute bottom-11 right-0 z-50 w-64 max-h-64 overflow-y-auto custom-scrollbar p-2 rounded-xl bg-surface border border-borderSubtle/10 shadow-xl space-y-0.5"></div>
+                                </div>
+                                <button data-click="sendMessage" id="send-btn" disabled aria-label="Send" data-i18n="common.send" data-i18n-attr="aria-label"
+                                    class="chat-send-btn w-8 h-8 rounded-xl bg-primary text-background flex items-center justify-center hover:brightness-110 active:scale-95 transition opacity-40 cursor-not-allowed flex-shrink-0 my-1.5 mr-0.5">
+                                    <i data-lucide="arrow-up" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                            <!-- 2026-09-14 合規口吻：常駐免責一行（每則回覆尾註在 chat-analysis.js） -->
+                            <p id="chat-disclaimer" class="pt-1.5 text-center text-[10px] leading-snug text-textMuted/40"
+                               data-i18n="chat.disclaimer">AI output is data analysis, not investment advice. Investment decisions are yours.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Crypto -->
+            <div id="crypto-tab" class="tab-content hidden h-full overflow-hidden relative">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: TW Stock -->
+            <div id="twstock-tab" class="tab-content hidden h-full overflow-hidden relative">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: US Stock -->
+            <div id="usstock-tab" class="tab-content hidden h-full overflow-hidden relative">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: Journal（統一帳本 — 投資＋支出＋收入 Dashboard） -->
+            <div id="journal-tab" class="tab-content hidden h-full overflow-y-auto custom-scrollbar px-4 md:pl-6 md:pr-16 py-6 pb-40">
+                <div class="max-w-4xl mx-auto space-y-5">
+                    <!-- Header -->
+                    <div class="flex flex-wrap gap-3 justify-between items-end md:pr-14">
+                        <div>
+                            <h2 class="font-serif text-3xl text-secondary" data-i18n="journal.title">Investment Journal</h2>
+                            <p class="text-sm text-textMuted mt-1" data-i18n="journal.subtitle">Trades, expenses & income in one ledger</p>
+                        </div>
+                        <div class="flex gap-2 items-center">
+                            <!-- 報表基準幣（c039）：換算額/彙總以此幣別呈現。
+                                 切換會整批搬移既有條目的換算值，故先確認 -->
+                            <select id="journal-base-currency"
+                                class="text-xs bg-surface border border-borderSubtle rounded-xl px-2 py-2 pr-8 text-textMuted"
+                                data-i18n="journal.baseCurrencyLabel" data-i18n-attr="aria-label"
+                                aria-label="Reporting currency"></select>
+                            <button id="journal-refresh-btn" data-click="Journal.refresh"
+                                class="p-2 bg-surface hover:bg-surfaceHighlight rounded-full text-textMuted transition"
+                                data-i18n="journal.refresh" data-i18n-attr="aria-label" aria-label="Refresh">
+                                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                            </button>
+                            <button id="journal-add-btn" data-click="Journal.openForm"
+                                class="inline-flex items-center gap-2 whitespace-nowrap text-sm font-medium px-4 py-2 rounded-xl bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 transition">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                <span data-i18n="journal.addEntry">Add Entry</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 子視圖切換（UX 第二輪）：月度收支 | 投資持倉 | 行事曆（手機全寬好點擊） -->
+                    <div class="grid grid-cols-3 w-full md:w-fit md:flex gap-1 p-1 bg-surfaceHighlight/60 rounded-xl">
+                        <button class="journal-view-btn px-4 py-2 md:py-1.5 text-sm font-medium rounded-lg transition"
+                            data-click="Journal.switchView" data-click-arg="cashflow">
+                            <span data-i18n="journal.viewCashflow">Cash Flow</span>
+                        </button>
+                        <button class="journal-view-btn px-4 py-2 md:py-1.5 text-sm font-medium rounded-lg transition"
+                            data-click="Journal.switchView" data-click-arg="invest">
+                            <span data-i18n="journal.viewInvest">Investments</span>
+                        </button>
+                        <button class="journal-view-btn px-4 py-2 md:py-1.5 text-sm font-medium rounded-lg transition"
+                            data-click="Journal.switchView" data-click-arg="calendar">
+                            <span data-i18n="journal.calendar.title">Calendar</span>
+                        </button>
+                    </div>
+
+                    <!-- ── 月度收支視圖 ─────────────────────────── -->
+                    <div id="journal-cashflow-view" class="space-y-5">
+                    <!-- Filter Bar（手機：全寫寬堆疊一次一列；桌機：flex-wrap 同排） -->
+                    <div class="flex flex-col md:flex-row md:flex-wrap gap-2 md:items-center">
+                        <div class="grid grid-cols-2 md:flex md:flex-wrap gap-2">
+                            <select id="journal-filter-type" class="journal-filter min-w-0 w-full md:w-auto md:max-w-[45vw] text-sm bg-surface border border-borderSubtle rounded-xl px-3 py-2.5 md:py-2 pr-8 text-textMuted truncate">
+                                <option value="" data-i18n="journal.allTypes">All Types</option>
+                                <option value="expense" data-i18n="journal.filterExpense">Expenses</option>
+                                <option value="income" data-i18n="journal.filterIncome">Income</option>
+                            </select>
+                            <select id="journal-filter-days" class="journal-filter min-w-0 w-full md:w-auto md:max-w-[45vw] text-sm bg-surface border border-borderSubtle rounded-xl px-3 py-2.5 md:py-2 pr-8 text-textMuted truncate">
+                                <option value="month" data-i18n="journal.thisMonth">This month</option>
+                                <option value="prev_month" data-i18n="journal.lastMonth">Last month</option>
+                                <option value="year" data-i18n="journal.thisYear">This year</option>
+                                <option value="7" data-i18n="journal.last7">Last 7 days</option>
+                                <option value="30" selected data-i18n="journal.last30">Last 30 days</option>
+                                <option value="90" data-i18n="journal.last90">Last 90 days</option>
+                                <option value="0" data-i18n="journal.allTime">All time</option>
+                            </select>
+                        </div>
+                        <div class="flex gap-2">
+                            <!-- 特定月份（平台風格 picker；原生 input type=month 各瀏覽器樣式不一且醜） -->
+                            <div class="relative flex-1 md:flex-none" id="journal-month-picker-wrap">
+                                <button type="button" id="journal-month-btn" aria-haspopup="dialog"
+                                    class="journal-filter w-full md:w-auto flex items-center justify-center gap-1.5 text-sm bg-surface border border-borderSubtle rounded-xl px-3 py-2.5 md:py-2 text-textMuted hover:text-secondary hover:border-primary/30 transition">
+                                    <i data-lucide="calendar" class="w-4 h-4 shrink-0"></i>
+                                    <span id="journal-month-btn-label" class="truncate"
+                                        data-i18n="journal.pickMonth">Pick month</span>
+                                </button>
+                                <input id="journal-filter-month" type="month" class="hidden" aria-hidden="true" tabindex="-1"
+                                    data-i18n="journal.pickMonth" data-i18n-attr="aria-label" aria-label="Pick month">
+                            </div>
+                            <!-- title/aria 由 _syncTrashToggle 依語言與開合狀態設定（init 呼叫）-->
+                            <button id="journal-trash-toggle" data-click="Journal.toggleTrash"
+                                class="shrink-0 px-2.5 md:p-2 bg-surface border border-borderSubtle rounded-xl text-textMuted hover:text-danger transition"
+                                title="Show trash" aria-label="Show trash">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div class="flex-1 min-w-[160px] relative">
+                            <input id="journal-search" type="text"
+                                class="journal-filter w-full text-sm bg-surface border border-borderSubtle rounded-xl px-3 py-2.5 md:py-2 pl-9 text-secondary placeholder-textMuted/40"
+                                data-i18n="journal.searchPlaceholder" data-i18n-attr="placeholder" placeholder="Search notes or symbols...">
+                            <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-textMuted/40"></i>
+                        </div>
+                    </div>
+
+                    <!-- Category Chips -->
+                    <div id="journal-category-chips" class="flex flex-wrap gap-1.5"></div>
+
+                    <!-- Summary Cards -->
+                    <div id="journal-summary" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+
+                    <!-- Category Breakdown -->
+                    <div id="journal-category-breakdown" class="space-y-2"></div>
+
+                    <!-- Entry List -->
+                    <div id="journal-list" class="space-y-2">
+                        <div class="text-center text-textMuted py-8" data-i18n="journal.loading">Loading...</div>
+                    </div>
+                    </div><!-- /journal-cashflow-view -->
+
+                    <!-- ── 投資持倉視圖（UX 第二輪）──────────────── -->
+                    <div id="journal-invest-view" class="hidden space-y-5">
+                        <div id="journal-invest-summary" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                        <div id="journal-positions-list" class="space-y-2"></div>
+                        <!-- 已驗證持倉（2026-09-12）：綁定錢包的鏈上餘額，與帳本持倉並列 -->
+                        <div id="journal-verified-holdings" class="rounded-2xl border border-borderSubtle bg-surface p-4 space-y-3">
+                            <div class="flex items-center justify-between gap-2">
+                                <h3 class="text-sm font-medium text-textMuted" data-i18n="journal.holdings.title">Verified on-chain holdings</h3>
+                                <button data-click="GlobalNav.navigateToTab" data-click-arg="wallet" class="min-h-11 px-2 text-[11px] text-primary hover:underline" data-i18n="journal.holdings.openWallet">Wallet</button>
+                            </div>
+                            <div id="journal-verified-holdings-list" class="space-y-1.5">
+                                <div class="text-center text-textMuted py-3 text-sm" data-i18n="journal.loading">Loading...</div>
+                            </div>
+                        </div>
+                        <!-- 我的判斷成績（2026-09-13）：帳本交易到期用市場對答案，只有本人看得到 -->
+                        <div id="journal-scorecard" class="rounded-2xl border border-borderSubtle bg-surface p-4 space-y-3">
+                            <div class="flex items-start justify-between gap-2">
+                                <div class="min-w-0">
+                                    <h3 class="text-sm font-medium text-textMuted" data-i18n="journal.scorecard.title">My scorecard</h3>
+                                    <p class="text-[11px] text-textMuted/60" data-i18n="journal.scorecard.hint">Every ledger trade is scored against the market after 30 and 90 days. Only you can see this.</p>
+                                </div>
+                                <button data-click="Journal.refreshScorecard" class="shrink-0 min-h-11 px-2 text-[11px] text-primary hover:underline whitespace-nowrap" data-i18n="journal.scorecard.refresh">Update</button>
+                            </div>
+                            <div id="journal-scorecard-body" class="space-y-3">
+                                <div class="text-center text-textMuted py-4 text-sm" data-i18n="journal.loading">Loading...</div>
+                            </div>
+                            <p id="journal-scorecard-status" class="text-xs text-textMuted"></p>
+                            <!-- v2 明確喊單（2026-09-13）：不用真的下單也能記一筆判斷，到期同樣對答案 -->
+                            <div id="journal-calls" class="pt-3 border-t border-borderSubtle space-y-2">
+                                <div class="flex items-start justify-between gap-2">
+                                    <div class="min-w-0">
+                                        <h4 class="text-sm font-medium text-textMuted" data-i18n="journal.calls.title">Record a call</h4>
+                                        <p class="text-[11px] text-textMuted/60" data-i18n="journal.calls.hint">Bullish or bearish on something without trading it? Record it here or tell the AI. Entry price is the latest close; calls lock after 24 hours.</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                                    <input id="journal-call-symbol" type="text" placeholder="BTC / 2330.TW / AAPL" data-i18n="journal.calls.symbolPlaceholder" data-i18n-attr="placeholder" class="col-span-2 sm:col-span-1 min-h-11 px-3 rounded-lg bg-background border border-borderSubtle text-sm text-textMain" data-enter="Journal.submitCall">
+                                    <select id="journal-call-side" class="min-h-11 px-2 rounded-lg bg-background border border-borderSubtle text-sm text-textMain">
+                                        <option value="bullish" data-i18n="journal.calls.bullish">Bullish</option>
+                                        <option value="bearish" data-i18n="journal.calls.bearish">Bearish</option>
+                                    </select>
+                                    <select id="journal-call-horizon" class="min-h-11 px-2 rounded-lg bg-background border border-borderSubtle text-sm text-textMain">
+                                        <option value="7">7d</option>
+                                        <option value="30" selected>30d</option>
+                                        <option value="90">90d</option>
+                                        <option value="180">180d</option>
+                                        <option value="365">365d</option>
+                                    </select>
+                                    <input id="journal-call-target" type="number" step="any" min="0" placeholder="Target (opt.)" data-i18n="journal.calls.targetPlaceholder" data-i18n-attr="placeholder" class="min-h-11 px-3 rounded-lg bg-background border border-borderSubtle text-sm text-textMain" data-enter="Journal.submitCall">
+                                    <button data-click="Journal.submitCall" class="min-h-11 px-3 rounded-lg bg-primary text-background text-sm font-semibold" data-i18n="journal.calls.submit">Record</button>
+                                </div>
+                                <p id="journal-calls-status" class="text-xs text-textMuted"></p>
+                                <div id="journal-calls-list" class="space-y-0.5"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium text-textMuted mb-2" data-i18n="journal.investTrades">Investment Trades</h3>
+                            <div id="journal-invest-list" class="space-y-2"></div>
+                        </div>
+                    </div>
+
+                    <!-- ── 行事曆視圖（2026-09-30 DANNY：「日曆在哪裡我怎麼沒看到」——以前塞在投資持倉最底下，
+                         排在五張卡之後；固定支出、財報、總經都在這，跟收支一樣常用，獨立成第三個視圖）── -->
+                    <div id="journal-calendar-view" class="hidden space-y-5">
+                        <!-- 行事曆（每日早報 Phase B；2026-09-12 改月曆）：一格一天、點日期看當天、在那天加自訂提醒 -->
+                        <div id="journal-calendar" class="rounded-2xl border border-borderSubtle bg-surface p-4 space-y-3">
+                            <div class="flex items-center justify-between gap-2">
+                                <h3 class="text-sm font-medium text-textMuted" data-i18n="journal.calendar.title">Calendar</h3>
+                                <span class="text-[11px] text-textMuted/60" data-i18n="journal.calendar.hint">Reminded in your daily brief</span>
+                            </div>
+                            <div class="flex items-center justify-between gap-2">
+                                <button data-click="Journal.calendarPrev" class="min-w-11 min-h-11 flex items-center justify-center rounded-full text-textMuted hover:text-secondary hover:bg-surfaceHighlight transition" aria-label="Previous month" data-i18n="journal.calendar.prevMonth" data-i18n-attr="aria-label">
+                                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                                </button>
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span id="journal-calendar-month" class="font-bold text-secondary text-base whitespace-nowrap"></span>
+                                    <button data-click="Journal.calendarToday" class="min-h-11 px-2 text-xs text-primary hover:underline whitespace-nowrap" data-i18n="journal.calendar.today">Today</button>
+                                </div>
+                                <button data-click="Journal.calendarNext" class="min-w-11 min-h-11 flex items-center justify-center rounded-full text-textMuted hover:text-secondary hover:bg-surfaceHighlight transition" aria-label="Next month" data-i18n="journal.calendar.nextMonth" data-i18n-attr="aria-label">
+                                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                            <div id="journal-calendar-weekdays" class="grid grid-cols-7 text-center text-[11px] text-textMuted"></div>
+                            <div id="journal-calendar-grid" class="grid grid-cols-7 gap-1">
+                                <div class="col-span-7 text-center text-textMuted py-6 text-sm" data-i18n="journal.loading">Loading...</div>
+                            </div>
+                            <div class="flex flex-wrap gap-x-3 gap-y-1 text-[10px] text-textMuted">
+                                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary"></span><span data-i18n="journal.calendar.kindEarnings">earnings</span></span>
+                                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary/40"></span><span data-i18n="journal.calendar.kindReport">reports</span></span>
+                                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-danger"></span><span data-i18n="journal.calendar.kindUnlock">unlock</span></span>
+                                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-success"></span><span data-i18n="journal.calendar.kindMacro">macro</span></span>
+                                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary"></span><span data-i18n="journal.calendar.kindCustom">mine</span></span>
+                            </div>
+                            <div class="pt-2 border-t border-borderSubtle space-y-2">
+                                <div class="flex items-center justify-between gap-2">
+                                    <h4 id="journal-calendar-day-title" class="text-sm font-medium text-secondary"></h4>
+                                    <span id="journal-calendar-day-count" class="text-[11px] text-textMuted"></span>
+                                </div>
+                                <div id="journal-calendar-list" class="space-y-1.5"></div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-[9rem_1fr_auto] gap-2 items-end pt-2 border-t border-borderSubtle">
+                                <label class="block">
+                                    <span class="text-[11px] text-textMuted" data-i18n="journal.calendar.dateLabel">Date</span>
+                                    <input id="journal-calendar-date" type="date" class="mt-1 w-full min-h-11 bg-background border border-borderLight rounded-lg px-3 py-2 text-sm text-secondary">
+                                </label>
+                                <div>
+                                    <label for="journal-calendar-title" class="text-[11px] text-textMuted" data-i18n="journal.calendar.titleLabel">What to remember</label>
+                                    <div class="mt-1 flex gap-2">
+                                        <input id="journal-calendar-title" type="text" maxlength="120" class="flex-1 min-w-0 min-h-11 bg-background border border-borderLight rounded-lg px-3 py-2 text-sm text-secondary" data-i18n="journal.calendar.titlePlaceholder" data-i18n-attr="placeholder" placeholder="e.g. NVDA earnings, rent due">
+                                        <select id="journal-calendar-repeat" class="shrink-0 min-h-11 bg-background border border-borderLight rounded-lg px-2 py-2 text-sm text-secondary" aria-label="Repeat" data-i18n="journal.calendar.repeatLabel" data-i18n-attr="aria-label">
+                                            <option value="none" data-i18n="journal.calendar.repeatNone">Once</option>
+                                            <option value="weekly" data-i18n="journal.calendar.repeatWeekly">Weekly</option>
+                                            <option value="monthly" data-i18n="journal.calendar.repeatMonthly">Monthly</option>
+                                            <option value="yearly" data-i18n="journal.calendar.repeatYearly">Yearly</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button id="journal-calendar-cancel" data-click="Journal.cancelCalendarEdit" class="hidden min-h-11 px-3 py-2 text-sm text-textMuted hover:text-secondary rounded-xl transition">
+                                        <span data-i18n="journal.calendar.cancelEdit">Cancel</span>
+                                    </button>
+                                    <button data-click="Journal.addCalendarEvent" class="flex-1 min-h-11 px-4 py-2 bg-primary hover:bg-primary/90 text-background font-bold rounded-xl text-sm transition">
+                                        <span id="journal-calendar-submit-label" data-i18n="journal.calendar.add">Add</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <p id="journal-calendar-status" class="text-xs text-textMuted"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manual Entry Modal（max-h + 內滾：矮視窗表單不超出） -->
+            <div id="journal-form-modal" class="modal-overlay hidden fixed inset-0 z-[80] bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+                <div class="bg-surface w-full max-w-md max-h-[85dvh] flex flex-col rounded-2xl border border-borderLight overflow-hidden">
+                    <div class="flex justify-between items-center p-6 pb-0 shrink-0">
+                        <h3 class="font-serif text-xl text-secondary" data-i18n="journal.addEntry">Add Entry</h3>
+                        <button data-click="Journal.closeForm" data-close-modal class="w-11 h-11 -mr-2 flex items-center justify-center hover:bg-surfaceHighlight rounded-full text-textMuted" aria-label="Close" data-i18n="common.close" data-i18n-attr="aria-label">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <div class="p-6 space-y-4 min-h-0 overflow-y-auto custom-scrollbar">
+                        <label for="journal-entry-type" class="block text-[11px] text-textMuted mb-1" data-i18n="journal.labelType">Type</label>
+                        <select id="journal-entry-type" class="w-full text-sm bg-surfaceHighlight border border-borderSubtle rounded-xl px-3 py-2.5 text-secondary">
+                            <option value="expense" data-i18n="journal.typeExpense">💸 Expense</option>
+                            <option value="income" data-i18n="journal.typeIncome">💰 Income</option>
+                            <option value="trade" data-i18n="journal.typeTrade">📈 Trade</option>
+                        </select>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div><label for="journal-entry-amount" class="block text-[11px] text-textMuted mb-1" data-i18n="journal.labelAmount">Amount</label><input id="journal-entry-amount" type="number" step="any" min="0.00000001" placeholder="0.00"
+                                class="text-sm bg-surfaceHighlight border border-borderSubtle rounded-xl px-3 py-2.5 text-secondary"
+                                data-i18n="journal.amountPlaceholder" data-i18n-attr="placeholder" required></div>
+                            <div><label for="journal-entry-currency" class="block text-[11px] text-textMuted mb-1" data-i18n="journal.labelCurrency">Currency</label><select id="journal-entry-currency" class="w-full text-sm bg-surfaceHighlight border border-borderSubtle rounded-xl px-3 py-2.5 text-secondary">
+                                <!-- 法幣（exchange_rate.py _FIAT_RATES：離線靜態表，一定換算得出）-->
+                                <option value="TWD">TWD</option>
+                                <option value="USD">USD</option>
+                                <option value="HKD">HKD</option>
+                                <option value="JPY">JPY</option>
+                                <option value="CNY">CNY</option>
+                                <option value="EUR">EUR</option>
+                                <!-- 加密貨幣（exchange_rate.py _CRYPTO_SYMBOLS：走 CoinGecko）-->
+                                <option value="BTC">BTC</option>
+                                <option value="ETH">ETH</option>
+                                <option value="TON">TON</option>
+                                <option value="USDT">USDT</option>
+                                <option value="USDC">USDC</option>
+                                <option value="SOL">SOL</option>
+                                <option value="BNB">BNB</option>
+                                <option value="XRP">XRP</option>
+                                <option value="DOGE">DOGE</option>
+                                <option value="ADA">ADA</option>
+                                <option value="AVAX">AVAX</option>
+                                <option value="MATIC">MATIC</option>
+                                <option value="DOT">DOT</option>
+                                <option value="LINK">LINK</option>
+                            </select></div>
+                        </div>
+                        <!-- 自填匯率（幣別≠基準幣時顯示；留空＝自動抓取）——
+                             匯率服務抓不到時的出口，也供填自己的實際成交匯率 -->
+                        <div id="journal-entry-rate-row" class="hidden">
+                            <input id="journal-entry-rate" type="number" step="any" min="0.00000001"
+                                class="w-full text-sm bg-surfaceHighlight border border-borderSubtle rounded-xl px-3 py-2.5 text-secondary"
+                                data-i18n="journal.ratePlaceholder" data-i18n-attr="placeholder"
+                                placeholder="Exchange rate (optional)">
+                            <p class="text-[10px] text-textMuted/60 mt-1" data-i18n="journal.rateHint">Leave empty = look up automatically</p>
+                        </div>
+                        <!-- 投資專用：股數＋買賣方向（型別切換時由 _populateCategories 開關）-->
+                        <div id="journal-entry-trade-fields" class="hidden">
+                            <div class="grid grid-cols-2 gap-3">
+                                <input id="journal-entry-quantity" type="number" step="any" min="0.00000001" placeholder="1"
+                                    class="text-sm bg-surfaceHighlight border border-borderSubtle rounded-xl px-3 py-2.5 text-secondary"
+                                    data-i18n="journal.quantityPlaceholder" data-i18n-attr="placeholder">
+                                <select id="journal-entry-side" class="text-sm bg-surfaceHighlight border border-borderSubtle rounded-xl px-3 py-2.5 text-secondary">
+                                    <option value="buy" data-i18n="journal.sideBuy">Buy</option>
+                                    <option value="sell" data-i18n="journal.sideSell">Sell</option>
+                                </select>
+                            </div>
+                        </div>
+                        <label for="journal-entry-category" class="block text-[11px] text-textMuted mb-1" data-i18n="journal.labelCategory">Category</label>
+                        <select id="journal-entry-category" class="w-full text-sm bg-surfaceHighlight border border-borderSubtle rounded-xl px-3 py-2.5 text-secondary">
+                            <option value="" data-i18n="journal.autoCategory">Auto-categorize</option>
+                        </select>
+                        <input id="journal-entry-category-custom" type="text" maxlength="20"
+                            class="hidden text-sm bg-surfaceHighlight border border-borderSubtle rounded-xl px-3 py-2.5 text-secondary"
+                            data-i18n="journal.customCategoryPlaceholder" data-i18n-attr="placeholder" placeholder="Custom category (optional)">
+                        <label for="journal-entry-symbol" class="block text-[11px] text-textMuted mb-1" data-i18n="journal.labelSymbol">Symbol</label>
+                        <input id="journal-entry-symbol" type="text" placeholder="BTC / 2330.TW / AAPL"
+                            class="text-sm bg-surfaceHighlight border border-borderSubtle rounded-xl px-3 py-2.5 text-secondary"
+                            data-i18n="journal.symbolPlaceholder" data-i18n-attr="placeholder">
+                        <!-- 日期：留空＝現在；補記歷史交易用 -->
+                        <div>
+                            <label for="journal-entry-date" class="block text-[11px] text-textMuted mb-1" data-i18n="journal.labelDate">Date & time</label>
+                            <input id="journal-entry-date" type="datetime-local"
+                                class="w-full text-sm bg-surfaceHighlight border border-borderSubtle rounded-xl px-3 py-2.5 text-secondary">
+                            <p class="text-[10px] text-textMuted/60 mt-1" data-i18n="journal.dateHint">Leave empty = now</p>
+                        </div>
+                        <label for="journal-entry-note" class="block text-[11px] text-textMuted mb-1" data-i18n="journal.labelNote">Note</label>
+                        <input id="journal-entry-note" type="text" placeholder="Note (e.g. lunch with team)"
+                            class="text-sm bg-surfaceHighlight border border-borderSubtle rounded-xl px-3 py-2.5 text-secondary"
+                            data-i18n="journal.notePlaceholder" data-i18n-attr="placeholder">
+                    </div>
+                    <div class="flex gap-3 p-6 shrink-0 border-t border-borderSubtle/60">
+                        <button data-click="Journal.closeForm"
+                            class="flex-1 py-2.5 text-sm font-bold rounded-xl bg-surfaceHighlight text-textMuted hover:bg-borderSubtle transition"
+                            data-i18n="common.cancel">Cancel</button>
+                        <button data-click="Journal.submitForm"
+                            class="flex-1 py-2.5 text-sm font-bold rounded-xl bg-primary text-background hover:bg-primary/90 transition"
+                            data-i18n="journal.save">Save</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Journal Entry History Modal（c037 版本史）-->
+            <div id="journal-history-modal" class="modal-overlay hidden fixed inset-0 z-[80] bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+                <div class="bg-surface w-full max-w-md max-h-[85dvh] flex flex-col rounded-2xl border border-borderLight overflow-hidden">
+                    <div class="flex justify-between items-center p-6 pb-0 shrink-0">
+                        <h3 class="font-serif text-xl text-secondary" data-i18n="journal.historyTitle">Entry History</h3>
+                        <button data-click="Journal.closeHistory" data-close-modal class="w-11 h-11 -mr-2 flex items-center justify-center hover:bg-surfaceHighlight rounded-full text-textMuted" aria-label="Close" data-i18n="common.close" data-i18n-attr="aria-label">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <div id="journal-history-list" class="p-6 space-y-3 min-h-0 overflow-y-auto custom-scrollbar"></div>
+                </div>
+            </div>
+
+            <!-- Journal Edit Entry Modal（2026-08-26：後端 PUT 一直存在，補 UI 入口）-->
+            <div id="journal-edit-modal" class="modal-overlay hidden fixed inset-0 z-[80] bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+                <div class="bg-surface w-full max-w-md max-h-[85dvh] flex flex-col rounded-2xl border border-borderLight overflow-hidden">
+                    <div class="flex justify-between items-center p-6 pb-0 shrink-0">
+                        <h3 class="font-serif text-xl text-secondary" data-i18n="journal.editTitle">Edit Entry</h3>
+                        <div class="flex items-center gap-1">
+                            <!-- 手機無 hover 按鈕，編輯 modal 內提供歷史/刪除入口（2026-08-30 UX）-->
+                            <button data-click="Journal.editModalHistory" class="w-11 h-11 flex items-center justify-center hover:bg-surfaceHighlight rounded-full text-textMuted hover:text-primary transition"
+                                aria-label="History" title="History">
+                                <i data-lucide="history" class="w-4 h-4"></i>
+                            </button>
+                            <button data-click="Journal.editModalDelete" class="w-11 h-11 flex items-center justify-center hover:bg-danger/10 rounded-full text-textMuted hover:text-danger transition"
+                                aria-label="Delete" title="Delete">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                            <button data-click="Journal.closeEditForm" data-close-modal class="w-11 h-11 -mr-2 flex items-center justify-center hover:bg-surfaceHighlight rounded-full text-textMuted" aria-label="Close" data-i18n="common.close" data-i18n-attr="aria-label">
+                                <i data-lucide="x" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-4 min-h-0 overflow-y-auto custom-scrollbar">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div><label for="journal-edit-amount" class="block text-[11px] text-textMuted mb-1" data-i18n="journal.labelAmount">Amount</label><input id="journal-edit-amount" type="number" step="any" min="0.00000001" placeholder="0.00"
+                                class="text-sm bg-surfaceHighlight border border-borderSubtle rounded-xl px-3 py-2.5 text-secondary"
+                                data-i18n="journal.amountPlaceholder" data-i18n-attr="placeholder"></div>
+                            <div><label for="journal-edit-currency" class="block text-[11px] text-textMuted mb-1" data-i18n="journal.labelCurrency">Currency</label><select id="journal-edit-currency" class="w-full text-sm bg-surfaceHighlight border border-borderSubtle rounded-xl px-3 py-2.5 text-secondary">
+                                <!-- 法幣（exchange_rate.py _FIAT_RATES：離線靜態表，一定換算得出）-->
+                                <option value="TWD">TWD</option>
+                                <option value="USD">USD</option>
+                                <option value="HKD">HKD</option>
+                                <option value="JPY">JPY</option>
+                                <option value="CNY">CNY</option>
+                                <option value="EUR">EUR</option>
+                                <!-- 加密貨幣（exchange_rate.py _CRYPTO_SYMBOLS：走 CoinGecko）-->
+                                <option value="BTC">BTC</option>
+                                <option value="ETH">ETH</option>
+                                <option value="TON">TON</option>
+                                <option value="USDT">USDT</option>
+                                <option value="USDC">USDC</option>
+                                <option value="SOL">SOL</option>
+                                <option value="BNB">BNB</option>
+                                <option value="XRP">XRP</option>
+                                <option value="DOGE">DOGE</option>
+                                <option value="ADA">ADA</option>
+                                <option value="AVAX">AVAX</option>
+                                <option value="MATIC">MATIC</option>
+                                <option value="DOT">DOT</option>
+                                <option value="LINK">LINK</option>
+                            </select></div>
+                        </div>
+                        <div id="journal-edit-rate-row" class="hidden">
+                            <input id="journal-edit-rate" type="number" step="any" min="0.00000001"
+                                class="w-full text-sm bg-surfaceHighlight border border-borderSubtle rounded-xl px-3 py-2.5 text-secondary"
+                                data-i18n="journal.ratePlaceholder" data-i18n-attr="placeholder"
+                                placeholder="Exchange rate (optional)">
+                            <p class="text-[10px] text-textMuted/60 mt-1" data-i18n="journal.rateHintEdit">Leave empty = keep the frozen rate</p>
+                        </div>
+                        <label for="journal-edit-category" class="block text-[11px] text-textMuted mb-1" data-i18n="journal.labelCategory">Category</label>
+                        <select id="journal-edit-category" class="w-full text-sm bg-surfaceHighlight border border-borderSubtle rounded-xl px-3 py-2.5 text-secondary"></select>
+                        <label for="journal-edit-note" class="block text-[11px] text-textMuted mb-1" data-i18n="journal.labelNote">Note</label>
+                        <input id="journal-edit-note" type="text" placeholder="Note"
+                            class="text-sm bg-surfaceHighlight border border-borderSubtle rounded-xl px-3 py-2.5 text-secondary"
+                            data-i18n="journal.notePlaceholder" data-i18n-attr="placeholder">
+                    </div>
+                    <div class="flex gap-3 p-6 shrink-0 border-t border-borderSubtle/60">
+                        <button data-click="Journal.closeEditForm"
+                            class="flex-1 py-2.5 text-sm font-bold rounded-xl bg-surfaceHighlight text-textMuted hover:bg-borderSubtle transition"
+                            data-i18n="common.cancel">Cancel</button>
+                        <button data-click="Journal.submitEditForm"
+                            class="flex-1 py-2.5 text-sm font-bold rounded-xl bg-primary text-background hover:bg-primary/90 transition"
+                            data-i18n="journal.save">Save</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Wallet -->
+            <div id="wallet-tab"
+                class="tab-content hidden h-full overflow-y-auto custom-scrollbar px-4 md:pl-6 md:pr-16 py-6 pb-40">
+                <div class="max-w-3xl mx-auto space-y-6">
+                    <!-- Header -->
+                    <div class="flex justify-between items-end md:pr-14">
+                        <h2 class="font-serif text-3xl text-secondary" data-i18n="wallet.title">Wallet</h2>
+                        <button data-click="walletLoad" aria-label="Refresh" data-i18n="common.refresh" data-i18n-attr="aria-label"
+                            class="p-2 bg-surface hover:bg-surfaceHighlight rounded-full text-textMuted transition"><i
+                                data-lucide="refresh-cw" class="w-4 h-4"></i></button>
+                    </div>
+
+                    <!-- 我的錢包（2026-09-12 EVM 優先：綁定錢包列表＋鏈上餘額；沒綁定 → 引導去 Settings） -->
+                    <div id="wallet-bound-card" class="bg-surface border border-borderSubtle rounded-[2rem] p-6 space-y-4">
+                        <div class="flex items-center justify-between gap-3">
+                            <h3 class="font-bold text-secondary text-lg flex items-center gap-2">
+                                <i data-lucide="wallet" class="w-5 h-5 text-primary"></i>
+                                <span data-i18n="wallet.myWallets">My wallets</span>
+                            </h3>
+                            <div class="text-right shrink-0">
+                                <div class="text-[10px] text-textMuted uppercase tracking-wider" data-i18n="wallet.onchainTotal">On-chain total</div>
+                                <div id="wallet-holdings-total" class="font-bold text-xl text-secondary">—</div>
+                            </div>
+                        </div>
+                        <div id="wallet-bound-list" class="space-y-3">
+                            <div class="text-center text-textMuted py-6 opacity-60 text-sm" data-i18n="wallet.loadingWallets">Loading wallets...</div>
+                        </div>
+                    </div>
+
+                    <!-- 鏈上同步（綁定錢包的轉帳 → 帳本） -->
+                    <div id="wallet-sync-card" class="bg-surface border border-borderSubtle rounded-[2rem] p-6 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div class="min-w-0">
+                                <h3 class="font-bold text-secondary text-lg flex items-center gap-2">
+                                    <i data-lucide="refresh-ccw" class="w-5 h-5 text-primary"></i>
+                                    <span data-i18n="wallet.sync.title">Sync to ledger</span>
+                                </h3>
+                                <p class="text-xs text-textMuted mt-1" data-i18n="wallet.sync.hint">Transfers into and out of your bound wallets are recorded in the ledger daily (at market price). You can edit or delete any entry.</p>
+                            </div>
+                            <label class="flex items-center gap-2 min-h-11 cursor-pointer shrink-0">
+                                <input id="wallet-sync-enabled" type="checkbox" class="w-5 h-5 accent-primary" data-change-action="walletToggleSync">
+                                <span class="text-sm text-textMain whitespace-nowrap" data-i18n="wallet.sync.auto">Auto sync daily</span>
+                            </label>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <button id="wallet-sync-now" data-click="walletSyncNow"
+                                class="px-4 py-3 min-h-11 bg-primary hover:bg-primary/90 text-background font-bold rounded-xl text-sm transition">
+                                <span data-i18n="wallet.sync.now">Sync now</span>
+                            </button>
+                            <button data-click="GlobalNav.navigateToTab" data-click-arg="journal"
+                                class="px-4 py-3 min-h-11 bg-primary/10 hover:bg-primary/20 text-primary rounded-xl text-sm transition">
+                                <span data-i18n="wallet.sync.openLedger">Open ledger</span>
+                            </button>
+                            <span id="wallet-sync-last" class="text-xs text-textMuted"></span>
+                        </div>
+                        <div id="wallet-sync-result" class="text-sm text-textMuted min-h-5"></div>
+                    </div>
+
+                    <!-- 平台付款紀錄（訂閱／發文／打賞；資產別由後端決定） -->
+                    <div class="bg-surface border border-borderSubtle rounded-[2rem] p-6 min-h-[400px]">
+                        <div class="flex flex-wrap items-center gap-x-6 gap-y-1 mb-4">
+                            <h3 class="font-bold text-secondary text-lg flex items-center gap-2">
+                                <i data-lucide="history" class="w-5 h-5 text-primary"></i> <span
+                                    data-i18n="wallet.transactions">Platform payments</span>
+                            </h3>
+                            <div class="flex gap-5 text-xs">
+                                <div>
+                                    <span class="text-[10px] text-textMuted uppercase tracking-wider block" data-i18n="wallet.spentOut">Spent (Out)</span>
+                                    <div class="text-danger font-bold flex items-center gap-1">
+                                        <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+                                        <span id="wallet-total-out">0</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] text-textMuted uppercase tracking-wider block" data-i18n="wallet.receivedIn">Received (In)</span>
+                                    <div class="text-success font-bold flex items-center gap-1">
+                                        <i data-lucide="arrow-down-left" class="w-3 h-3"></i>
+                                        <span id="wallet-total-in">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end mb-6">
+                            <!-- Filters -->
+                            <div class="flex flex-col gap-2 items-end">
+                                <div class="flex gap-2 overflow-x-auto pb-1 md:pb-0 hide-scrollbar">
+                                    <label for="wallet-filter-type" class="sr-only" data-i18n="wallet.filterTypeLabel">Transaction type</label>
+                                    <select id="wallet-filter-type" data-change-action="walletApplyFilters"
+                                        class="bg-surfaceHighlight border border-borderLight text-textMuted text-xs font-bold rounded-xl px-3 py-2 outline-none focus:border-primary/50 transition cursor-pointer">
+                                        <option value="all" data-i18n="wallet.allTypes">All Types</option>
+                                        <option value="in" data-i18n="wallet.income">💰 Income (In)</option>
+                                        <option value="out" data-i18n="wallet.expense">💸 Expense (Out)</option>
+                                        <option value="membership" data-i18n="wallet.premium">👑 Premium</option>
+                                        <option value="tip" data-i18n="wallet.tips">🎁 Tips</option>
+                                        <option value="post" data-i18n="wallet.postFees">📝 Post Fees</option>
+                                    </select>
+                                    <label for="wallet-filter-time" class="sr-only" data-i18n="wallet.filterTimeLabel">Time range</label>
+                                    <select id="wallet-filter-time" data-change-action="walletTimeFilter"
+                                        class="bg-surfaceHighlight border border-borderLight text-textMuted text-xs font-bold rounded-xl px-3 py-2 outline-none focus:border-primary/50 transition cursor-pointer">
+                                        <option value="all" data-i18n="wallet.allTime">All Time</option>
+                                        <option value="7" data-i18n="wallet.last7Days">Last 7 Days</option>
+                                        <option value="30" data-i18n="wallet.last30Days">Last 30 Days</option>
+                                        <option value="90" data-i18n="wallet.last3Months">Last 3 Months</option>
+                                        <option value="custom" data-i18n="wallet.customRange">📅 Custom Range</option>
+                                    </select>
+                                </div>
+
+                                <!-- Custom Date Inputs (Hidden by default) -->
+                                <div id="wallet-custom-date-range"
+                                    class="hidden flex items-center gap-2 bg-surfaceHighlight p-2 rounded-xl border border-borderSubtle animate-fade-in-down w-full md:w-auto justify-end">
+                                    <label for="wallet-date-start" class="sr-only" data-i18n="wallet.dateStartLabel">Start date</label>
+                                    <input type="date" id="wallet-date-start"
+                                        class="bg-background border border-borderLight rounded-lg px-2 py-1 text-xs text-secondary outline-none focus:border-primary/50 min-w-[120px]"
+                                        data-change-action="walletApplyFilters">
+                                    <span class="text-textMuted text-xs" data-i18n="common.to">to</span>
+                                    <label for="wallet-date-end" class="sr-only" data-i18n="wallet.dateEndLabel">End date</label>
+                                    <input type="date" id="wallet-date-end"
+                                        class="bg-background border border-borderLight rounded-lg px-2 py-1 text-xs text-secondary outline-none focus:border-primary/50 min-w-[120px]"
+                                        data-change-action="walletApplyFilters">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="wallet-tx-list" class="space-y-2">
+                            <div class="text-center text-textMuted py-10 opacity-50" data-i18n="wallet.loadingHistory">
+                                <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2"></i>
+                                Loading history...
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Tab: Trust（全面重組 Phase 1，動態注入） -->
+            <div id="trust-tab" class="tab-content hidden h-full overflow-hidden relative">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: AI Studio（Phase 1/2，動態注入；入口 = Settings「我的 AI」） -->
+            <div id="ai-studio-tab" class="tab-content hidden h-full overflow-hidden relative">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: Discover（Phase 3 People & Projects 探索，動態注入） -->
+            <div id="discover-tab" class="tab-content hidden h-full overflow-hidden relative">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: Studio（提案工作台＝募資者模式，design 2026-08-16，動態注入） -->
+            <div id="studio-tab" class="tab-content hidden h-full overflow-hidden relative">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: Wallet Monitor（全面重組，動態注入） -->
+            <div id="wallet-monitor-tab" class="tab-content hidden h-full overflow-hidden relative">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: Commodity -->
+            <div id="commodity-tab"
+                class="tab-content hidden h-full overflow-hidden relative">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: Forex -->
+            <div id="forex-tab"
+                class="tab-content hidden h-full overflow-hidden relative">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: HK Stock -->
+            <div id="hkstock-tab"
+                class="tab-content hidden h-full overflow-hidden relative">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: A Stock -->
+            <div id="astock-tab"
+                class="tab-content hidden h-full overflow-hidden relative">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: JP Stock -->
+            <div id="jpstock-tab"
+                class="tab-content hidden h-full overflow-hidden relative">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: India Stock -->
+            <div id="instock-tab"
+                class="tab-content hidden h-full overflow-hidden relative">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: Korea Stock -->
+            <div id="krstock-tab"
+                class="tab-content hidden h-full overflow-hidden relative">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: Friends (Global Social Hub) -->
+            <div id="friends-tab" class="tab-content hidden h-full overflow-hidden relative">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: Forum -->
+            <div id="forum-tab"
+                class="tab-content hidden h-full overflow-y-auto custom-scrollbar px-4 md:pl-6 md:pr-16 py-6 pb-40">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+
+            <!-- Tab: Settings -->
+            <div id="settings-tab"
+                class="tab-content hidden h-full overflow-y-auto custom-scrollbar px-4 md:px-6 py-6 pb-40 will-change-transform">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+            <div id="admin-tab"
+                class="tab-content hidden h-full overflow-y-auto custom-scrollbar px-4 md:px-6 py-6 pb-40 will-change-transform">
+                <!-- Dynamic Content Injected via components.js (admin only) -->
+            </div>
+            <!-- Tab: Connections（連結）— Telegram／LINE 等外部連接（2026-09-08 自 Settings 遷出） -->
+            <div id="connections-tab"
+                class="tab-content hidden h-full overflow-y-auto custom-scrollbar px-4 md:px-6 py-6 pb-40 will-change-transform">
+                <!-- Dynamic Content Injected via components.js -->
+            </div>
+            <!-- Tab: Sample portfolio（訪客專用示範頁，2026-09-27 上市準備 PR-3） -->
+            <div id="sample-tab"
+                class="tab-content hidden h-full overflow-y-auto custom-scrollbar px-4 md:pl-6 md:pr-16 py-6 pb-40">
+                <!-- Dynamic Content Injected via components/tab-sample.js -->
+            </div>
+            <!-- Tab: Scam Check（詐騙檢查，2026-09-27 自獨立頁 /scam-tracker/ 搬進 SPA；訪客可用） -->
+            <div id="scamcheck-tab"
+                class="tab-content hidden h-full overflow-y-auto custom-scrollbar px-4 md:pl-6 md:pr-16 py-6 pb-40">
+                <!-- Dynamic Content Injected via components/tab-scamcheck.js -->
+            </div>
+    </main>
+
+    <!-- Chart Modal (Moved from Watchlist) -->
+    <div id="chart-section" class="modal-overlay hidden fixed inset-0 z-[60] bg-background/95 backdrop-blur overflow-y-auto p-4 md:p-6">
+        <div class="flex flex-col gap-3 mb-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <h3 id="chart-title" class="text-lg md:text-xl font-serif text-secondary">BTC Chart</h3>
+                    <span id="chart-updated" class="text-[10px] text-textMuted opacity-60"></span>
+                </div>
+                <button data-click="closeChart" data-close-modal aria-label="Close" data-i18n="common.close" data-i18n-attr="aria-label"
+                    class="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-textMuted hover:text-secondary transition"><i
+                        data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <!-- Toolbar -->
+            <div class="flex flex-wrap items-center gap-2">
+                <!-- Timeframe Selector -->
+                <div class="flex gap-0.5 bg-surface/50 p-1 rounded-xl overflow-x-auto">
+                    <button data-click="changeChartInterval" data-click-arg="1m"
+                        class="chart-interval-btn min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg text-textMuted hover:bg-surfaceHighlight transition whitespace-nowrap"
+                        data-interval="1m">1m</button>
+                    <button data-click="changeChartInterval" data-click-arg="3m"
+                        class="chart-interval-btn min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg text-textMuted hover:bg-surfaceHighlight transition whitespace-nowrap"
+                        data-interval="3m">3m</button>
+                    <button data-click="changeChartInterval" data-click-arg="5m"
+                        class="chart-interval-btn min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg text-textMuted hover:bg-surfaceHighlight transition whitespace-nowrap"
+                        data-interval="5m">5m</button>
+                    <button data-click="changeChartInterval" data-click-arg="15m"
+                        class="chart-interval-btn min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg text-textMuted hover:bg-surfaceHighlight transition whitespace-nowrap"
+                        data-interval="15m">15m</button>
+                    <button data-click="changeChartInterval" data-click-arg="30m"
+                        class="chart-interval-btn min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg text-textMuted hover:bg-surfaceHighlight transition whitespace-nowrap"
+                        data-interval="30m">30m</button>
+                    <button data-click="changeChartInterval" data-click-arg="1h"
+                        class="chart-interval-btn min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg text-textMuted hover:bg-surfaceHighlight transition whitespace-nowrap"
+                        data-interval="1h">1H</button>
+                    <button data-click="changeChartInterval" data-click-arg="2h"
+                        class="chart-interval-btn min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg text-textMuted hover:bg-surfaceHighlight transition whitespace-nowrap"
+                        data-interval="2h">2H</button>
+                    <button data-click="changeChartInterval" data-click-arg="4h"
+                        class="chart-interval-btn min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg text-textMuted hover:bg-surfaceHighlight transition whitespace-nowrap"
+                        data-interval="4h">4H</button>
+                    <button data-click="changeChartInterval" data-click-arg="1d"
+                        class="chart-interval-btn min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg text-textMuted hover:bg-surfaceHighlight transition whitespace-nowrap bg-surfaceHighlight text-primary"
+                        data-interval="1d">1D</button>
+                    <button data-click="changeChartInterval" data-click-arg="1w"
+                        class="chart-interval-btn min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg text-textMuted hover:bg-surfaceHighlight transition whitespace-nowrap"
+                        data-interval="1w">1W</button>
+                </div>
+                <!-- Auto Refresh Toggle -->
+                <button id="auto-refresh-btn" data-click="toggleAutoRefresh"
+                    class="min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg bg-surface/50 text-textMuted hover:bg-surfaceHighlight transition flex items-center justify-center gap-1"
+                    title="Auto refresh" data-i18n="chart.autoRefresh" data-i18n-attr="title">
+                    <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+                    <span id="auto-refresh-status" data-i18n="chart.off">OFF</span>
+                </button>
+                <!-- OHLCV Info Display -->
+                <div id="ohlcv-info" class="flex flex-wrap items-center gap-2 text-[10px] font-mono ml-auto">
+                    <span class="text-textMuted"><span data-i18n="chart.ohlcvO">O:</span><span id="info-open" class="text-secondary ml-0.5">-</span></span>
+                    <span class="text-textMuted"><span data-i18n="chart.ohlcvH">H:</span><span id="info-high" class="text-success ml-0.5">-</span></span>
+                    <span class="text-textMuted"><span data-i18n="chart.ohlcvL">L:</span><span id="info-low" class="text-danger ml-0.5">-</span></span>
+                    <span class="text-textMuted"><span data-i18n="chart.ohlcvC">C:</span><span id="info-close" class="text-secondary ml-0.5">-</span></span>
+                    <span class="text-textMuted"><span data-i18n="chart.ohlcvVol">Vol:</span><span id="info-volume" class="text-primary ml-0.5">-</span></span>
+                </div>
+            </div>
+        </div>
+        <!-- Chart Area -->
+        <div class="w-full bg-surface rounded-3xl border border-borderSubtle overflow-hidden">
+            <!-- Current Price Display -->
+            <div class="px-4 pt-3 pb-1">
+                <div id="current-price-display" class="text-center text-2xl font-bold text-secondary font-mono">
+                    <!-- Current price will be displayed here -->
+                </div>
+            </div>
+            <div id="chart-container" class="h-[52dvh] w-full relative"></div>
+            <div id="volume-container" class="w-full h-40 border-t border-borderSubtle"></div>
+        </div>
+    </div>
+
+    <!-- Content Modal（memory / skill 完整內容檢視 + 編輯）-->
+    <div id="content-modal"
+        class="hidden fixed inset-0 z-[60] bg-background/95 backdrop-blur overflow-y-auto p-4 md:p-6">
+        <div class="max-w-2xl mx-auto flex flex-col gap-3 min-h-full">
+            <!-- 標題列 -->
+            <div class="flex justify-between items-center gap-3">
+                <div class="flex items-center gap-2 min-w-0 flex-1">
+                    <div id="content-modal-title" class="flex items-center gap-2"></div>
+                </div>
+                <button id="content-modal-close-btn" aria-label="Close" data-i18n="common.close" data-i18n-attr="aria-label"
+                    class="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-textMuted hover:text-secondary transition shrink-0">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <h3 id="content-modal-subtitle" class="text-lg font-serif text-secondary break-words"></h3>
+
+            <!-- 內容區 -->
+            <textarea id="content-modal-body"
+                class="flex-1 w-full bg-surface border border-borderLight rounded-xl px-4 py-3 text-sm text-secondary focus:outline-none focus:border-primary/40 resize-none min-h-[40dvh] font-mono"
+                readonly></textarea>
+
+            <!-- 操作列 -->
+            <div class="flex items-center justify-end gap-2">
+                <button id="content-modal-cancel-btn"
+                    class="hidden px-4 py-2 rounded-lg text-textMuted hover:text-secondary transition text-sm font-bold" data-i18n="common.cancel">Cancel</button>
+                <button id="content-modal-save-btn"
+                    class="hidden px-4 py-2 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition text-sm font-bold" data-i18n="common.save">Save</button>
+                <button id="content-modal-edit-btn"
+                    class="px-4 py-2 rounded-lg text-textMuted hover:text-primary hover:bg-surfaceHighlight transition text-sm flex items-center gap-1.5">
+                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i> <span data-i18n="common.edit">Edit</span>
+                </button>
+                <button id="content-modal-delete-btn"
+                    class="px-4 py-2 rounded-lg text-textMuted hover:text-red-400 hover:bg-red-400/10 transition text-sm flex items-center gap-1.5">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> <span data-i18n="common.delete">Delete</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TW Stock Chart Modal -->
+    <div id="twstock-chart-section"
+        class="modal-overlay hidden fixed inset-0 z-[60] bg-background/95 backdrop-blur overflow-y-auto p-4 md:p-6">
+        <div class="flex flex-col gap-3 mb-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <h3 id="twstock-chart-title" class="text-lg md:text-xl font-serif text-secondary">TW Stock Chart
+                    </h3>
+                    <span id="twstock-chart-updated" class="text-[10px] text-textMuted opacity-60"></span>
+                </div>
+                <button data-click="twCloseChart" data-close-modal aria-label="Close" data-i18n="common.close" data-i18n-attr="aria-label"
+                    class="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-textMuted hover:text-secondary transition"><i
+                        data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <!-- Toolbar -->
+            <div class="flex flex-wrap items-center gap-2">
+                <!-- Timeframe Selector -->
+                <div class="flex gap-0.5 bg-surface/50 p-1 rounded-xl overflow-x-auto">
+                    <button data-click="twChangeChartInterval" data-click-arg="1d"
+                        class="tw-chart-interval-btn min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg text-textMuted hover:bg-surfaceHighlight transition whitespace-nowrap bg-surfaceHighlight text-primary"
+                        data-interval="1d">1D</button>
+                    <button data-click="twChangeChartInterval" data-click-arg="1wk"
+                        class="tw-chart-interval-btn min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg text-textMuted hover:bg-surfaceHighlight transition whitespace-nowrap"
+                        data-interval="1wk">1W</button>
+                    <button data-click="twChangeChartInterval" data-click-arg="1mo"
+                        class="tw-chart-interval-btn min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg text-textMuted hover:bg-surfaceHighlight transition whitespace-nowrap"
+                        data-interval="1mo">1M</button>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-textMuted ml-4 px-2 py-1 bg-surface/30 rounded-lg">
+                    <i data-lucide="info" class="w-3 h-3"></i> <span data-i18n="chart.afterHoursDelay">After-hours delayed data (yfinance)</span>
+                </div>
+                <!-- OHLCV Info Display -->
+                <div id="tw-ohlcv-info" class="flex flex-wrap items-center gap-2 text-[10px] font-mono ml-auto">
+                    <span class="text-textMuted"><span data-i18n="chart.ohlcvO">O:</span><span id="tw-info-open" class="text-secondary ml-0.5">-</span></span>
+                    <span class="text-textMuted"><span data-i18n="chart.ohlcvH">H:</span><span id="tw-info-high" class="text-success ml-0.5">-</span></span>
+                    <span class="text-textMuted"><span data-i18n="chart.ohlcvL">L:</span><span id="tw-info-low" class="text-danger ml-0.5">-</span></span>
+                    <span class="text-textMuted"><span data-i18n="chart.ohlcvC">C:</span><span id="tw-info-close"
+                            class="text-secondary ml-0.5">-</span></span>
+                    <span class="text-textMuted"><span data-i18n="chart.ohlcvVol">Vol:</span><span id="tw-info-volume"
+                            class="text-primary ml-0.5">-</span></span>
+                </div>
+            </div>
+        </div>
+        <!-- Chart Area -->
+        <div class="w-full bg-surface rounded-3xl border border-borderSubtle overflow-hidden">
+            <div id="twstock-chart-container" class="h-[52dvh] w-full relative"></div>
+            <div id="twstock-volume-container" class="w-full h-40 border-t border-borderSubtle"></div>
+        </div>
+    </div>
+
+    <!-- US Stock Chart Modal -->
+    <div id="usstock-chart-section"
+        class="modal-overlay hidden fixed inset-0 z-[60] bg-background/95 backdrop-blur overflow-y-auto p-4 md:p-6">
+        <div class="flex flex-col gap-3 mb-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <h3 id="usstock-chart-title" class="text-lg md:text-xl font-serif text-secondary">US Stock Chart</h3>
+                    <span id="usstock-chart-updated" class="text-[10px] text-textMuted opacity-60"></span>
+                </div>
+                <button data-click="usCloseChart" data-close-modal aria-label="Close" data-i18n="common.close" data-i18n-attr="aria-label"
+                    class="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-textMuted hover:text-secondary transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <!-- Toolbar -->
+            <div class="flex flex-wrap items-center gap-2">
+                <div class="flex gap-0.5 bg-surface/50 p-1 rounded-xl overflow-x-auto">
+                    <button data-click="usChangeChartInterval" data-click-arg="1d"
+                        class="us-chart-interval-btn min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg text-textMuted hover:bg-surfaceHighlight transition whitespace-nowrap bg-surfaceHighlight text-primary"
+                        data-interval="1d">1D</button>
+                    <button data-click="usChangeChartInterval" data-click-arg="1wk"
+                        class="us-chart-interval-btn min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg text-textMuted hover:bg-surfaceHighlight transition whitespace-nowrap"
+                        data-interval="1wk">1W</button>
+                    <button data-click="usChangeChartInterval" data-click-arg="1mo"
+                        class="us-chart-interval-btn min-h-11 min-w-11 px-2 py-1 text-[10px] rounded-lg text-textMuted hover:bg-surfaceHighlight transition whitespace-nowrap"
+                        data-interval="1mo">1M</button>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-textMuted ml-4 px-2 py-1 bg-surface/30 rounded-lg">
+                    <i data-lucide="info" class="w-3 h-3"></i> <span data-i18n="chart.afterHoursDelay">After-hours delayed data (yfinance)</span>
+                </div>
+                <div id="us-ohlcv-info" class="flex flex-wrap items-center gap-2 text-[10px] font-mono ml-auto">
+                    <span class="text-textMuted"><span data-i18n="chart.ohlcvO">O:</span><span id="us-info-open" class="text-secondary ml-0.5">-</span></span>
+                    <span class="text-textMuted"><span data-i18n="chart.ohlcvH">H:</span><span id="us-info-high" class="text-success ml-0.5">-</span></span>
+                    <span class="text-textMuted"><span data-i18n="chart.ohlcvL">L:</span><span id="us-info-low" class="text-danger ml-0.5">-</span></span>
+                    <span class="text-textMuted"><span data-i18n="chart.ohlcvC">C:</span><span id="us-info-close" class="text-secondary ml-0.5">-</span></span>
+                    <span class="text-textMuted"><span data-i18n="chart.ohlcvVol">Vol:</span><span id="us-info-volume" class="text-primary ml-0.5">-</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="w-full bg-surface rounded-3xl border border-borderSubtle overflow-hidden">
+            <div id="usstock-chart-container" class="h-[52dvh] w-full relative"></div>
+            <div id="usstock-volume-container" class="w-full h-40 border-t border-borderSubtle"></div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Global Filter Modal (Re-styled) -->
+    <div id="global-filter-modal" role="dialog" aria-modal="true" aria-labelledby="global-filter-modal-title"
+        class="modal-overlay fixed inset-0 bg-background/90 backdrop-blur-sm z-[70] hidden flex items-center justify-center p-4">
+        <div
+            class="bg-surface w-full max-w-md h-[80dvh] flex flex-col rounded-[2.5rem] border border-borderSubtle shadow-2xl overflow-hidden">
+            <div class="p-6 border-b border-borderSubtle flex justify-between items-center">
+                <h3 id="global-filter-modal-title" class="font-serif text-xl text-secondary" data-i18n="modals.filter.title">Asset Filter</h3>
+                <button data-click="closeModal" data-click-arg="global-filter-modal" data-close-modal aria-label="Close" data-i18n="common.close" data-i18n-attr="aria-label"
+                    class="w-11 h-11 rounded-full bg-background flex items-center justify-center text-textMuted hover:text-secondary"><i
+                        data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+
+            <div class="p-4 bg-background/50 space-y-3">
+                <div>
+                    <label for="symbol-search" class="sr-only" data-i18n="modals.searchToken">Search token</label>
+                    <input type="text" id="symbol-search" placeholder="Search (e.g. BTC)..."
+                        data-i18n="modals.filter.searchPlaceholder" data-i18n-attr="placeholder"
+                        class="w-full bg-background border border-borderSubtle rounded-2xl px-5 py-3 text-secondary focus:border-primary/50 outline-none transition"
+                        data-input-action="renderSymbolList">
+                </div>
+                <div class="flex gap-2">
+                    <label for="filter-exchange-select" class="sr-only" data-i18n="modals.selectExchange">Select exchange</label>
+                    <select id="filter-exchange-select" data-change-action="switchFilterExchange"
+                        class="flex-1 bg-background border border-borderSubtle rounded-xl px-3 py-2 text-xs text-textMuted outline-none">
+                        <option value="okx">OKX</option>
+                    </select>
+
+                </div>
+            </div>
+
+            <div id="symbol-list-container" class="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar"></div>
+
+            <div class="p-6 border-t border-borderSubtle">
+                <button data-click="applyGlobalFilter"
+                    class="w-full bg-primary text-background font-bold py-4 rounded-2xl transition shadow-lg shadow-primary/20">
+                    <span data-i18n="modals.filter.applyFilter">Apply Filter</span> (<span
+                        id="selected-count-modal">0</span>)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- News Modal -->
+    <div id="news-modal"
+        class="modal-overlay fixed inset-0 bg-background/90 backdrop-blur-sm z-[70] hidden flex items-center justify-center p-6">
+        <div
+            class="bg-surface w-full max-w-md max-h-[80dvh] flex flex-col rounded-[2.5rem] border border-borderSubtle shadow-2xl">
+            <div class="p-6 border-b border-borderSubtle flex justify-between items-center shrink-0">
+                <h3 class="font-serif text-xl text-secondary flex items-center gap-2">
+                    <span id="news-modal-symbol" class="text-primary">BTC</span><span data-i18n="pulse.newsSuffix"> News</span>
+                </h3>
+                <button data-click="closeModal" data-click-arg="news-modal" data-close-modal aria-label="Close" data-i18n="common.close" data-i18n-attr="aria-label"
+                    class="w-11 h-11 rounded-full bg-background flex items-center justify-center text-textMuted hover:text-secondary transition"><i
+                        data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <div id="news-list-content" class="p-6 overflow-y-auto custom-scrollbar space-y-3">
+                <!-- News items injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- API Test Modal -->
+    <div id="api-test-modal"
+        class="modal-overlay fixed inset-0 bg-background/90 backdrop-blur-sm z-[80] hidden flex items-center justify-center p-6 overflow-y-auto">
+        <div class="bg-surface w-full max-w-sm max-h-[80dvh] overflow-y-auto custom-scrollbar p-8 rounded-[2.5rem] border border-success/20 shadow-2xl">
+            <div
+                class="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-6 text-success">
+                <i data-lucide="check" class="w-8 h-8"></i>
+            </div>
+            <h3 class="text-center font-serif text-xl text-secondary mb-2" data-i18n="modals.apiTest.connected">
+                Connected</h3>
+            <p class="text-center text-textMuted text-sm mb-6" data-i18n="modals.apiTest.successMessage">AI brain is now
+                online.</p>
+            <button data-click="closeModal" data-click-arg="api-test-modal" data-close-modal
+                class="w-full py-3 bg-secondary text-background font-bold rounded-2xl"
+                data-i18n="common.continue">Continue</button>
+        </div>
+    </div>
+
+    <!-- Confirm Dialog Modal（message 動態可長——max-h + 卡片內滾） -->
+    <div id="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title" aria-describedby="confirm-modal-message"
+        class="modal-overlay fixed inset-0 bg-background/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6">
+        <div
+            class="bg-surface w-full max-w-sm max-h-[80dvh] flex flex-col rounded-[2.5rem] border border-borderSubtle shadow-2xl animate-fade-in-up overflow-hidden">
+            <!-- Icon -->
+            <div id="confirm-modal-icon" class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mt-8 mb-6 shrink-0">
+                <i data-lucide="alert-triangle" class="w-8 h-8"></i>
+            </div>
+            <!-- Title -->
+            <h3 id="confirm-modal-title" class="text-center font-serif text-xl text-secondary mb-2 px-8 shrink-0"
+                data-i18n="modals.confirm.defaultTitle">Confirm Action</h3>
+            <!-- Message -->
+            <div class="min-h-0 overflow-y-auto custom-scrollbar px-8 pb-6">
+                <p id="confirm-modal-message" class="text-center text-textMuted text-sm whitespace-pre-line"
+                    data-i18n="modals.confirm.defaultMessage">Are you sure you want to proceed?
+                </p>
+            </div>
+            <!-- Buttons -->
+            <div id="confirm-modal-buttons" class="flex gap-3 p-8 pt-2 shrink-0">
+                <button id="confirm-modal-cancel" data-close-modal
+                    class="flex-1 py-3 bg-surfaceHighlight hover:bg-surfaceHighlight text-textMuted font-bold rounded-2xl transition border border-borderSubtle"
+                    data-i18n="common.cancel">
+                    Cancel
+                </button>
+                <button id="confirm-modal-confirm"
+                    class="flex-1 py-3 bg-danger hover:brightness-110 text-background font-bold rounded-2xl transition shadow-lg"
+                    data-i18n="common.confirm">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container - top-right on desktop, bottom-center on mobile -->
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="true" class="fixed z-[110] flex flex-col gap-3 pointer-events-none
+        bottom-28 left-4 right-4 items-center
+        md:bottom-auto md:top-24 md:left-auto md:right-4 md:items-end"
+        >
+        <!-- Toasts will be injected here -->
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title"
+        class="fixed inset-0 bg-background/95 backdrop-blur-xl z-[90] overflow-y-auto flex py-10 px-6 hidden">
+        <!-- Login card -->
+        <div class="relative bg-surface w-full max-w-md p-8 sm:p-10 rounded-[2rem] border border-borderLight shadow-2xl m-auto">
+            <!-- Language + Theme switcher: visible before login so users can pick language and theme -->
+            <div class="absolute top-4 right-4 z-10 flex items-center gap-2">
+                <div class="login-theme-switcher"></div>
+                <div class="login-lang-switcher"></div>
+            </div>
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="relative w-20 h-20 mx-auto mb-5">
+                    <img src="/static/img/title_icon.png" alt="CryptoMind Logo"
+                         class="relative w-full h-full object-contain">
+                </div>
+                <h2 id="login-modal-title" class="font-serif text-2xl text-secondary mb-2"
+                    data-i18n="login.welcomeTitle">Welcome to CryptoMind</h2>
+                <p class="text-textMuted text-sm" data-i18n="login.welcomeSubtitle">Connect your wallet to get
+                    started</p>
+            </div>
+
+            <!-- 錢包登入區（Telegram 原生 ＋ EVM）。
+                 2026-08-31 起登入統一 EVM，TON 登入入口已移除；TON Connect
+                 仍保留供 TON／USD₮ 付款，但不再是登入方式。 -->
+            <div id="wallet-login-area">
+                <!-- Telegram native login (shown by JS only inside a Telegram Mini App).
+                     Logs in via Telegram identity — no wallet needed. -->
+                <button id="tg-login-btn" data-click="safeTelegramLogin"
+                    class="hidden-init group w-full py-4 mb-3 bg-[#229ED9] hover:bg-[#1c8ec4] text-white font-bold rounded-2xl flex items-center justify-center gap-3 transition-all duration-200 shadow-lg shadow-[#229ED9]/25 hover:scale-[1.02] active:scale-[0.98]">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21.94 4.6 18.6 19.2c-.25 1.1-.92 1.38-1.86.86l-5.14-3.79-2.48 2.39c-.27.27-.5.5-1.03.5l.37-5.27 9.6-8.67c.42-.37-.09-.58-.65-.21L5.5 13.04.66 11.5c-1.05-.33-1.07-1.05.22-1.56L20.62 2.3c.88-.33 1.65.2 1.32 2.3z"/>
+                    </svg>
+                    <span data-i18n="login.connectTelegram">Sign in with Telegram</span>
+                </button>
+                <!-- Email／Google 登入（PR-6，REOWN_SOCIAL_LOGIN_ENABLED）：預設 hidden，旗標開＋一般網頁才由
+                     social-login.js 顯示。開 AppKit 彈窗，Reown 替沒有錢包的人建一個內嵌錢包（固定 EOA），
+                     登入一樣是 SIWE 簽章 → evm_ 帳號；彈窗裡原本的錢包清單照列。 -->
+                <button id="social-login-btn" data-click="safeSocialLogin" data-tma-hide
+                    class="hidden group w-full py-3.5 mb-3 bg-surface hover:bg-surfaceHighlight text-textMain font-bold rounded-2xl border border-borderLight flex flex-col items-center justify-center gap-0.5 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
+                    <span class="flex items-center gap-3">
+                        <svg class="w-5 h-5 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="5" width="18" height="14" rx="2" />
+                            <path d="m3 7 9 6 9-6" />
+                        </svg>
+                        <span data-i18n="login.continueWithEmailGoogle">Continue with email or Google</span>
+                    </span>
+                    <span class="text-[11px] font-normal text-textMuted" data-i18n="login.embeddedWalletHint">No wallet? We'll create a secure one for you</span>
+                </button>
+                <!-- Google 登入（2026-09-13 Google Play 版 Phase 2）：GIS 官方按鈕渲染在這裡；
+                     沒設 GOOGLE_CLIENT_ID 就一直 hidden；Telegram 內藏（Telegram 原生登入） -->
+                <div id="google-login-wrap" class="hidden mb-3" data-tma-hide>
+                    <div id="google-login-container" class="flex justify-center min-h-11"></div>
+                    <p id="google-login-status" class="hidden mt-2 text-center text-xs text-textMuted"></p>
+                </div>
+                <!-- EVM 錢包登入（2026-08-31 DANNY 決策：登入統一 EVM。
+                     TON 錢包登入入口移除；TON Connect 仍保留供 TON/USD₮ 付款） -->
+                <button id="evm-login-btn" data-click="safeEvmLogin" data-tma-hide
+                    class="group w-full py-4 bg-[#627EEA] hover:bg-[#4f6bdd] text-white font-bold rounded-2xl flex items-center justify-center gap-3 transition-all duration-200 shadow-lg shadow-[#627EEA]/25 hover:scale-[1.02] active:scale-[0.98]">
+                    <!-- Ethereum diamond icon -->
+                    <svg id="evm-login-icon" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 1.5l6.2 10.3L12 15.5l-6.2-3.7L12 1.5zM5.8 13.5L12 17.2l6.2-3.7L12 22.5l-6.2-9z"
+                            opacity=".75" />
+                    </svg>
+                    <!-- 簽署等待中：ETH 圖示換轉圈（_setSignStatus 切換 hidden） -->
+                    <svg id="evm-login-spinner" class="hidden w-5 h-5 animate-spin" viewBox="0 0 24 24"
+                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                    </svg>
+                    <span id="evm-login-label" data-i18n="login.connectEvmWallet">Connect EVM Wallet</span>
+                    <span id="evm-login-label-connecting" class="hidden" data-i18n="evmAuth.connectingShort">Connecting wallet…</span>
+                    <span id="evm-login-label-wait" class="hidden" data-i18n="evmAuth.signWaitingButton">Waiting for your wallet…</span>
+                </button>
+
+                <!-- 簽名等待狀態（_setSignStatus 切換）。2026-09-05 初版是 JS 動態
+                     插入的琥珀色警告塊——但「等待簽署」是進行中資訊而非警告
+                     （DESIGN_SYSTEM：無 warning token，amber 僅留給警告），且色塊
+                     在手機上佔空間。二版：按鈕內建忙碌狀態＋一行 muted 小字。 -->
+                <div id="evm-sign-status" role="status"
+                    class="hidden mt-3 flex items-center justify-center gap-2 text-xs text-textMuted">
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary/70 animate-pulse shrink-0"></span>
+                    <span id="evm-sign-status-text"></span>
+                </div>
+
+                <!-- Trust indicator: Secured by wallet signature -->
+                <div class="flex items-center justify-center gap-1.5 mt-4 text-textMuted/60">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        <path d="M9 12l2 2 4-4" />
+                    </svg>
+                    <span class="text-xs" data-i18n="login.secureLogin">Secured by wallet signature</span>
+                </div>
+
+                <!-- 訪客模式入口（2026-08-20 DANNY；2026-08-30 UX 提升視覺權重：
+                     訪客是行銷主路徑，與錢包登入並列為同等級按鈕而非小字逃生門） -->
+                <button data-click="continueAsGuest"
+                    class="w-full mt-3 py-4 text-secondary font-bold rounded-2xl bg-surfaceHighlight/70 hover:bg-surfaceHighlight border border-borderSubtle/60 hover:border-primary/30 transition flex items-center justify-center gap-2 text-sm">
+                    <i data-lucide="user" class="w-4 h-4 text-primary"></i>
+                    <span data-i18n="login.continueAsGuest">Continue as guest</span>
+                    <span class="text-[10px] font-normal text-textMuted/70 ml-1" data-i18n="login.guestFreeHint">Free daily questions</span>
+                </button>
+            </div>
+
+            <!-- Test mode login button: only shown in TEST_MODE -->
+            <div id="dev-login-area" class="hidden-init mt-2">
+                <button id="dev-login-btn"
+                    data-click="mockLogin"
+                    class="w-full py-4 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold rounded-2xl flex items-center justify-center gap-3 transition border border-amber-600/30 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    <span data-i18n="login.testModeLogin">Test Mode Login</span>
+                </button>
+                <p class="text-[10px] text-amber-600/50 text-center mt-2" data-i18n="common.devOnly">Test environment only · Dev only</p>
+            </div>
+
+            <!-- Legal links with border-top separator -->
+            <div class="mt-8 pt-5 border-t border-borderSubtle flex items-center justify-center gap-3 text-[11px] text-textMuted/50">
+                <button data-click="showLegalPage" data-click-arg="terms" class="hover:text-textMuted transition underline underline-offset-2" data-i18n="settings.legal.termsTitle">Terms of Service</button>
+                <span class="opacity-30">·</span>
+                <button data-click="showLegalPage" data-click-arg="privacy" class="hover:text-textMuted transition underline underline-offset-2" data-i18n="settings.legal.privacyTitle">Privacy Policy</button>
+                <span class="opacity-30">·</span>
+                <button data-click="showLegalPage" data-click-arg="guidelines" class="hover:text-textMuted transition underline underline-offset-2" data-i18n="settings.legal.guidelinesTitle">Community Guidelines</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div id="report-modal"
+        class="modal-overlay fixed inset-0 bg-background/90 backdrop-blur-sm z-[80] hidden flex items-center justify-center p-4">
+        <div class="bg-surface w-full max-w-sm max-h-[80dvh] flex flex-col rounded-[2rem] border border-borderSubtle shadow-2xl overflow-hidden">
+            <div class="p-6 border-b border-borderSubtle flex justify-between items-center shrink-0">
+                <h3 class="font-serif text-xl text-secondary" data-i18n="safety.gov.reportTitle">Report Content</h3>
+                <button data-click="forumCloseReport" data-close-modal aria-label="Close" data-i18n="common.close" data-i18n-attr="aria-label"
+                    class="w-11 h-11 rounded-full bg-background flex items-center justify-center text-textMuted hover:text-secondary transition">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4 min-h-0 overflow-y-auto custom-scrollbar">
+                <input type="hidden" id="report-content-type">
+                <input type="hidden" id="report-content-id">
+
+                <div>
+                    <div id="report-error"
+                        class="hidden bg-danger/10 border border-danger/20 text-danger text-sm p-3 rounded-xl mb-3 flex items-start gap-2">
+                        <i data-lucide="alert-circle" class="w-4 h-4 mt-0.5 shrink-0"></i>
+                        <span id="report-error-msg"></span>
+                    </div>
+                    <label for="report-type" class="block text-xs font-bold text-textMuted uppercase tracking-wider mb-2"
+                        data-i18n="safety.gov.violationType">Violation Type</label>
+                    <select id="report-type"
+                        class="w-full bg-background border border-borderSubtle rounded-xl px-4 py-3 text-secondary outline-none focus:border-primary/50 transition text-sm">
+                        <option value="" data-i18n="safety.submit.selectType">Select type...</option>
+                        <option value="spam" data-i18n="safety.gov.spam">Spam</option>
+                        <option value="harassment" data-i18n="safety.gov.harassment">Harassment</option>
+                        <option value="misinformation" data-i18n="safety.gov.misinformation">Misinformation</option>
+                        <option value="scam" data-i18n="safety.gov.scam">Scam</option>
+                        <option value="illegal" data-i18n="safety.gov.illegal">Illegal Content</option>
+                        <option value="other" data-i18n="safety.gov.other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="report-description" class="block text-xs font-bold text-textMuted uppercase tracking-wider mb-2"><span
+                            data-i18n="safety.submit.description">Description</span> <span
+                            class="text-textMuted/50" data-i18n="common.optional">(Optional)</span></label>
+                    <textarea id="report-description" rows="3" placeholder="Describe the violation..."
+                        data-i18n="safety.gov.describeViolation" data-i18n-attr="placeholder"
+                        class="w-full bg-background border border-borderSubtle rounded-xl px-4 py-3 text-secondary outline-none focus:border-primary/50 transition text-sm resize-none"></textarea>
+                </div>
+                <button data-click="forumSubmitReport" id="btn-submit-report"
+                    class="w-full py-3 bg-danger hover:brightness-110 text-background font-bold rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                    <i data-lucide="flag" class="w-4 h-4"></i> <span data-i18n="safety.gov.submitReport">Submit
+                        Report</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Price Alert Modal -->
+    <!-- Price Alert Modal -->
+    <div id="alert-modal" class="modal-overlay fixed inset-0 bg-background/90 backdrop-blur-sm z-[70] hidden flex items-center justify-center p-6">
+        <div class="bg-surface w-full max-w-sm max-h-[80dvh] flex flex-col rounded-[2.5rem] border border-borderSubtle shadow-2xl overflow-hidden">
+            <!-- Header -->
+            <div class="flex justify-between items-center px-6 pt-6 pb-4 border-b border-borderSubtle">
+                <h3 class="font-serif text-lg text-secondary" data-i18n="modals.priceAlert.title">Set Price Alert</h3>
+                <button data-click="closeAlertModal" data-close-modal aria-label="Close" data-i18n="common.close" data-i18n-attr="aria-label"
+                        class="w-11 h-11 rounded-full bg-background flex items-center justify-center text-textMuted hover:text-secondary transition">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <!-- Symbol label -->
+            <div class="px-6 pt-4">
+                <p id="alert-symbol-label" class="text-primary text-sm font-mono"></p>
+            </div>
+            <!-- Form -->
+            <div class="px-6 py-4 space-y-4 min-h-0 overflow-y-auto custom-scrollbar flex-1">
+                <div>
+                    <label for="alert-condition" class="text-textMuted text-xs mb-1.5 block" data-i18n="modals.priceAlert.condition">Condition</label>
+                    <select id="alert-condition"
+                            class="w-full bg-background border border-borderSubtle rounded-2xl px-4 py-3 text-secondary text-sm outline-none focus:border-primary/50 transition">
+                        <option value="above" data-i18n="modals.priceAlert.above">Price above</option>
+                        <option value="below" data-i18n="modals.priceAlert.below">Price below</option>
+                        <option value="change_pct_up" data-i18n="modals.priceAlert.changePctUp">Rise by (%)</option>
+                        <option value="change_pct_down" data-i18n="modals.priceAlert.changePctDown">Drop by (%)</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="alert-target" class="text-textMuted text-xs mb-1.5 block" data-i18n="modals.priceAlert.targetLabel">Target value</label>
+                    <input type="number" id="alert-target" step="0.01"
+                           data-i18n-attr="placeholder" data-i18n="modals.priceAlert.targetPlaceholder"
+                           placeholder="Enter target value"
+                           class="w-full bg-background border border-borderSubtle rounded-2xl px-4 py-3 text-secondary text-sm outline-none focus:border-primary/50 transition" />
+                </div>
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" id="alert-repeat"
+                           class="w-4 h-4 rounded accent-primary" />
+                    <label for="alert-repeat" class="text-textMuted text-sm cursor-pointer"
+                           data-i18n="modals.priceAlert.repeat">Repeat notification (not deleted after trigger)</label>
+                </div>
+            </div>
+            <!-- Footer -->
+            <div class="flex gap-3 px-6 pb-6 shrink-0">
+                <button data-click="submitAlert"
+                        class="flex-1 bg-primary hover:brightness-110 text-background font-semibold py-3 rounded-2xl text-sm transition shadow-lg shadow-primary/20"
+                        data-i18n="modals.priceAlert.confirm">Confirm</button>
+                <button data-click="closeAlertModal"
+                        class="flex-1 bg-background hover:bg-surfaceHighlight text-textMuted hover:text-secondary border border-borderSubtle py-3 rounded-2xl text-sm transition"
+                        data-i18n="modals.priceAlert.cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tool Settings Modal -->
+    <div id="tool-settings-modal"
+        class="modal-overlay fixed inset-0 bg-background/90 backdrop-blur-sm z-[80] hidden flex items-center justify-center p-4">
+        <div class="bg-surface w-full max-w-lg max-h-[85dvh] flex flex-col rounded-[2rem] border border-borderSubtle shadow-2xl">
+            <!-- Header -->
+            <div class="p-6 border-b border-borderSubtle flex justify-between items-center shrink-0">
+                <div>
+                    <h3 class="font-serif text-xl text-secondary" data-i18n="toolSettings.modalTitle">Tool Settings</h3>
+                    <p id="tool-settings-pending-count" class="text-xs text-textMuted mt-0.5"></p>
+                </div>
+                <button data-click="closeToolSettingsModal" data-close-modal aria-label="Close" data-i18n="common.close" data-i18n-attr="aria-label"
+                    class="w-11 h-11 rounded-full bg-background flex items-center justify-center text-textMuted hover:text-secondary transition">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <!-- Tool list container -->
+            <div id="tool-settings-modal-list" class="flex-1 overflow-y-auto p-4 space-y-1"></div>
+            <!-- Footer -->
+            <div class="p-4 border-t border-borderSubtle flex gap-3 shrink-0">
+                <button data-click="cancelToolPreferences"
+                    class="flex-1 py-3 bg-background hover:bg-surfaceHighlight text-textMuted border border-borderSubtle rounded-2xl text-sm font-semibold transition"
+                    data-i18n="common.cancel">Cancel</button>
+                <button data-click="saveAllToolPreferences"
+                    id="btn-save-tool-prefs"
+                    class="flex-1 py-3 bg-primary hover:brightness-110 text-background font-bold rounded-2xl text-sm transition shadow-lg shadow-primary/20"
+                    data-i18n="toolSettings.confirmSave">Confirm Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts — ES Modules via Vite -->
+    <div id="feedback-modal" class="fixed inset-0 z-[9998] bg-background hidden flex-col">
+        <nav class="sticky top-0 z-10 bg-surface/95 backdrop-blur-xl border-b border-borderSubtle">
+            <div class="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <button data-click="closeFeedbackModal"
+                        class="px-4 py-2 bg-surfaceHighlight hover:bg-surfaceHighlight text-textMuted hover:text-secondary rounded-xl transition flex items-center gap-2">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        <span data-i18n="settings.feedback.back">Back</span>
+                    </button>
+                    <div>
+                        <h1 class="text-xl font-serif text-secondary" data-i18n="settings.feedback.modalTitle">Feedback</h1>
+                        <p class="text-xs text-textMuted" data-i18n="settings.feedback.modalSubtitle">Share your platform suggestions and usage experience</p>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="flex-1 overflow-y-auto">
+            <div class="max-w-3xl mx-auto px-6 py-12">
+                <div id="feedback-form-panel" class="bg-surface w-full rounded-[2rem] border border-borderSubtle shadow-2xl p-6 md:p-8">
+                    <div class="flex items-start gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                            <i data-lucide="message-square-heart" class="w-5 h-5 text-primary"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-serif text-secondary" data-i18n="settings.feedback.formTitle">Tell us what you think</h2>
+                            <p class="text-sm text-textMuted leading-relaxed" data-i18n="settings.feedback.formDescription">
+                                You can leave product suggestions, problems you encountered, or your overall experience using this platform.
+                            </p>
+                        </div>
+                    </div>
+
+                    <label for="feedback-message-input" class="block text-xs font-bold text-textMuted uppercase tracking-wider mb-2" data-i18n="settings.feedback.inputLabel">
+                        Feedback Message
+                    </label>
+                    <textarea
+                        id="feedback-message-input"
+                        rows="8"
+                        maxlength="2000"
+                        data-i18n="settings.feedback.placeholder"
+                        data-i18n-attr="placeholder"
+                        placeholder="Write your feedback here..."
+                        class="w-full bg-background border border-borderSubtle rounded-2xl px-4 py-4 text-secondary outline-none focus:border-primary/50 transition text-sm resize-y"></textarea>
+                    <div class="mt-2 flex items-center justify-between gap-3">
+                        <p id="feedback-error-message" class="text-xs text-danger hidden"></p>
+                        <span id="feedback-char-count" class="ml-auto text-[10px] font-mono text-textMuted">0 / 2000</span>
+                    </div>
+
+                    <div class="mt-6">
+                        <button
+                            id="feedback-submit-btn"
+                            data-click="submitFeedbackMessage"
+                            class="w-full py-3.5 bg-primary hover:brightness-110 text-background font-bold rounded-2xl transition shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                            <span data-i18n="settings.feedback.submit">Submit Feedback</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="feedback-success-panel" class="hidden bg-surface w-full rounded-[2rem] border border-borderSubtle shadow-2xl p-8 md:p-10 text-center">
+                    <div class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-success/10">
+                        <i data-lucide="check-check" class="w-8 h-8 text-success"></i>
+                    </div>
+                    <h2 class="text-2xl font-serif text-secondary" data-i18n="settings.feedback.successTitle">Feedback sent</h2>
+                    <p class="mt-3 text-sm leading-relaxed text-textMuted" data-i18n="settings.feedback.successDescription">Thanks for your feedback — we've received it and will use it to improve.</p>
+                    <div class="mt-8">
+                        <button
+                            data-click="closeFeedbackModal"
+                            class="w-full py-3.5 bg-primary hover:brightness-110 text-background font-bold rounded-2xl transition shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                            <span data-i18n="settings.feedback.successButton">Back to settings</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/components/content-modal.js?v=1"></script>
+    <script src="/js/memory-manager.js?v=5"></script>
+    <script src="/js/skill-manager.js?v=6"></script>
+    <script type="module" src="/js/main.js?v=93"></script>
+    <!-- Legal Page Modal -->
+    <!-- 條款／隱私政策改版的同意提示（legal-consent.js；/api/user/me 的 legal.accepted=false 才顯示）。
+         貼底、置中：手機底邊跟 toast 同一條線、在輸入列之上；桌機置中在聊天欄（扣掉左側選單，位置在
+         styles.css #legal-consent-card）。不擋操作，只能按同意收起（要留同意紀錄）。 -->
+    <div id="legal-consent-card" role="dialog" aria-labelledby="legal-consent-title"
+        class="hidden fixed inset-x-3 mx-auto max-w-md z-[70] rounded-2xl bg-surface border border-borderLight shadow-xl p-5 flex flex-col items-center text-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center" aria-hidden="true">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+        </div>
+        <p id="legal-consent-title" class="text-base font-semibold text-textMain" data-i18n="auth.legalConsent.title">We've updated our Terms and Privacy Policy</p>
+        <p class="text-xs text-textMuted leading-relaxed max-w-sm" data-i18n="auth.legalConsent.body">Updated on Sept 27, 2026: we added details about the Email brief, Email/Google sign-in and buying USDC by card, and corrected how API keys are stored (encrypted on our server). Please review and agree.</p>
+        <div class="flex items-center justify-center gap-5 text-xs">
+            <button type="button" data-click="showLegalPage" data-click-arg="terms" class="text-primary underline underline-offset-2" data-i18n="settings.legal.termsTitle">Terms of Service</button>
+            <button type="button" data-click="showLegalPage" data-click-arg="privacy" class="text-primary underline underline-offset-2" data-i18n="settings.legal.privacyTitle">Privacy Policy</button>
+        </div>
+        <p id="legal-consent-error" class="hidden text-xs text-danger" aria-live="polite"></p>
+        <button type="button" id="legal-consent-accept" data-click="LegalConsent.accept"
+            class="w-full min-h-11 bg-primary hover:bg-primary/90 text-background rounded-xl text-sm font-medium transition disabled:opacity-60"
+            data-i18n="auth.legalConsent.accept">I have read and agree</button>
+    </div>
+
+    <div id="legal-modal" class="modal-overlay fixed inset-0 z-[9999] bg-background hidden flex-col">
+        <nav class="sticky top-0 z-10 bg-surface/95 backdrop-blur-xl border-b border-borderSubtle">
+            <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <button data-click="closeLegalModal" data-close-modal
+                        class="px-4 py-2 bg-surfaceHighlight hover:bg-surfaceHighlight text-textMuted hover:text-secondary rounded-xl transition flex items-center gap-2">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        <span id="legal-back-text">Back</span>
+                    </button>
+                    <h1 id="legal-title" class="text-xl font-serif text-secondary"></h1>
+                </div>
+            </div>
+        </nav>
+        <div id="legal-content" data-shell-scroll data-shell-scroll-extra="3rem" class="flex-1 overflow-y-auto">
+            <div class="max-w-4xl mx-auto px-6 py-12"></div>
+        </div>
+    </div>
+</body>
+
+</html>

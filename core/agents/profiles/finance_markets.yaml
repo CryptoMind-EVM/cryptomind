@@ -1,0 +1,30 @@
+id: finance_markets
+version: "1.1.0"
+display_name: "Finance & Markets"
+description: "股票、加密貨幣、外匯、商品、總經與新聞"
+tier: free
+capabilities:
+  - market_analysis
+  - technical_analysis
+  - derivatives_analysis
+  - macro_analysis
+default_analysis_mode: verified
+default_action_policy: read_only
+allowed_data_sources:
+  - web
+  - market_data
+allowed_tool_categories:
+  - crypto_basic
+  - technical
+  - news
+  - derivatives
+  - tw_stock
+  - us_stock
+  - finance
+  - commodity
+  - forex
+  - global_stock
+  - macro
+default_skills: []
+required_tools:
+  - resolve_symbol

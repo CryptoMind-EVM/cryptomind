@@ -1,0 +1,25 @@
+{
+  "query_types": {
+    "price_lookup": {
+      "patterns": [
+        "價格",
+        "股價",
+        "現在多少",
+        "多少錢",
+        "幾塊",
+        "price",
+        "quote",
+        "trading at"
+      ],
+      "requires_symbol_candidates": true
+    }
+  },
+  "query_policies": {
+    "price_lookup": {
+      "resolved_role": "market_lookup",
+      "resolved_fail_reason": "tool_unavailable",
+      "discovery_role": "discovery_lookup",
+      "discovery_fail_reason": "discovery_tool_unavailable"
+    }
+  }
+}

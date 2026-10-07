@@ -1,0 +1,79 @@
+# VCS / local env
+.git
+.gitignore
+.venv
+.python-version
+.vscode
+.idea
+
+# Python cache/artifacts
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Runtime logs / outputs
+*.log
+logs/
+test_results/
+tmp/
+
+# Runtime data (should be created at runtime, not baked into image)
+core/database/*.db
+core/database/*.sqlite
+core/database/*.sqlite3
+data/*.jsonl
+
+# Local QA / docs not needed in runtime image
+tests/
+pw_test/
+docs/
+instructions/
+ARCHITECTURE_AUDIT_REPORT.md
+README.md
+README_CN.md
+
+# scripts/ 大多是本機維運工具（migrate/reset/scan），不必進 runtime image；
+# 但 app image（root Dockerfile 的 `COPY . .`）同時給 cron-worker／analysis-worker
+# 用（docker-compose.prod.yml 共用 stock-ton/app:local），排程腳本必須在裡面。
+# 用 whitelist 保留 cron 排程用腳本，其餘維運腳本不進映像檔。
+# ⚠️ crontab.txt 引用的每個腳本都必須在 whitelist（缺了會靜默不跑）；
+#   守衛：tests/test_cron_image_whitelist.py（拿 crontab 對這份白名單）。
+#   cron_governance / cron_expire_members / analysis_worker
+#   cron_wallet_monitor（每 10 分鐘錢包警示）/ cron_recompute_trust（每日 trust 重算）
+#   cron_daily_brief（每小時早報）/ cron_onchain_sync（鏈上→帳本）
+#   cron_judgment_scores（判斷評分）/ cron_calendar_sync（系統事件同步）
+#   cron_purge_assistant_history（過期的聊天室 AI 助理問答）
+scripts/*
+!scripts/check_env_sanity.py
+!scripts/cron_governance.py
+!scripts/cron_expire_members.py
+!scripts/analysis_worker.py
+!scripts/cron_wallet_monitor.py
+!scripts/cron_recompute_trust.py
+!scripts/cron_daily_brief.py
+!scripts/cron_onchain_sync.py
+!scripts/cron_judgment_scores.py
+!scripts/cron_calendar_sync.py
+!scripts/cron_purge_assistant_history.py
+# app 啟動時補回舊版 chunk（docker-entrypoint.sh 呼叫；tests/test_keep_old_assets.py 守）
+!scripts/keep_old_assets.sh
+
+# Local tooling / meta folders
+.claude/
+.agent/
+
+# 部署腳本／文件在 host 上跑（deploy/deploy.sh、deploy/llm/*），不進 app image
+deploy/
+# 正式站 DB dump（deploy/vm/backup-db.sh 寫 ~/backups；手動 dump 也可能落在 repo 裡）——
+# `COPY . .` 絕不能把它烤進 image
+backups/
+**/*.sql.gz
+**/*.dump
+
+# OS junk
+.DS_Store

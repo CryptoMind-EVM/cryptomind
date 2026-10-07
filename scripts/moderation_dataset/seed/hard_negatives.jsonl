@@ -1,0 +1,856 @@
+{"text": "防詐提醒：不管對方自稱客服、管理員還是工程師，只要開口要助記詞就是詐騙，一個字都不要給。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "再說一次🙏 官方「不會」私訊你，私訊你的都是假的。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "官方不會私訊你，記住。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "【分享】最近常見的假投資群組手法整理：先拉你進 LINE 群、老師帶單、前幾次讓你小賺出金，等你加碼就說要繳「保證金」才能提領。看到這流程直接封鎖。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "求職的朋友注意⚠️ 說要「借你的帳戶走金流」、「日領 3000 只要提供存摺」的都是在找人頭帳戶，出事是你要負法律責任。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "幫大家整理辨識假交易所的三個方法：1. 網址拼字 2. App 不在官方商店 3. 出金要先繳稅金。只要中一個就快跑🏃", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "提醒長輩：銀行跟警察不會叫你去 ATM 解除分期付款設定！！", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "交友軟體認識的對象開始跟你聊投資、說他舅舅在交易所上班有內線，99% 是殺豬盤，別問我怎麼知道的😅", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "看到有人在論壇私訊說能幫忙「找回被騙的幣」，要先付費。這也是二次詐騙，被騙過的人特別容易再被盯上。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "小科普🧠：approve 無限額度授權很危險，不明的 DApp 不要亂連錢包，記得定期去檢查並撤銷舊授權。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "冒充名人的投資廣告又出現了，FB 上那種「某某教你月入百萬」的都是盜用照片，大家看到就檢舉🚨", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "不要相信空投網站要你「輸入助記詞領取」，正常的空投頂多連錢包簽名，而且簽之前要看清楚內容。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "我們這裡的管理員不會主動私訊任何人要求轉帳或驗證錢包，請大家截圖檢舉冒充者。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "🚩「保證獲利」「穩賺不賠」「日報酬 3%」這些字眼出現就可以直接判定是詐騙了，正常投資沒有保證這回事。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "📞 遇到可疑狀況先打 165 反詐騙專線問，不用不好意思，他們每天接一堆這種電話。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "年底常見的假退稅簡訊又來了，國稅局不會用簡訊附連結叫你填卡號。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "防詐小教室📚：假客服常用的話術是「您的訂單被誤設成批發商，每月會自動扣款」，聽到這句直接掛電話。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "提醒：USDT 地址投毒的案例越來越多，轉帳前要比對完整地址，不要只看前後幾碼。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "地址投毒是什麼？就是騙子用跟你常用地址頭尾很像的地址轉 0 元給你，等你從歷史紀錄複製錯。轉帳務必從通訊錄或手動核對。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "勸大家不要把自己的交易所帳號借別人「幫忙刷量」，那叫人頭帳戶，洗錢防制法現在罰很重。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "有人說可以代操、每月固定分紅，還要你先儲值到他給的平台…這種 100% 是龐氏，不要碰。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "看到新幣 TG 群組喊單「明天要拉十倍」，大部分是 pump and dump，最後接盤的是散戶。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "辨識釣魚網站：看瀏覽器網址列，不要點搜尋結果最上面的廣告，很多是仿冒官網。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "提醒新手：Google 搜尋錢包名稱時，前幾個「贊助」結果有可能是假網站，從官方 X 或 GitHub 連過去比較安全。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "接到自稱「交易所風控部門」的電話說你的帳戶涉及洗錢要配合調查，掛掉。真的有問題會在 App 裡通知，不會叫你轉幣到別的地方。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "「安全帳戶」這四個字是詐騙集團最愛用的，任何要你把錢轉到安全帳戶的都是騙子。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "警察不會用 LINE 視訊做筆錄，也不會傳「拘票」照片給你，看到就知道是假檢警🚔", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "想問大家 有沒有覺得最近假的 MetaMask 擴充功能變多？下載前記得看發行者跟下載數。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "分享我阿嬤差點被騙的經過：對方假裝是孫子說換號碼，然後要借錢。幸好她打給我確認。大家記得跟家裡長輩約好「通關密語」。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "不要掃路邊或停車單上的 QR code 繳費，之前有新聞說是假的繳費頁。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "投資群組裡的「助教」很熱心教你開戶下載 App，如果 App 不在 App Store、要用描述檔安裝，就是假平台。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "雲端挖礦「保本」方案都要很小心，大部分只是拿後面的錢付前面的人。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "剛發現有人冒用我們論壇名義開 Telegram 群組，請認明本站只有公告欄列出的官方帳號。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "防詐口訣：一聽👂（聽到投資保證獲利）、二掛📵（掛電話）、三查🔍（打 165 查證）。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "小提醒：剛註冊的新手常被拉進「VIP 帶單群」，退群就好，不需要跟對方吵。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "如果有人說你中獎了，但要先付手續費或稅金才能領，那就不是中獎，是被盯上了。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "各位，看到「論壇官方客服」加你 LINE 好友的，那不是我們，本站沒有 LINE 客服。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "有人假冒交易所寄 Email 說「帳戶將被凍結，請於 24 小時內驗證」，寄件網域仔細看都是怪怪的。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "硬體錢包只從官網或授權經銷商買，二手的或拆封過的可能被動過手腳。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "收到附「助記詞卡片」的硬體錢包請直接退貨不要用，正版不會預先給你助記詞。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "網拍賣東西被要求「加 LINE 私下交易」或「點連結簽署金流服務」，十之八九是假買家。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "分享一個判斷是不是龐氏的方法：問自己「這個收益是從哪裡來的？」答不出來的話，你可能就是那個收益。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "我真的拜託各位，不要因為對方每天跟你道早安就相信他的投資建議😭", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "提醒：交易所的「提幣白名單」功能請打開，就算帳號被盜，對方也比較難把幣轉走 🔐", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "打開 2FA，不要只用簡訊驗證，改用 Authenticator App，SIM 卡被盜轉的案例很多📱", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "防範 SIM swap：可以去電信門市設定「補卡須本人親臨」，多一層保障。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "有人在 Discord 私訊你說「你的 NFT 被盜，點這裡驗證」，那就是要盜你的人。Discord 的 mod 不會先私訊。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "提醒：「解凍金」「保證金」「稅金」「手續費」——出金前要你再付錢的平台，錢基本上拿不回來了，不要再加碼。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "防詐專區新增了一篇「假投資 App 清單」，大家可以參考，不過清單永遠追不上新的，自己還是要判斷。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "新手常見迷思：鏈上轉帳是不能撤回的，所以任何「先轉一點測試看看」的要求都要想清楚對象是誰。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "不是在嚇人，最近很多人收到「包裹配送失敗」的簡訊，連結點下去會要你輸入信用卡，千萬別填。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "🙅 拒當車手！網路上說「幫忙收包裹、領現金、一趟五千」的工作，就是詐騙集團在找車手，被抓會判刑。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "學生族群注意：打工廣告寫「只要提供網銀帳號密碼，每月租金 5000」——這是租用人頭帳戶，帳戶會被列警示，以後連開戶都難。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "鍛鍊一下判斷力：如果一個投資機會好到你覺得「怎麼只有我知道」，那答案通常是「因為是騙你的」。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "我自己的原則：陌生人推薦的幣、App、網站，一律不碰。認識的人推薦的，也要自己查過。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "看到有人在留言區貼「客服 Line ID」說可以幫忙解決出金問題，那些都是詐騙留言，請檢舉，不要加。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "有 TG 機器人說能「複製大戶跟單」只要授權錢包，這種授權可能讓對方直接轉走你的幣。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "防詐不是笨不笨的問題，是資訊落差。多分享給家人朋友就是在幫忙❤️", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "假的「幣圈導師」常見特徵：炫富照片、跑車、名錶、說自己財務自由，然後賣你課程或群組會員。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "分享反詐資源：165 全民防騙網可以查詢假投資網站與詐騙 LINE ID，查一下不會少塊肉。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "Rug pull 怎麼避免？看合約有沒有開源、流動性有沒有鎖、團隊有沒有公開身分、持幣是否過度集中。都沒有就保持距離。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "有人用「我是你以前的同學」加你 IG，聊幾天就開始推 USDT 理財，請小心。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "公告翻成白話文：任何以本站名義要求你連結錢包領獎的訊息都是假的。我們沒有在發獎。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "我覺得現在最可怕的是 AI 換臉影片，假冒名人推薦投資平台，連聲音都很像。眼見不一定為憑👀", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "遇到假檢警說你涉案要「監管帳戶」，記得：檢察官不會要你交錢或交存摺。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "【防詐】假冒政府補助的簡訊又來了\n「您有一筆補助款未領取」這種簡訊都不要點，政府補助請自己上官方網站查。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "大家要注意「代儲值」「低價代購 USDT」這種，常見的是錢付出去對方就消失，或給你來源有問題的幣讓你帳戶被凍結。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "場外 OTC 買幣請找有口碑、有實名的，價格比市價便宜太多本身就是警訊。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "「幫我收個款再轉給我，給你 2% 手續費」——不要答應，這就是在洗錢，你的帳戶會變警示帳戶。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "爸媽常用的 LINE 群組常常轉發假投資廣告，可以教他們把訊息丟給查證機器人確認。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "最近假冒電信公司說欠費的語音電話很多，按 9 轉專人就是詐騙☎️", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "小技巧：交易所的防釣魚碼（anti-phishing code）設定起來，官方信件會帶你的專屬碼，沒有就是假信。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "千萬別在任何網站「輸入私鑰匯入錢包」來領空投或查收益，私鑰給出去就等於把錢包送出去。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "看到 YouTube 直播「某知名人士送 BTC，轉 1 顆回饋 2 顆」，那是盜用帳號的假直播，送幣活動 100% 是假的 ❌", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "投資詐騙最常走 FB 廣告→LINE 群組→假 App 這條路線，任何一個環節覺得怪就停下來。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "致新手：在社群裡主動私訊說要幫你的，通常不是好人。真正想幫忙的會在公開討論區回覆。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "警示：最近有假的錢包 App 出現在第三方商店，圖示跟名字幾乎一模一樣，請只從官方連結下載。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "有人問我「那個網站出金很快」是不是代表安全？不是喔，前期出金快是為了讓你放大金額。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "請大家別在公開頻道貼自己的錢包截圖加交易所帳號，容易被有心人鎖定。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "防詐 tip💡：對方急著要你「現在、馬上、今天之內」決定的，先放一天再說，詐騙最怕你冷靜。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "長輩被拉進「股票飆股群」的請注意，那種群組常常最後推你去買沒人聽過的海外平台。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "記得這句話：Not your keys, not your coins。但同樣的，keys 也別交給任何人🔑", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "【長文】整理今年看到的五種常見幣圈詐騙\n1. 假客服：冒充交易所要驗證碼\n2. 殺豬盤：交友後帶你投資\n3. 假空投：要你連錢包簽授權\n4. 地址投毒：轉 0 元污染你的轉帳紀錄\n5. 假 App：不在官方商店、出金要繳費\n共通點就是「急」跟「要你的東西」。看完分享給家人吧🙏", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "以前覺得被騙的人很傻，直到我同事被假投顧騙了快百萬…真的不要小看這些集團的劇本，大家多留意。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "有人在問「保證金不夠被平台凍結」怎麼辦，我只能說，正規交易所不會用這種理由要你另外匯款到個人帳戶。", "label": 0, "kind": "scam_warning", "lang": "zh-TW"}
+{"text": "提醒大家：任何自称“客服”让你提供验证码的都是骗子，验证码就是你的钥匙。", "label": 0, "kind": "scam_warning", "lang": "zh-CN"}
+{"text": "防骗科普：所谓“杀猪盘”，就是先培养感情再诱导投资，前期让你小赚，后期全部卷走。", "label": 0, "kind": "scam_warning", "lang": "zh-CN"}
+{"text": "别再相信“内部消息”了，真有内幕的人不会在群里免费告诉你🙄", "label": 0, "kind": "scam_warning", "lang": "zh-CN"}
+{"text": "求职的朋友注意，“刷单返利”是诈骗，先做几单小的给你返钱，然后让你垫大额。", "label": 0, "kind": "scam_warning", "lang": "zh-CN"}
+{"text": "提醒：出借、出售银行卡和电话卡是违法的，“两卡”查得很严，别为了几百块把自己搭进去。", "label": 0, "kind": "scam_warning", "lang": "zh-CN"}
+{"text": "有人冒充平台管理员发私信，说要“认证钱包”，请直接举报，管理员不会私信你。", "label": 0, "kind": "scam_warning", "lang": "zh-CN"}
+{"text": "买币一定要走正规渠道，场外交易遇到来路不明的U，银行卡可能被冻结，到时候有理说不清。", "label": 0, "kind": "scam_warning", "lang": "zh-CN"}
+{"text": "‼️再提醒一次：转账前核对完整地址，地址投毒专门坑复制粘贴的人。", "label": 0, "kind": "scam_warning", "lang": "zh-CN"}
+{"text": "防诈小贴士：遇到“征信修复”“注销校园贷”的电话直接挂，都是骗子。", "label": 0, "kind": "scam_warning", "lang": "zh-CN"}
+{"text": "我被詐騙了…對方說是交易所客服，我給了驗證碼，帳號裡的 USDT 全被轉走。現在該怎麼報警？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "請問被假投資平台騙了要去哪裡報案？是去戶籍地派出所還是哪一間都可以？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "家人被交友詐騙騙了快 80 萬，現在情緒很差💔 想問有沒有人知道後續流程，錢有機會追回來嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "我的 MetaMask 被盜了，昨天點了一個空投連結，今天早上發現 ETH 全部沒了😭 還有什麼補救的嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "求助🙏 錢包授權到惡意合約，剩下的幣要怎麼救？先轉到新錢包嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "經驗分享：去年被殺豬盤騙 30 萬，報案後警方有調到對方的收款帳戶，但錢大部分已經被領走。把流程寫出來給大家參考。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "被騙之後才知道要越快通報越好，銀行端有機會先把對方帳戶列警示，我太晚報了QQ", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "交易所帳號被盜登，對方用我的帳號亂買垃圾幣，請問可以跟交易所申訴嗎？要準備什麼資料？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "我是受害者但帳戶被列為警示帳戶了…因為我把錢轉給「平台指定的個人帳戶」，現在要怎麼證明自己不是共犯？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "想問有沒有人處理過「被騙走的 USDT 在鏈上被凍結」的案例？聽說發行商可以凍結，是要透過警方申請嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "剛剛差點被騙，對方說我中了交易所抽獎，要先轉 50 USDT 驗證。還好我先上來論壇問，謝謝之前發防詐文的大大🙇‍♂️", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "被騙 5 萬不算多，但很嘔😤 有人報案後真的有拿回來嗎？還是報了也只是備案？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "我男友被拉進「帶單群」投了兩百多萬進一個 App，現在出不了金，對方要他再繳 20% 保證金。我要怎麼說服他這是詐騙😢", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "筆錄的時候警察問我有沒有對方的錢包地址、交易 hash、對話截圖，建議大家被騙後第一時間先把這些都存下來。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "有沒有律師朋友可以問一下：被詐騙後提告民事求償，實際上可行嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "Telegram 被盜了，對方用我的帳號跟朋友借錢，已經請大家不要理。有辦法把帳號拿回來嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "分享我被盜的原因給大家當借鏡：我把助記詞截圖存在手機相簿，手機中毒後就被偷了。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "被騙後最難的是跟家人坦白。我拖了兩個月才說，結果家人反而很支持我。想說的是，不要一個人扛。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "有人用我的身分證影本去開了交易所帳戶，我收到奇怪的 KYC 通知，該報警還是先聯絡交易所？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "請問在 P2P 買幣，賣家收了錢不放幣，平台的申訴流程大概多久？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "剛發現信用卡被盜刷 3 筆海外交易，已經打給銀行停卡了，請問還需要報警嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "我被釣魚網站騙去輸入了交易所帳密，現在改密碼來得及嗎？目前還沒發現異常提領。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "網拍被假買家騙了，對方說要我去 ATM 操作「簽署金流協議」，我照做轉出了 2 萬…現在該怎麼辦？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "想請教：被騙的錢如果最後流向交易所，警方可以發函請交易所凍結嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "爸爸被假檢警騙走存款，現在很自責不太吃東西。有沒有人知道被害人支持團體或資源？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "我寫了一篇被騙過程的完整時間軸，希望可以幫其他人辨識手法，連結在個人頁。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "錢包被清空了，鏈上看到被轉進混幣器，是不是就追不到了？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "報案三聯單拿到了📄 接下來要做什麼？有人有經驗嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "被交友軟體上的人騙，他說是在新加坡做外匯的工程師。現在回想很多破綻，但當下真的看不出來。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "我的 X 帳號被盜後發了很多假空投連結，如果你有點到請趕快撤銷授權！真的很抱歉🙇", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "被騙了要不要跟交易所講？我的錢是從交易所提出去轉給詐騙平台的。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "請問被詐騙的損失，報稅時可以列損失扣除嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "剛剛接到假冒銀行的電話，我有說出身分證末四碼，會不會有問題？要怎麼補救？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "我買到假的硬體錢包，用了兩週就被盜，現在要找誰處理？賣家已經聯絡不到。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "想問大家：被騙後有人打電話說是「追款公司」可以幫忙追回，要先付 3 成費用，這是不是又是詐騙？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "求問：遊戲帳號被盜走了虛寶，這個可以報警嗎？還是只能找遊戲公司客服？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "被騙不丟臉，丟臉的是騙子。我整理的報案流程：①保存證據 ②打 165 ③到派出所報案 ④聯絡銀行/交易所。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "有人知道被盜的 NFT 可以在交易市場檢舉、讓它被標記不能交易嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "朋友被騙之後一直說要「再投一筆把本賺回來」，怎麼勸都勸不聽，好無力😮‍💨", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "我是小額受害者，被騙 3000 塊的 USDT。雖然不多，但還是報案了，希望多一筆紀錄可以幫警方串案。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "報警後警察說虛擬貨幣的案子很難追，有點灰心。有沒有成功追回的案例可以分享？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "銀行帳戶突然被凍結，說是「疑似涉詐」，但我只是在 P2P 賣了 USDT 給別人…請問要怎麼解除？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "被駭之後要做的事 checklist：換掉所有密碼、重灌電腦、開新錢包、檢查授權、通知朋友。大家補充一下？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "有人也收過交易所「帳戶異常」的假信然後點下去嗎？我點了但沒輸入任何東西，這樣有風險嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "姊姊被假投顧騙了，對方的公司名稱查不到登記。可以去金管會檢舉嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "我被盜了 0.8 ETH，鏈上看到已經轉進某交易所的入金地址，我可以直接寫信給那間交易所嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "被騙後一直睡不好，覺得自己很蠢。後來去看身心科，醫生說這種反應很正常。分享給有同樣狀況的人。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "我把電腦拿去修，結果瀏覽器裡的錢包就被盜了…這種可以告維修店嗎？要怎麼舉證？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "有人盜用我的照片在 IG 開假帳號推銷投資，已經檢舉好幾次了，大家看到請幫忙檢舉🙏", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "想報案但不知道怎麼描述加密貨幣的部分，警察好像也不太熟。有沒有人整理過報案時要帶的資料？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "我才 19 歲，被網路上說「代操穩賺」的人騙了學費…不敢跟爸媽講，可以自己去報案嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "被騙之後收到很多陌生訊息說可以幫我討回來，是不是我的資料被賣了？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "🆘 求救：電腦中了木馬，剪貼簿被換掉，轉出去的地址不是我貼的那個。錢以經轉了，還有救嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "我上週被盜，今天又收到假冒警方說要幫我處理案件的簡訊，還要我加 LINE…幸好有先查證。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "被盜經驗：我在一個假的錢包「更新視窗」輸入了 24 個字。現在才知道真的軟體永遠不會叫你輸入助記詞。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "請問各位被騙之後，有去法律扶助基金會諮詢過嗎？有沒有幫助？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "帳戶被當成人頭帳戶，因為我把網銀帳密給了自稱「家庭代工公司」的人。現在被通知要去做筆錄，好害怕，該找律師嗎？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "我把被騙的對話紀錄、轉帳紀錄都整理成 PDF 給警方了，警方說會併案。給大家一個方向：證據越完整越好。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "網購顯示卡被騙，賣家用的是假的賣場頁面。已經報案，也在 PTT 發文警示。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "求問幣安帳號被盜的申訴入口在哪？客服機器人一直繞圈圈。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "被騙後最想跟大家說：不要因為想「快點賺回來」而去碰槓桿，我就是這樣第二次虧損的。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "朋友借我的名義在交易所開戶，現在出事了警察找上我，請問該怎麼辦？我真的不知道他拿去幹嘛。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "有人知道被詐騙的錢包地址可以去哪裡回報標記嗎？想讓其他人看到警示。", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "標題：被假投資平台騙 47 萬的完整經過（求建議）\n今年三月在 FB 看到名人推薦的投資課程廣告，加了 LINE 之後被拉進群組，助教教我下載一個 App 入金 USDT。前兩次出金都很順利，後來說要升級 VIP 才能做「大單」，我陸續投入 47 萬。上週要出金時說要先繳 20% 稅金。我已經停止付款，也打了 165。想請問接下來除了報案，還能做什麼？證據要怎麼整理比較好？", "label": 0, "kind": "victim_help", "lang": "zh-TW"}
+{"text": "我被骗了，对方说是平台客服，让我把币转到“安全钱包”，现在联系不上了。请问应该怎么报警？", "label": 0, "kind": "victim_help", "lang": "zh-CN"}
+{"text": "钱包被盗了，助记词只存在一个记事本里，不知道怎么泄露的。剩下的资产应该怎么转移？", "label": 0, "kind": "victim_help", "lang": "zh-CN"}
+{"text": "求助：家里老人被“养老投资”项目骗了十几万，有没有人知道能找哪些部门？", "label": 0, "kind": "victim_help", "lang": "zh-CN"}
+{"text": "我在 C2C 卖币，银行卡被冻结了，说是收到涉案资金，请问怎么申请解冻？", "label": 0, "kind": "victim_help", "lang": "zh-CN"}
+{"text": "分享一下被盗的教训：我在搜索引擎点进了假的钱包官网，下载的插件是钓鱼的。大家一定从官方渠道下载。", "label": 0, "kind": "victim_help", "lang": "zh-CN"}
+{"text": "被刷单诈骗骗了 8000，报警后警察让我等消息，这个一般要多久？😞", "label": 0, "kind": "victim_help", "lang": "zh-CN"}
+{"text": "有没有人遇过“退款客服”诈骗？我已经报警了，想知道后续还要做什么。", "label": 0, "kind": "victim_help", "lang": "zh-CN"}
+{"text": "新聞：警方破獲假投資詐騙機房，起獲多支手機與上百本人頭存摺，主嫌已被收押。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "🚨【快訊】刑事局查獲以加密貨幣洗錢的地下匯兌集團，金流高達數十億元。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "判決出爐：提供帳戶給詐騙集團使用的男子，被依幫助詐欺及洗錢罪判刑 4 個月，得易科罰金。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "區塊鏈分析公司的年度報告指出，流向非法地址的加密貨幣中，詐騙相關的占比相當高。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "研究報告：殺豬盤的受害者不只是長輩，不少是 30 到 40 歲的上班族。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "外電報導：美國司法部起訴多名涉嫌經營加密貨幣龐氏騙局的被告，指控他們吸金數億美元。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞整理：東南亞詐騙園區的人口販運問題嚴重，聯合國報告估計有數十萬人被困在當地。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "海巡署在港口查獲大批走私毒品，市價估計逾億元，相關嫌犯已移送地檢署偵辦。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "地檢署起訴一名利用 NFT 平台洗錢的嫌犯，檢方指出其以自買自賣方式墊高成交價。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "警方提醒：近期詐騙集團改用虛擬貨幣 ATM 收款，已有多名民眾受害。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞：某知名交易所前執行長因詐欺罪被判處 25 年徒刑，法官認定其挪用客戶資金。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "法院判決：車手集團成員因提領被害人款項，各被判處 1 年至 2 年不等徒刑。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "研究：駭客組織去年透過跨鏈橋攻擊竊取大量加密資產，資安公司建議專案方加強多簽管理。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞報導指出，北韓駭客組織 Lazarus 被認為與多起交易所遭駭事件有關。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "地方新聞：一名男子在超商持刀搶劫，警方 20 分鐘內將其逮捕，所幸無人受傷。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "社會新聞：夜市發生鬥毆事件，兩人送醫，警方已調閱監視器釐清案情。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "調查局破獲利用空殼公司進行跨境洗錢案，涉案金額約 15 億元。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "外媒：歐洲刑警組織搗毀一個大型網路釣魚服務平台，逮捕數十名嫌犯。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "法學討論：洗錢防制法修法後，「無正當理由交付帳戶」的處罰構成要件整理。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞：法院認定被告雖是因求職受騙而交付帳戶，但未盡注意義務，判處緩刑並附條件。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "警方破獲毒品分裝場，查扣大量 K 他命與包裝器材，三名嫌犯到案。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞：一名詐團幹部遭遣返回台後羈押，檢方追查其在柬埔寨的據點。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "美國 FBI 網路犯罪報告顯示，投資詐騙是損失金額最高的類別，其中多數涉及加密貨幣。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "評論文章：為什麼詐騙集團偏愛 USDT？分析穩定幣在跨境洗錢中的角色與監管對策。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞：穩定幣發行商宣布配合執法機關凍結多個涉及詐騙的地址。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "判決摘要：法院認定加密貨幣屬於財產，詐騙取得的 USDT 應予沒收並發還被害人。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "社會新聞：高中生遭網友恐嚇勒索，家長報警後嫌犯落網。警方呼籲家長多關心孩子的網路交友。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞：某縣市發生槍擊案，警方迅速封鎖現場並逮捕嫌犯，犯案動機仍在調查中。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "刑事局統計：今年上半年詐欺案件數較去年同期下降，但平均每件財損上升。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞：警方查獲網路賭博集團，伺服器架設在海外，以虛擬貨幣收付賭資。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "專題報導：從受害者到被告——那些被騙去當人頭帳戶的年輕人。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞：歐盟 MiCA 法規上路，交易所須加強反洗錢審查與旅行規則。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "法院判決：駭客入侵交易所竊取虛擬貨幣，被判 7 年有期徒刑並沒收不法所得。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "國際新聞：美國財政部制裁多名協助販毒集團以加密貨幣洗錢的人士。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞：檢警聯手破獲假冒網拍客服的詐騙機房，逮捕 30 多名嫌犯。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "讀報心得：今天看到被詐騙集團吸收的車手大多才 20 歲出頭，真的很令人感慨😔", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞：知名 YouTuber 被冒名推薦投資，本人發聲明澄清並報警處理。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "報導：研究指出深偽（deepfake）影片被大量用於投資詐騙廣告，平台下架速度跟不上。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "社會新聞：男子酒駕肇事逃逸，警方循線查獲，依公共危險罪移送。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞：警方破獲電信詐騙集團，起出改號設備與話術劇本，劇本包含假冒檢察官的對話流程。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "法律新聞：最高法院針對虛擬貨幣詐欺案的沒收範圍做出新見解，值得關注。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "📰 新聞：英國警方查獲史上最大宗比特幣扣押案，涉及中國龐氏騙局的 6 萬多顆 BTC。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "判決：在網路上散布他人私密影像的被告被判刑，法官強調數位性暴力對被害人的傷害。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞：日本警方逮捕跨國詐騙集團成員，該集團以「國際戀愛詐騙」手法騙取高齡者存款。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞回顧：某大型交易所遭駭，損失約 15 億美元的 ETH，事後追查顯示資金被快速分散洗出。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "學術研究：以圖神經網路偵測以太坊上的釣魚地址，準確率顯著提升。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "社評：打詐不能只靠宣導，銀行與電信業者應負起更多攔阻責任。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞：警方在機場攔截攜帶毒品入境的旅客，毒品藏在行李箱夾層。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞：國際足球比賽爆發假球案，調查顯示與非法簽賭集團有關。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞：恐嚇取財案嫌犯以散布不實訊息威脅企業付款，警方循 IP 位址追查到案。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "讀了一篇論文，在講詐騙集團如何利用社群平台的推薦演算法找到受害者，滿有收穫的📄", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新聞：檢方查扣洗錢集團名下的超跑與豪宅，將聲請沒收。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "判決：前員工竊取公司加密貨幣私鑰並轉走資產，依背信罪判刑。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "【新聞整理】地檢署今日起訴一個跨國投資詐騙集團，起訴書指出，該集團以假冒名人的社群廣告吸引民眾加入 LINE 群組，再誘導下載假交易 App。被害人超過 300 人，損失總額逾 8 億元。檢方同時查扣集團成員名下的虛擬貨幣與不動產，將聲請沒收並發還被害人。", "label": 0, "kind": "crime_news", "lang": "zh-TW"}
+{"text": "新闻：警方破获一起利用虚拟货币洗钱的案件，涉案资金流水上亿元。", "label": 0, "kind": "crime_news", "lang": "zh-CN"}
+{"text": "法院判决：帮信罪案例增多，被告多为出售银行卡的年轻人。", "label": 0, "kind": "crime_news", "lang": "zh-CN"}
+{"text": "报道：东南亚电诈园区内部情况曝光，被骗去的人被没收护照、强迫工作。", "label": 0, "kind": "crime_news", "lang": "zh-CN"}
+{"text": "研究报告显示，加密货币诈骗中“杀猪盘”造成的损失连年上升。", "label": 0, "kind": "crime_news", "lang": "zh-CN"}
+{"text": "新闻：某地警方打掉一个跨境赌博团伙，涉案人员通过 USDT 结算赌资。", "label": 0, "kind": "crime_news", "lang": "zh-CN"}
+{"text": "案例分析：从某交易所被盗事件看冷热钱包管理的重要性。", "label": 0, "kind": "crime_news", "lang": "zh-CN"}
+{"text": "今天 ETH 血洗，多軍全滅，空軍殺紅了眼🩸", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "這波空單被爆倉，保證金直接被砍掉一大半。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "多單全滅，躺平。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "昨晚插針到 58000，我的 20 倍多單直接斷頭💀", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "主力倒貨倒得好兇，散戶接到手軟🫠", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "又是割韭菜的一天，我就是那根韭菜🌱", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "ETH 腰斬了還在抱，信仰值拉滿💎🙌", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "日線死亡交叉出現，短線可能還要再殺一波。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "黃金交叉跟死亡交叉都看過了，結果還是被洗出場🤡", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "歐印 SOL 的我現在只想哭😭", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "梭哈山寨的下場：三天 -70% 📉", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "空軍今天被屠殺，軋空軋到懷疑人生🚀", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "早上殺多，下午殺空，兩邊通殺，莊家最大🎰", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "台指期今天殺尾盤，夜盤再看看。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "這種行情就是多空雙巴，最好的策略是不要動。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "被洗下車後它就噴了，經典。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "有人跟我一樣半夜被強平嗎？醒來保證金沒了😵", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "槓桿開太大，一根針就被打穿，大家倉位要控制好。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "鯨魚大砸盤，2 億美元的多單一小時內被清算。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "全網爆倉 10 億美元，又是一個血流成河的週末🩸📉", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "斷頭賣壓湧現，融資維持率跌破 130% 的要小心了。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "散戶追高被套，主力出貨完畢，經典 K 線劇本。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "這根大陰線也太狠，直接砍掉三天的漲幅。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "又被收割了😑 下次再追高我就剁手。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "我的停損單被掃掉，然後就反彈了，主力是不是在看我的單？", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "小幣被拉高出貨，上線即巔峰，買的人全部套在山頂。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "站崗站到腿都麻了，誰來救救山頂上的我⛰️", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "跌成這樣，該抄底還是繼續等？目前覺得還沒殺完。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "今天的盤真的是屠宰場，連藍籌都被殺。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "空頭殺紅了眼，連 ETF 資金流入都止不住跌勢🐻", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "美股盤前大殺，那斯達克期貨 -2%，台股明天應該也會被拖累。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "恐慌指數爆表，大家都在割肉，反而是我開始分批接的時候。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "割肉出場 -40%，學到教訓：沒有停損計畫就不要上槓桿。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "爆倉三次之後我終於只做現貨了，心臟比較健康。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "📉 台股今天血流成河，加權指數跌超過 600 點，融資斷頭潮要來了嗎？", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "被軋空軋到停損，空單全滅，大家空要看時機啊。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "漲停打開又被殺到平盤，主力洗盤洗很大。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "韭菜的自我修養：追高、套牢、認賠、再追高🔁", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "被深套 50%，現在只能裝死。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "這種流動性，大戶一砸就是瀑布，小幣千萬不要開槓桿。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "BTC 一根大陽線把空頭全殺了，今晚空軍哀鴻遍野🐂", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "我只是去洗個澡，回來多單就被打爆了🚿💥", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "爆倉王又來報到了，這次 50 倍，一樣的結局🫡", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "「別人恐懼我貪婪」，但我貪婪的時候都剛好是被屠殺的開始。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "台積電今天被外資狂砍，賣超好幾萬張😩", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "外資今天大砍權值股，台股跌破季線。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "三大法人一起倒貨，散戶在接刀子。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "不要接掉下來的刀子，等它落地再說🔪", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "今天走勢叫做「殺多不殺空」，跌了又不給空單賺。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "下殺 8% 之後 V 轉，空軍被巴，多軍被嚇，只有現貨躺平的人笑。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "歐印 0050 是信仰，歐印 meme 是勇氣🫡", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "散戶被割完一輪，主力準備下一波拉抬了。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "量縮價跌，就是在磨散戶的耐心，看誰先投降。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "期貨結算日前一天，總會被殺一波，見怪不怪。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "今天這根下影線好長，代表下殺有人接，短線可能打底。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "我承認，昨天我在高點喊「上車」，今天就被腰斬了，大家別學我😭", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "跌到這裡已經是死亡區間了，再跌就是大底？", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "某某幣解鎖前一週，空軍準備好收割了。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "被套在 4000 的 ETH 戰士報到，一起站崗吧🫂", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "爆倉線就在 61000 附近，主力很可能去插那邊的針。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "清算地圖顯示上方空單密集，很容易被拉上去殺空。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "CPI 公布後一根針，多空雙殺，最慘的是兩邊都開的。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "Meme 幣的生命週期：發射→暴漲→主力倒貨→歸零→韭菜罵罵號。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "被收割不可怕，可怕的是同一招被收割三次🌱✂️", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "我的帳戶已經變成「慘」字了，今年第三次腰斬。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "這次跌勢是去槓桿，爆倉潮清完應該會比較健康。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "散戶情緒指標全面翻空，反指標的我準備買了。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "空單抱到底，今天終於殺下來，賺爽爽🍻", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "開盤直接跳空殺，連停損都來不及跑。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "日 K 連續五根黑 K，空頭排列，多頭別急著摸底。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "「血洗」這兩個字今天在幣圈被用了一百次，但今天真的是血洗。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "被強制平倉的感覺就像被老闆突然開除，什麼都來不及說。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "炒短線被巴到懷疑人生，還是回去定期定額吧。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "抄底抄在半山腰，結果是腰斬的那個腰。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "這是我看過最暴力的拉盤，一小時 +30%，空軍屍橫遍野🚀🚀", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "看到群組裡大家都在哀號被爆倉，我默默把槓桿降到 2 倍。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "美債殖利率狂飆，科技股被屠殺，Nasdaq -3%。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "被主力騙線騙到怕，突破都是假突破。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "熊市裡活下來最重要，不要被收割到連子彈都沒了。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "9 點一開就殺，散戶停損單全被掃光，掃完就拉，真的很會。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "期權賣方今天被打爆💥 波動率突然暴漲。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "全倉 vs 逐倉：全倉一次爆掉全部，逐倉只爆那一單，新手請用逐倉。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "昨晚的行情真的是教科書級的雙殺：先一根大陽線把空單全部軋出去，資金費率衝到 0.1%，接著主力反手砸盤，兩小時跌 9%，多單爆倉 6 億美元。最慘的是那些被軋空之後反手做多的人，兩邊都被收割。結論：高波動的時候，最好的部位是空手。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "我在也不開槓桿了，這禮拜被清算兩次，學費繳好繳滿。", "label": 0, "kind": "market_slang", "lang": "zh-TW"}
+{"text": "庄家又在砸盘洗筹码了，稳住别慌。", "label": 0, "kind": "market_slang", "lang": "zh-CN"}
+{"text": "这波行情韭菜被收割得干干净净，我也是其中一根。", "label": 0, "kind": "market_slang", "lang": "zh-CN"}
+{"text": "合约爆仓了，本金归零，以后再也不碰高倍杠杆了。", "label": 0, "kind": "market_slang", "lang": "zh-CN"}
+{"text": "大饼腰斩，二饼跌成狗，山寨直接归零🥲", "label": 0, "kind": "market_slang", "lang": "zh-CN"}
+{"text": "主力疯狂出货，散户还在抄底，熟悉的剧本。", "label": 0, "kind": "market_slang", "lang": "zh-CN"}
+{"text": "空军今晚被打爆了，一根大阳线干上去，爽！", "label": 0, "kind": "market_slang", "lang": "zh-CN"}
+{"text": "梭哈 meme 币的兄弟们，还活着吗？", "label": 0, "kind": "market_slang", "lang": "zh-CN"}
+{"text": "又是一个跌停板，满仓的朋友挺住。", "label": 0, "kind": "market_slang", "lang": "zh-CN"}
+{"text": "A 股今天杀跌，尾盘被国家队拉回来了。", "label": 0, "kind": "market_slang", "lang": "zh-CN"}
+{"text": "這部片的槍戰戲拍得超有張力，尤其是倉庫那段。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "程式卡住了，請問怎麼用 kill -9 把 process 砍掉？", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "昨晚打 Valorant 連續爆頭五個，人生巔峰🎯", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "雙 11 秒殺搶到顯卡，太開心了！", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "跟老闆殺價殺到 8 折，成功😆", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "下單後發現買錯，趕快砍單重下😅", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "這季動畫的打鬥作畫真的殺瘋了，每集都像劇場版。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "LOL 昨天上路被對面殺穿，整場崩潰🎮💀", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "這本推理小說的兇手設定太神了，最後一章完全猜不到。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "球賽最後 3 秒絕殺，全場沸騰🏀🔥", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "《捍衛任務》系列的動作戲完全是教科書等級。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "劇組今天殺青，大家一起去吃熱炒慶祝🎬", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "求推薦好玩的殭屍生存遊戲，最近在玩 7 Days to Die 很上癮。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "Linux 小技巧：用 pkill -f 加關鍵字可以一次砍掉所有相關的 process。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "Docker container 卡死，docker kill 之後記得把殘留的 volume 清一下。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "這個 bug 殺了我三天，結果只是少一個逗號🐛", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "爆肝三天終於上線。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "被老師的期末考屠殺，全班平均 42 分😇", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "這間拉麵店的叉燒好吃到爆炸💥", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "吃雞今天一場拿了 12 殺，第一次吃到雞🐔", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "籃球比賽被對手打爆，輸了 30 分，下次再來。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "《魷魚遊戲》看完了，有人要一起討論劇情嗎？（有雷）", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "Git 小提醒：git reset --hard 會直接砍掉你的變更，用之前三思。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "我寫的 script 會 fork 出一堆子行程，要怎麼一次全部 kill 掉？", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "在 Elden Ring 被 Boss 虐了 50 次，終於打贏了🗡️", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "這部韓劇的復仇情節超爽，女主角最後一集完勝。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "月底了，購物車的東西砍一砍，不然要吃土了。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "老闆說這個需求要砍掉重練，我心好累🥲", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "網球比賽第三盤搶七大逆轉，對手被殺到沒脾氣。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "Code review 被學長電到體無完膚，但學到很多🙏", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "西洋劍比賽拿到銅牌，雖然被冠軍刺中好幾劍😂", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "狼人殺今晚誰要來？缺兩個人～🐺", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "劇本殺推薦：這個本子推理邏輯很嚴謹，四小時玩得很過癮。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "拳擊課第一堂就被教練操到腿軟，但流汗很爽🥊", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "歷史課講到赤壁之戰，火燒連環船那段超精彩。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "《沙丘：第二部》的戰爭場面太壯觀了，IMAX 必看。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "🎮 遊戲更新後狙擊槍被大砍，現在一槍打不死人了。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "期末報告被組員雷到，最後我一個人扛。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "今天健身房練腿，練到「腿已經不是我的了」。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "搶演唱會門票比搶 IPO 還難，三秒就被秒殺🎫😭", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "刺客教條新作的潛行暗殺系統做得比前作好很多。", "label": 0, "kind": "violent_words_ok", "lang": "zh-TW"}
+{"text": "王者荣耀今晚拿了五杀，队友直接刷屏喊大神😂", "label": 0, "kind": "violent_words_ok", "lang": "zh-CN"}
+{"text": "Python 进程卡死了，Ctrl+C 不管用，怎么强制杀掉？", "label": 0, "kind": "violent_words_ok", "lang": "zh-CN"}
+{"text": "双十一秒杀活动又来了，手速不够快根本抢不到🛒", "label": 0, "kind": "violent_words_ok", "lang": "zh-CN"}
+{"text": "这部武侠剧的打戏拍得真好，一点都不假。", "label": 0, "kind": "violent_words_ok", "lang": "zh-CN"}
+{"text": "想問大家 HPV 疫苗男生也可以打嗎？有沒有建議的年齡？", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "分享：今天去做了子宮頸抹片檢查，其實沒有想像中可怕，女生們記得定期做。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "請問事後避孕藥要在多少小時內吃才有效？藥局可以直接買嗎？", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "最近壓力很大，晚上一直睡不好，有人試過正念冥想嗎？有用嗎？🧘", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "盯盤盯到焦慮症發作，去看了身心科，醫生建議減少看盤時間。分享給同樣狀況的人。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "戒菸第 30 天🚭 省下的錢拿去定期定額了，雙贏。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "想戒酒但每次應酬都破功🥲 大家有什麼方法嗎？", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "性教育應該從小開始，教孩子認識身體界線，懂得保護自己。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "保險套除了避孕，也能降低性傳染病的風險，這個觀念大家要有。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "乳房自我檢查的方法分享：每個月月經結束後一週做一次，摸到硬塊就去看醫生。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "攝護腺肥大的檢查流程是怎樣？爸爸最近夜尿很頻繁。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "我最近情緒很低落，對什麼都提不起勁，想找諮商但不知道從哪開始，有推薦嗎？", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "💛 分享資源：心情不好想找人聊，可以打 1925 安心專線，24 小時都有人接。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "不少縣市的社區心理衛生中心有提供免費或低價的心理諮商，可以查查看。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "長期熬夜看美股，結果胃食道逆流。大家要顧身體啊🥲", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "健康檢查報告出來膽固醇偏高，請問要先調整飲食還是要吃藥？", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "青春期的孩子問我月經是怎麼回事，有沒有適合的繪本推薦？", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "避孕藥吃了會不會變胖？醫生說個體差異很大，有人有經驗嗎？", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "性傳染病其實很常見，梅毒、淋病都可以治療，有疑慮就去篩檢，不用覺得丟臉。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "匿名愛滋篩檢可以去哪裡做？聽說有些地方是免費的。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "產後憂鬱不是矯情，老婆生完小孩情緒很不穩，我們一起去看了醫生，現在有好轉。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "交易虧損之後一直失眠、心悸，這是焦慮嗎？我應該掛哪一科？", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "菸癮很重的朋友可以去醫院戒菸門診，有補助，藥物也有幫助。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "恐慌發作的時候會覺得快喘不過氣，後來學了 4-7-8 呼吸法有改善一點🌬️", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "跟伴侶討論避孕方式，最後決定我去做結紮，手術其實很快。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "大家有在吃褪黑激素幫助睡眠嗎？會不會有依賴性？", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "生理期前情緒波動很大，這是經前症候群嗎？", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "憂鬱症吃藥半年了，現在狀況穩定很多🌱 想跟正在猶豫要不要看醫生的人說：去看吧，真的有幫助。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "酒精成癮不是意志力的問題，是需要治療的疾病，家人陪伴很重要。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "最近一直掉頭髮，壓力性落髮有人遇過嗎？", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "學校的性平教育教了「同意」的觀念，我覺得很重要：沒有說好就是不好。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "想問女生生理期的時候可以運動嗎？", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "男生的睪丸自我檢查也很重要，年輕男性的睪丸癌其實不算罕見。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "更年期症狀好難熬，熱潮紅加失眠，有姊妹推薦什麼方法嗎？", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "檳榔跟口腔癌的關係很明確，想戒的話可以去醫院的戒檳門診。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "我發現自己每天滑手機看幣價超過 6 小時，算是成癮嗎？想戒掉📵", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "備孕中，醫生建議先檢查甲狀腺跟補充葉酸，分享給大家。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "失眠好幾週了，醫生開了短效安眠藥，說不要長期吃。大家有什麼非藥物的方法？", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "衛教：預防泌尿道感染，記得多喝水、不要憋尿。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "朋友最近常說覺得很累、什麼都不想做，我很擔心他。想知道怎麼陪伴比較好？", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "運動真的是很好的情緒調節，我每天跑步 30 分鐘後心情穩定很多🏃‍♀️", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "性教育不是教壞小孩，是讓他們有正確資訊保護自己。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "打完 HPV 疫苗手臂痠了兩天，其他沒什麼副作用💉", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "二手菸對小孩影響很大，家裡有小朋友的抽菸請到外面。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "交易壓力大到睡覺磨牙，牙醫說要戴咬合板😬", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "分享一下我這半年的心理狀態：前幾年交易所倒閉那波虧了不少，之後每天失眠、上班也沒辦法專心，一直看手機。後來在朋友建議下去看了身心科，醫生診斷是焦慮症，開了藥也建議我搭配心理諮商。現在睡眠好很多，投資也改成定期定額，不再天天盯盤。想跟有類似狀況的人說，尋求協助不丟臉。", "label": 0, "kind": "health_sex_ed", "lang": "zh-TW"}
+{"text": "最近工作压力大，经常失眠，有没有人推荐的助眠方法？", "label": 0, "kind": "health_sex_ed", "lang": "zh-CN"}
+{"text": "九价 HPV 疫苗现在还难约吗？想给女儿预约。", "label": 0, "kind": "health_sex_ed", "lang": "zh-CN"}
+{"text": "戒烟第 100 天打卡，咳嗽少了很多，加油！💪", "label": 0, "kind": "health_sex_ed", "lang": "zh-CN"}
+{"text": "心理咨询真的有用，我去了三个月，学会了怎么处理焦虑。", "label": 0, "kind": "health_sex_ed", "lang": "zh-CN"}
+{"text": "避孕套和短效避孕药哪种更适合新婚夫妻？求科普。", "label": 0, "kind": "health_sex_ed", "lang": "zh-CN"}
+{"text": "泰國大麻政策反覆，相關的大麻概念股波動好大，大家怎麼看？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "美國大麻 ETF（MSOS）今年表現如何？聯邦重新分類的進度有人在追嗎？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "加拿大大麻公司 Tilray、Canopy Growth 連年虧損，還值得長期持有嗎？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "菲利普莫里斯（PM）轉型加熱菸後股息還算穩，存股族有人持有嗎？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "英美菸草 BTI 殖利率很高，但菸草業長期萎縮，這種高股息會不會是價值陷阱？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "澳門賭場股隨著旅客回流反彈🎰 金沙中國跟銀河娛樂哪個比較好？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "拉斯維加斯金沙（LVS）財報：澳門與新加坡營收都成長，股價盤後 +5%。", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "美國運彩合法化的州越來越多🏈 DraftKings 什麼時候能穩定獲利？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "軍工股在地緣政治緊張時通常會漲，洛克希德馬丁跟雷神你們會選哪個？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "漢翔今天漲停✈️ 國防預算增加真的有反映在營收上嗎？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "台灣國防概念股整理：漢翔、雷虎、龍德造船…大家有在追蹤嗎？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "Smith & Wesson（SWBI）財報出來，槍械銷售連續幾季下滑，股價反應不大。", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "Ruger（RGR）殖利率不錯，但槍枝銷售跟選舉週期關係很大，有人研究過嗎？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "🥃 酒類股分析：帝亞吉歐（DEO）被年輕人少喝酒的趨勢打壓，估值變便宜了。", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "台灣菸酒公司沒有上市，想投資酒類只能買國外的嗎？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "成人娛樂相關的上市公司其實有，像 RCI Hospitality（RICK）財報公開透明，純就財務面看估值偏低。", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "Playboy（PLBY）轉型品牌授權後還是虧損，這檔大家怎麼看？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "博弈股 vs 博弈幣：上市賭場公司至少有監管跟財報，比來路不明的「博弈幣」可靠多了。", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "公益彩券的盈餘有一部分會撥作社福用途，這個制度大家了解嗎？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "運動彩券在台灣是合法的，由政府授權發行，跟地下簽賭完全不一樣喔。", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "日本 IR（綜合度假村）預計在大阪開幕，相關概念股有哪些？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "國防 ETF（ITA）長期報酬不錯，但 ESG 基金通常會排除軍工，大家會在意嗎？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "ESG 排除的「罪惡股」（菸、酒、賭、軍火）長期報酬反而不差，有學術研究可以參考。", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "醫療用大麻在德國合法化後，歐洲相關公司的估值變化很大。", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "美國大麻公司因為聯邦法規難以使用一般銀行服務，這也是它們估值低的原因之一。", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "我只買 ESG 基金，但朋友說避開菸酒股會少賺，大家怎麼取捨？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "無人機概念股最近很熱，雷虎、經緯航太都有題材，但波動也大，量力而為。", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "Flutter 主要上市地轉到紐約之後，流動性有變好嗎？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "線上博弈公司 Evolution 股價跌了一大段，是監管風險還是成長放緩？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "菸草公司的訴訟風險要怎麼評估？看財報附註的或有負債嗎？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "我不抽菸，但我持有菸草股，這樣算不算矛盾？純粹討論投資邏輯🚬📈", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "茅台股價跟中國消費景氣連動很高，最近跌這麼多可以撿嗎？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-TW"}
+{"text": "军工板块今天集体大涨🚀 中航系领涨，有人上车了吗？", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-CN"}
+{"text": "白酒股估值已经回到历史低位了吗？想慢慢布局。", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-CN"}
+{"text": "澳门博彩股节假日数据不错，银河娱乐和金沙中国可以关注一下。", "label": 0, "kind": "legal_controversial_finance", "lang": "zh-CN"}
+{"text": "助記詞現在是寫在紙上放抽屜，總覺得不太安心，大家都怎麼保存？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "第一次要把交易所的幣提到冷錢包，有沒有人可以分享步驟？怕轉錯。", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "助記詞可以截圖嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "助記詞用鋼板刻起來是不是比較保險？防火防水那種。", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "請問 Ledger 跟 Trezor 哪個比較適合新手？🤔", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "交易所出金到銀行要多久？今天下午提的到現在還沒入帳⏳", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "KYC 一直卡在人臉辨識🤳 光線調了好幾次都失敗，有人遇過嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "第一次在交易所做 KYC，要上傳身分證正反面跟自拍，這是正常流程嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "USDT 轉帳要選 TRC20 還是 ERC20？手續費差很多嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "不小心把 USDT 用錯網路轉出去，交易所說可以申請找回但要手續費，正常嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "信用卡帳單可以分期嗎？這個月刷太多了😅", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "銀行帳戶跨行轉帳一天上限是多少？我要付房租。", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "提款卡掉了，要先打給銀行掛失還是先去分行？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "金融卡掛失之後補發要幾天？這段期間可以用網銀轉帳嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "冷錢包需要定期插電嗎？放太久會不會壞？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "助記詞要不要拆成兩份放不同地方？還是這樣反而增加遺失風險？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "有人用多簽錢包管理家庭資產嗎？想了解設定方式。", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "交易所入金選銀行轉帳，備註欄一定要填交易所給的代碼嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "📱 換手機了，Google Authenticator 要怎麼轉移？舊手機還在。", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "2FA 的備用碼我印出來了，放哪裡比較好？跟助記詞放一起會不會不好？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "MetaMask 怎麼新增 Base 網路？自訂 RPC 要填什麼？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "錢包裡出現一堆不明代幣，可以直接忽略嗎？聽說不要去互動。", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "交易所提幣的「Memo/Tag」是什麼？沒填會怎樣？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "轉 XRP 忘記填 Destination Tag，客服說要等 3~5 個工作天處理，有人遇過嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "Gas fee 怎麼設定比較省？半夜轉會比較便宜嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "台灣的交易所出金到銀行要不要繳稅？金額大的話要怎麼申報？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "提款卡被 ATM 吃卡了，打給銀行說要隔天去分行領，好麻煩🙃", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "信用卡可以設定海外交易通知嗎？在哪裡設？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "網銀的約定轉帳帳戶要臨櫃辦理嗎？還是線上就可以？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "🔐 第一次用硬體錢包，設定 PIN 碼的時候要注意什麼？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "交易所的 API key 只開讀取權限，接記帳軟體應該安全吧？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "想把交易所的幣全部轉到自己的錢包，大家都是分批轉還是一次轉？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "先轉一小筆測試✅ 確認到帳再轉大筆，這是我的習慣，大家也這樣嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "錢包地址可以重複使用嗎？還是每次都要產生新的？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "比特幣錢包的 Native SegWit 跟 Taproot 地址有什麼差？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "助記詞第 25 個字（passphrase）有必要設嗎？怕自己忘記。", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "家人過世後的加密資產要怎麼繼承？想提前規劃，讓家人知道怎麼取得。", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "數位資產遺囑有人做過嗎？要怎麼交代清楚又不讓助記詞外流？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "出金被交易所要求補充資金來源證明，要準備什麼文件？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "交易所的子帳戶功能是做什麼用的？可以分開管理不同策略嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "美金帳戶匯到海外券商要手續費多少？有沒有比較省的方式？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "複委託跟海外券商哪個適合小資族？我想買美股 ETF。", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "銀行的外幣帳戶可以直接入金到交易所嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "轉帳到冷錢包顯示 pending 好久，是不是 gas 給太低？可以加速嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "比特幣交易卡在 mempool，有人用過 RBF 加速嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "硬體錢包韌體更新前，要先確認助記詞備份好對吧？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "我把錢包裝在新電腦上，用助記詞還原後餘額是 0，是不是衍生路徑不同？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "Phantom 錢包可以同時管理 Solana 跟 EVM 嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "怎麼查看錢包已經授權過哪些合約？想清理一下。", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "交易所說我的帳號需要「重新驗證身分」，從 App 內的通知進去做就可以嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "信用卡帳單繳款可以用行動支付嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "銀行轉帳打錯帳號一碼，錢轉到別人帳戶了，要怎麼請銀行處理？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "ATM 無卡提款怎麼設定？有時候忘了帶卡很方便。", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "外送平台綁定的信用卡要怎麼移除？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "網銀登入一直顯示「密碼錯誤次數過多」，要怎麼解鎖？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "交易所的「資金密碼」跟登入密碼要設不同的嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "如何確認下載的錢包 App 是官方版本？看開發者名稱就可以嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "Seed phrase 抄寫有沒有建議的格式？我怕字跡潦草以後看不懂。", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "新手問題🔥🧊：熱錢包跟冷錢包差在哪？小額放熱錢包可以嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "硬體錢包掉了怎麼辦？只要有助記詞就能在新裝置還原對吧？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "交易所提幣上限怎麼提高？要升級 KYC 等級嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "想開美元帳戶收海外薪資，哪間銀行手續費比較低？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "匯款到國外要填 SWIFT code，這個在哪裡查？🌏", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "信用卡循環利息好高，有人做過債務協商嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "錢包 App 刪掉重裝後，需要重新輸入助記詞嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "助記詞要自己保管還是用硬體錢包廠商的備份服務？我比較傾向自己保管，大家怎麼看？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "用交易所的「閃兌」功能換幣會不會比掛單貴？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "台灣交易所買 USDT 再轉到國外交易所，流程是怎樣？手續費大概多少？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "交易所綁定的銀行帳戶，一定要跟 KYC 同名嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "帳號登入紀錄出現陌生 IP，已經改密碼跟登出所有裝置，還需要做什麼嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "硬體錢包的 PIN 輸錯幾次會怎樣？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "冷錢包跟交易所的資產怎麼一起記帳？有推薦的 App 嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "銀行說大額現金提領要填用途，這是新規定嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "新手求教冷錢包流程，我理解的步驟對不對？\n1. 從官網買硬體錢包，收到後檢查包裝\n2. 自己產生助記詞，抄在紙上，不拍照不存雲端\n3. 用小額從交易所提幣測試，確認地址正確\n4. 再轉大額\n5. 定期檢查韌體更新\n還有什麼要注意的嗎？", "label": 0, "kind": "wallet_ops", "lang": "zh-TW"}
+{"text": "怎么把交易所的 USDT 提到冷钱包？链选错了会怎样？", "label": 0, "kind": "wallet_ops", "lang": "zh-CN"}
+{"text": "助记词抄在纸上还是刻在钢板上比较好？求大家的保存经验。", "label": 0, "kind": "wallet_ops", "lang": "zh-CN"}
+{"text": "银行卡丢了，先在手机银行上挂失可以吗？", "label": 0, "kind": "wallet_ops", "lang": "zh-CN"}
+{"text": "交易所 KYC 审核一般要多久？我提交两天了还在审核中。", "label": 0, "kind": "wallet_ops", "lang": "zh-CN"}
+{"text": "信用卡账单可以最低还款吗？会不会影响征信？", "label": 0, "kind": "wallet_ops", "lang": "zh-CN"}
+{"text": "MetaMask 里的代币不显示，要手动添加合约地址吗？", "label": 0, "kind": "wallet_ops", "lang": "zh-CN"}
+{"text": "提币到钱包一直显示处理中，正常需要多久？😵‍💫", "label": 0, "kind": "wallet_ops", "lang": "zh-CN"}
+{"text": "硬件钱包到手要检查什么？包装有没有被拆过？", "label": 0, "kind": "wallet_ops", "lang": "zh-CN"}
+{"text": "006208 定期定額五年，最近終於看到報酬破 50%，分享一下我的扣款設定。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "小資族每月 3000 存 ETF，兩年下來累積了 8 萬多，雖然不多但很踏實💪", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "BTC 週線站上 20 週均線，歷史上這通常是多頭延續的訊號，但還是要看量能。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "台積電法說會重點整理：毛利率優於預期、AI 需求強勁、資本支出維持高檔。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "📊 我的配置：60% 全市場 ETF、20% 債券、10% BTC、10% 現金，大家的比例呢？", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "今年第一季報酬 +12%，主要來自美股科技股，加密貨幣反而拖累。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "RSI 背離有人在用嗎？我覺得在大週期上比較準。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "分享我做的 BTC 定投回測：每週 1000 元，從 2019 年到現在，報酬率比單筆進場穩定很多。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "高股息 ETF 填息速度怎麼看？0056 跟 00878 哪個比較穩？", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "財報季開始了，這週要看微軟、Google、Meta 的雲端營收📊", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "費半指數創高，但我覺得估值有點貴了，慢慢減碼。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "美債 ETF 殖利率 4% 多，算是不錯的防守配置嗎？", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "MACD 金叉配合量增，今天小試一筆多單，停損設在前低。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "比特幣減半後的歷史走勢整理，供大家參考，過去不代表未來。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "新手請益：該先存緊急預備金還是直接開始投資？", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "存股十年心得：中間遇過兩次大跌，沒賣的人最後都笑了😄", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "這季 Nvidia 資料中心營收又創新高，但股價反應平淡，市場預期太高了。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "我用 Excel 做了一個資產配置再平衡的表格，需要的人可以留言。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "費用率很重要‼️ 0.03% 跟 0.5% 的差距，30 年後會差很多。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "ETH 質押的年化收益大概 3%，加上價格波動，大家覺得值得嗎？", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "降息循環開始，對成長股跟加密貨幣是利多，但也要注意衰退風險。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "看了巴菲特的股東信，最有感的還是「別人貪婪時恐懼」那段。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "今年把一半的現金轉進短天期美債，在等更好的進場點。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "均線糾結之後通常會有大方向，目前在等突破確認。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "定期定額到底要不要停利？我設定 +30% 就贖回一半。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "想請教如何閱讀現金流量表？自由現金流要怎麼算？", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "本益比 15 倍算便宜嗎？要跟同產業比還是跟歷史比？", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "鏈上數據顯示長期持有者持續增加，交易所 BTC 存量下降，籌碼看起來很穩。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "用論壇的分析功能看了 SOL 的資金費率，目前偏多，但不算過熱。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "今年報酬 -8%，主要是追高買了一檔 AI 概念股，學到要控制單一持股比例。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "分享一個心法：只投自己看得懂的東西。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "黃金創歷史新高，有人有配置黃金 ETF 嗎？🥇", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "日圓貶值，日股 ETF 要不要選有避險的版本？", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "Apple 盤後財報：營收符合預期，iPhone 銷售略低於預估。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "我的定期定額扣款日改成每月 6、16、26 號，分散一點時間點。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "年輕人最大的資產是時間，複利效果越早開始越好。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "比特幣 ETF 每日淨流入是我現在觀察的指標之一。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "投資三年第一次報酬轉正🥹 真的要有耐心。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "季線支撐守住，短線看反彈到月線附近。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "請問大家記帳都用什麼 App？想把股票跟幣的資產一起追蹤。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "這檔 REITs 殖利率 6%，但利率上升時表現很差，要注意。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "退休金規劃：勞退自提 6% 是我覺得很划算的一步。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "讀完《漫步華爾街》，更確定指數化投資適合我。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "期現貨價差擴大代表市場情緒偏多，但也可能是過熱的訊號。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "每次大跌我都會加碼一點，但會控制在可承受範圍內。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "台股殖利率排名前 20 整理，僅供參考，請自行判斷。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "資金費率轉負，代表空單擁擠，短線可能有軋空行情。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "美股 ETF 的股息要被預扣 30% 稅，有沒有比較省的方式？", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "ETH/BTC 匯率持續走低，我在想要不要再平衡。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "我的投資日記第 100 天：學會了不要每天看帳戶。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "新手第一次買股票，買了一張中華電，心情很平靜😌", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "今天加碼 0050 一張✅", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "金控股財報不錯，今年配息可能提高。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "市值前十的幣種近一年表現比較圖，BTC 還是最穩的。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "大家怎麼設停利停損？我用移動停利，比較不會太早下車。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "半年檢視：美股 +15%、台股 +8%、幣 -3%，整體還可以。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "波段操作 vs 長期持有，我試了兩年，結果長期持有贏。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "存了一筆錢想買房還是繼續投資？兩邊都有道理，好糾結。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "這次財報 EPS 年增 30%，但營收只成長 5%，主要是業外收益，要小心。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "看懂 K 線的第一步：先學會看收盤價跟成交量。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "我的 BTC 平均成本 3 萬多，從 2020 抱到現在，感謝當時的自己🙏", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "長期投資最難的不是選標的，是忍住不亂動。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "有人在用每日早報嗎？我覺得總經事件整理很方便，省很多時間。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "年終獎金到手，一半存起來、一半投入 ETF，剩下的請自己吃頓好的🍣", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "分享我的 2025 年投資回顧：\n年初配置 70% 美股 ETF、20% 台股、10% BTC。全年總報酬約 +18%，最大回撤 -12%（四月關稅那波）。做對的事：沒有在恐慌時賣出、每月固定投入。做錯的事：追了一檔題材股虧了 30%。今年的目標是減少看盤次數，每季再平衡一次就好。", "label": 0, "kind": "investing_normal", "lang": "zh-TW"}
+{"text": "沪深300 定投两年，终于回本了，坚持就是胜利✌️", "label": 0, "kind": "investing_normal", "lang": "zh-CN"}
+{"text": "纳斯达克 100 ETF 是我目前的主力仓位，长期看好科技股。", "label": 0, "kind": "investing_normal", "lang": "zh-CN"}
+{"text": "分享一下我的资产配置：股票 50%，债券 30%，黄金 10%，比特币 10%。", "label": 0, "kind": "investing_normal", "lang": "zh-CN"}
+{"text": "今年基金收益 +9%，跑赢了货币基金，满意了。", "label": 0, "kind": "investing_normal", "lang": "zh-CN"}
+{"text": "比特币周线 MACD 金叉，中线可能要启动了，仅供参考。", "label": 0, "kind": "investing_normal", "lang": "zh-CN"}
+{"text": "价值投资的核心是安全边际，买得便宜比买得好更重要。", "label": 0, "kind": "investing_normal", "lang": "zh-CN"}
+{"text": "新手求问：港股通和美股券商开户哪个更方便？", "label": 0, "kind": "investing_normal", "lang": "zh-CN"}
+{"text": "代幣分配太扯了，團隊持幣 40%、半年就解鎖，這種垃圾幣我不碰。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "某交易所的客服效率真的很差，問題拖了一週都沒解決，已經考慮換平台😤", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這次 App 更新完介面變超難用，按鈕藏在奇怪的地方，希望開發團隊聽聽使用者意見。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "白皮書寫得天花亂墜，但 GitHub 半年沒更新，這種專案我不會碰。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這間交易所的手續費比別家貴一倍，還常常系統維護，真的不推", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "說是去中心化，結果多簽地址全是團隊自己的，騙誰啊。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這個 L2 宣稱 TPS 很高，實測卡爆，提款回主網還要等七天。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "某 KOL 的分析一直都很不準，每次喊多就跌，建議大家獨立思考。👎", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這個 meme 幣毫無基本面，就是純炒作，買之前要有歸零的心理準備。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "我覺得這間交易所上幣太浮濫，什麼幣都上，品質參差不齊。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "論壇的搜尋功能很難用，關鍵字都搜不到，希望改善🙏", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這篇分析文邏輯有問題，只挑對自己有利的數據，結論站不住腳。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "交易所的 KYC 要求一直變，上個月才驗證過這個月又要重來，很煩。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這個 DeFi 協議的 APY 太誇張，我不相信能持續，風險揭露也不夠。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "某公鏈又當機了，這已經是今年第三次，穩定性真的堪憂。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "很失望，原本很期待的 GameFi 玩起來完全不好玩，就是挖礦換皮。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "🔔🔔🔔 App 推播太多了，一天十幾則，關了又會自己打開，拜託修一下。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這家券商的 App 下單延遲好嚴重，開盤時常常卡住。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "專案的 roadmap 一延再延，承諾的功能都沒做出來，社群信心崩盤。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "交易所把我的提幣卡了三天，說是風控審核，又不給明確理由，很不透明。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "我覺得這個 NFT 系列畫風很普通，價格完全是被炒高的。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這次空投規則改來改去，早期用戶被犧牲，很不公平。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "某某幣的社群太激進了，一有人批評就被圍攻，這樣反而讓人更不想買。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "新上線的「AI 選股」功能根本像隨機推薦，準確度很低。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這間銀行的網銀介面十年沒改，用起來像在用古董。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "感覺很多投顧節目都像在業配，聽聽就好，不要照單全收。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "交易所的合約介面很容易讓新手誤開高槓桿，預設值應該要更保守。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "說好的社群治理，結果提案都是團隊說了算，投票只是形式。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這款錢包的 UI 好醜，而且常常顯示錯誤餘額，換掉了。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這間公司的法說會都在講願景，數字一句帶過，看不出誠意。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "我對某穩定幣的儲備透明度存疑，審計報告一直不完整。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這篇新聞標題太聳動，內文跟標題根本不一樣，標題黨🙄", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "論壇有些文章就是在喊單，可以加個標籤區分分析跟喊單嗎？", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這次升級後 gas fee 也沒有變便宜，宣傳跟實際落差很大。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這款理財 App 隱藏費用很多，看了條款才發現每月有管理費。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這個專案的創辦人很會行銷但技術一般，我比較保守看待。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "Bug 回報了一個月還沒修，客服只會說「已轉交技術團隊」🫠", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "有些幣圈 YouTuber 標題都在「最後機會」「千倍幣」，看了就累。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這套技術分析課程內容很淺，網路上免費的資料都比它詳細，不推。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這個交易所的中文翻譯很爛，很多地方看不懂，希望找專業的人翻。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "打了三次客服電話都在等待，最後直接斷線，體驗極差⭐", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這間的出金速度越來越慢了，以前當天到，現在要三天。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "抱怨一下：交易所半夜突然維護，連公告都沒提前發😤", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "空投查詢網站一直當機，伺服器準備不足，因該早就預料到流量了吧。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "這 App 今天好卡，是不是又當機了？", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "實際用了三個月的心得：這間交易所介面漂亮、幣種多，但缺點也很明顯。第一，出金審核時間不固定，有時候半小時、有時候兩天；第二，客服只有機器人，真人要排很久；第三，手續費結構很複雜，常常算不清楚實際成本。如果你是長期持有者，我建議不要把大額資產放在上面。", "label": 0, "kind": "criticism", "lang": "zh-TW"}
+{"text": "这个项目的代币分配太不合理了，团队和机构占了一大半，散户就是来接盘的。", "label": 0, "kind": "criticism", "lang": "zh-CN"}
+{"text": "某交易所客服太敷衍了，工单一周都没人回复。", "label": 0, "kind": "criticism", "lang": "zh-CN"}
+{"text": "这个 App 广告太多了，体验很差，卸载了👋", "label": 0, "kind": "criticism", "lang": "zh-CN"}
+{"text": "所谓的“百倍币”大部分都是空气，劝大家理性。", "label": 0, "kind": "criticism", "lang": "zh-CN"}
+{"text": "这次版本更新把我常用的功能删了，产品经理在想什么？", "label": 0, "kind": "criticism", "lang": "zh-CN"}
+{"text": "我最近開了一個 YouTube 頻道，記錄自己存 ETF 的過程，沒有業配，只是記錄，歡迎交流🙌", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "寫了一篇部落格整理冷錢包設定步驟，附截圖，希望對新手有幫助，連結在個人簡介。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "📣 本週六台北有一場區塊鏈開發者 meetup，免費參加，有興趣的可以去活動頁報名。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "交易所推薦碼分享：A7K2Q，用了雙方都有手續費折扣，不用也完全沒關係～", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "我們讀書會每月討論一本投資書，這個月是《持續買進》，歡迎加入一起讀📚", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "做了一個免費的 Google 試算表，可以追蹤股票跟幣的資產配置，有需要的拿去用。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "我在 Podcast 聊了這次 Fed 會議的看法，大約 30 分鐘，通勤時可以聽。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "分享我的 Notion 投資日記模板，免費下載，歡迎改良。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "🚀 黑客松開跑！主題是 Web3 + AI，獎金跟評審資訊都在官網，學生也可以組隊參加。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "新開的 IG 帳號會畫一些投資概念的圖解，像複利、資產配置，歡迎追蹤🎨", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "論壇這個月有優質心得活動，認真分享的可以拿到徽章，詳情看公告。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "我寫的開源工具可以匯出交易所的交易紀錄做報稅用，原始碼在 GitHub，歡迎發 PR。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "金融研究社辦了一場講座，請到業界分析師分享產業研究方法，開放校外報名。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "自己整理的「新手常見問題」電子書，免費，不用留 email。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "我們團隊在做一個鏈上數據儀表板，目前是 beta，想找人幫忙測試給回饋。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "推薦一個我常聽的總經 Podcast（非業配），主持人講得很淺顯。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "週末辦了一場線上分享會聊「如何讀財報」，講者是會計師朋友，免費報名。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "用推薦碼註冊可以拿到交易所的新手任務獎勵，我的碼放在下面，有需要再用，請自行評估。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "我開了一個 Discord 群組專門討論 Python 量化交易，只聊技術不喊單。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "新書分享：我把三年的投資筆記整理出版了，各大書店都有，感謝大家支持🙏", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "這是我拍的「幣圈小知識」短影片系列第一集，講什麼是穩定幣。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "論壇的朋友們，我在 Medium 寫了 DeFi 入門系列，總共 5 篇，免費閱讀。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "下週日有一場防詐講座，邀請到警察局的講師，地點在台中，免費入場。", "label": 0, "kind": "legit_promo", "lang": "zh-TW"}
+{"text": "我在 B 站做了一期视频，讲怎么看懂基金季报，欢迎大家去看看。", "label": 0, "kind": "legit_promo", "lang": "zh-CN"}
+{"text": "整理了一份免费的投资书单，从入门到进阶都有，需要的可以留言。", "label": 0, "kind": "legit_promo", "lang": "zh-CN"}
+{"text": "早安☀️ 今天也是看盤的一天。", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "週末有人要去爬山嗎？天氣看起來不錯⛰️", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "中午吃了一碗超好吃的牛肉麵🍜 心情變好。", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "颱風天放假在家🌀 大家都在幹嘛？", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "剛加入論壇，請多指教！我是投資新手。", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "下班了！今天好累，回家要追劇📺", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "有人推薦台南好吃的早餐嗎？下週要去玩。", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "貓咪今天把我的鍵盤當床睡，害我不能看盤🐱", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "好想放長假喔，但戶頭不允許😂", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "今天是我生日🎂 給自己買了一本書當禮物。", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "這個論壇的深色模式好好看，終於不傷眼了。", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "下雨天適合喝咖啡配財報，你們今天在看什麼？", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "中秋節快樂🥮 大家烤肉了嗎？", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "有人跟我一樣半夜睡不著來逛論壇的嗎？", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "求推薦好用的機械鍵盤，打字手感好的。", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "最近在學日文，有沒有推薦的 App？", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "今天第一次自己煮晚餐，雖然只是泡麵加蛋🍳", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "演唱會搶到票了！！！開心到睡不著🎤", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "有沒有人也是工程師轉來研究投資的？", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "謝謝大家之前回答我的問題，真的學到很多🙏", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "今天跑了 10 公里，破個人紀錄🏃", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "新年快樂！祝大家新的一年身體健康、投資順利🧧", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "剛看完一部講比特幣歷史的紀錄片，滿好看的。", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "狗狗今天去打預防針，乖乖的沒哭🐶", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "台北今天好熱，37 度是在開玩笑嗎🥵", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "有人在玩 Switch 嗎？最近有什麼好玩的？", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "換新工作第一天，好緊張😬", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "午休時間，來逛一下論壇，大家今天心情如何？", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "想問一下論壇的發文規則在哪裡看？", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "今天去參加朋友婚禮，好感動💒", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "推薦一部日劇：《重版出來！》，看完很有動力。", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "想學攝影，有沒有入門相機推薦？預算兩萬左右。", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "剛搬完家📦 整理東西整理到腰痠。", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "國慶有人要去看煙火嗎？🎆", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "早餐店阿姨今天多給我一顆蛋，好開心🥚", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "下班路上看到超美的夕陽，分享一下🌇", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "最近在減肥，晚餐只吃沙拉，好餓😩", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "有沒有適合通勤聽的 Podcast？什麼主題都可以。", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "大家都幾點起床？偶是被鬧鐘叫了五次才起來", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "終於考到駕照了！！🚗", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "下週要去日本出差，有什麼必買的嗎？", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "晚安🌙 明天還要上班，大家早點睡。", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "媽媽今天做了紅燒肉，太幸福了。", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "剛發現論壇可以換大頭貼，終於不是預設圖了😆", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "今天又是被叫去開會的一天，會議比工作還多。", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "大家午安，今天吃什麼？", "label": 0, "kind": "chitchat", "lang": "zh-TW"}
+{"text": "早上好！今天天气不错，适合出去走走。", "label": 0, "kind": "chitchat", "lang": "zh-CN"}
+{"text": "刚入坑，请大家多多关照🙏", "label": 0, "kind": "chitchat", "lang": "zh-CN"}
+{"text": "周末去爬了泰山，腿到现在还在酸。", "label": 0, "kind": "chitchat", "lang": "zh-CN"}
+{"text": "有没有人推荐好看的科幻小说？最近书荒了。", "label": 0, "kind": "chitchat", "lang": "zh-CN"}
+{"text": "国庆假期大家都去哪玩了？🎒", "label": 0, "kind": "chitchat", "lang": "zh-CN"}
+{"text": "收到這種簡訊：「您的帳戶異常，請點擊連結重新驗證」，大家小心，銀行不會這樣發。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "剛收到「【郵局】您的包裹因地址不完整無法配送，請於 24 小時內更新資料」加一個奇怪的網址。是詐騙，別點。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "有人私訊我：「我是交易所客服，您的帳戶涉及異常交易，請提供驗證碼協助解凍」。截圖檢舉了，大家注意。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "警示⚠️ 這段話術很常見：「老師帶單，勝率 95%，跟單三天回本」。看到請直接退群。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "我媽收到 LINE 訊息：「媽，我換手機號碼了，先加這個新的」，然後就開始借錢。家裡有長輩的提醒一下。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "釣魚信件範例：「Your wallet has been compromised. Please verify your seed phrase within 12 hours.」——任何要你輸入助記詞的都是假的。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "今天在 TG 看到「限時空投！連接錢包即可領取 500 USDT」，點進去是要你簽 setApprovalForAll，千萬不要。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "分享一個詐騙電話的開場白：「您好，這邊是健保署，您的健保卡在外地被盜用…」聽到就掛。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "交友軟體上的對象說：「我叔叔在交易所做量化，有個漏洞可以套利，我帶你一起賺」——經典殺豬盤台詞。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "退稅詐騙範本：「您有一筆退稅款項待領取，請點選連結填寫帳戶資料」。國稅局不會這樣通知。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "這種留言大家看過嗎？「感謝 XX 老師讓我三個月賺了 200 萬，有興趣的可以加他 LINE」，底下一堆假帳號回「真的有效」。都是詐騙的暗樁。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "小心這種求職廣告：「在家工作，只需提供帳戶收款，每日領薪 2000」。這是在招人頭帳戶。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "詐騙集團的對話截圖（已打碼）：「先儲值 1 萬體驗，保證三天翻倍」。拿出來給大家看看話術長怎樣。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "有人在我文章底下留言「錢包問題請聯絡技術支援 @xxx」，那是假帳號，請不要聯絡🚫", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "假檢警話術：「你的帳戶涉及洗錢案，現在要把資金轉到法院監管帳戶，不然會被羈押」。法院沒有監管帳戶！", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "我收到的 email 標題是「MetaMask 帳戶即將停用」，但 MetaMask 根本沒有帳戶系統，一看就是假的。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "網購假客服：「您昨天的訂單被誤設為 12 期分期付款，需要您配合操作取消」。真的不要理。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "看到 FB 廣告寫「XXX 總裁親自傳授：投入 1 萬，每月領息 3000」，名人照片是盜用的，已檢舉。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "「恭喜您獲得 iPhone 抽獎，只需支付 99 元運費」——這種都是騙信用卡資料的，大家別填卡號。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "手機跳出「您的 ETC 通行費逾期未繳，將加收罰鍰」+ 短網址。業者說他們不會用簡訊附連結催繳，不要點。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "有人在 Discord 狂發「Official mint is live! Only 200 left!」，連結是假的鑄造網站，連錢包就會被盜。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "有個陌生人加我說「抱歉加錯人了」，然後很自然地聊下去…後來果然開始推投資平台。遇到「加錯人」開場要警覺。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "被推銷的話術原文：「這不是投資，是幫平台做數據，每單佣金 5%」。這就是刷單詐騙。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "引用一則詐騙訊息給大家參考：「親愛的用戶，您的錢包已被列入凍結名單，請點擊下方連結並輸入助記詞以解除。」任何網站要助記詞都是騙子。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "Apple ID 被鎖定的假簡訊又在流傳了，網址根本不是 apple.com，大家注意別輸入密碼。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "剛剛有陌生號碼打來，語音說「您有一筆包裹被海關扣留，請按 9」。是詐騙，直接掛。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "詐騙者的 LINE 名稱會用「官方客服」「認證專員」，大頭貼放交易所 logo，真的很容易被騙到。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "收到這封：「恭喜您被選為 Early Adopter，可領取 2 ETH，請先支付 0.05 ETH Gas 費」。先付錢才能領的一律是假的。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "🚨 群組裡這種訊息一定是假的：「管理員通知：群組即將升級，請所有成員重新驗證錢包」。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "這段話術請大家記住：「你不投就是不信任我」——感情跟投資綁在一起就是殺豬盤🐷", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "這種私訊我收過三次了：「你好，看到你在論壇的發言很專業，我們有個內部群想邀請你」，進去就是喊單群。", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "「您的信用卡積分即將到期，請盡快兌換」的連結是釣魚網站，會偷卡號，我差點就填了😰", "label": 0, "kind": "quoting_scam", "lang": "zh-TW"}
+{"text": "有人发来：“您的社保卡账户异常，请点击链接处理”，大家别点，是钓鱼。", "label": 0, "kind": "quoting_scam", "lang": "zh-CN"}
+{"text": "骗子的原话：“兼职刷单，日结 300，一单一结”，看到这种的赶紧拉黑。", "label": 0, "kind": "quoting_scam", "lang": "zh-CN"}
+{"text": "有人在群里发：“内部消息，某币明天上大所，现在进场稳赚”，这种都是割韭菜的托。", "label": 0, "kind": "quoting_scam", "lang": "zh-CN"}
+{"text": "What's the cleanest way to kill a hung Python process on Windows? Ctrl+C does nothing.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "PSA: no mod or admin will ever DM you first. Anyone asking for your seed phrase is a scammer. Block and report.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Got scammed by a fake \"support agent\" on Telegram and lost 2 ETH. How do I file a police report and what evidence should I bring?", "label": 0, "kind": "en", "lang": "en"}
+{"text": "My wallet got drained after I clicked an airdrop link. Is there anything I can do to save the remaining tokens?", "label": 0, "kind": "en", "lang": "en"}
+{"text": "BTC bloodbath today. Longs got absolutely wrecked, $800M liquidated in an hour 🩸", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Got liquidated on my 25x long. Lesson learned, back to spot 🥲", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Whales dumped on retail again 🐋 Classic pump and dump on that low-cap.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "That movie had the best shootout scene I've seen in years 🍿", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Headshot streak in CS2 last night, best match of my life 🎯", "label": 0, "kind": "en", "lang": "en"}
+{"text": "News: police dismantle a crypto investment fraud ring operating across three countries.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Court sentences former exchange CEO to 25 years for fraud.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Report: investment scams were the costliest cybercrime category last year, according to the FBI, with most involving crypto.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "How should I store my seed phrase safely? Paper in a drawer feels risky.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "How do I move coins from an exchange to a hardware wallet without picking the wrong network?", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Is it normal for KYC to ask for a selfie holding my ID?", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Is there a way to kill all child processes when the parent dies in bash?", "label": 0, "kind": "en", "lang": "en"}
+{"text": "This token's tokenomics are garbage 🗑️ Team holds 45% with a 6-month cliff. Hard pass.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "The exchange's customer support is a joke 🙄 Two weeks and still no answer on my withdrawal ticket.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Cannabis stocks have been crushed since 2021. Is rescheduling a real catalyst or just hype?", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Defense stocks like LMT and RTX rallied on the new budget. Anyone holding?", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Casino stocks: is Las Vegas Sands a buy after the latest Macau numbers?", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Been feeling burned out and anxious from staring at charts all day. Started seeing a therapist and it really helps. Take care of yourselves.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Quick health PSA: the HPV vaccine isn't just for women, guys can get it too.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Day 60 without a cigarette 🚭 Saved enough to fund my monthly ETF buy.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Scam alert: \"Your account will be suspended, verify here\" emails are going around again. The sender domain is fake, don't click.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Someone DMed me \"I'm from the exchange security team, please send your 2FA code.\" Reported. Stay safe, folks.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "DCA'd into VOO for 4 years, up 48%. Boring works.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "RSI divergence on the weekly. Not financial advice, just what I'm watching.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Death cross on the daily, expect more chop.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Bears got slaughtered on that short squeeze lol 🚀", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Sniped a GPU in the flash sale, 30 seconds and it was gone.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Haggled the price down 15% on a used monitor, small win.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "git reset --hard nuked my changes 😭 Is there any way to get them back?", "label": 0, "kind": "en", "lang": "en"}
+{"text": "That boss fight in Elden Ring destroyed me 40 times before I finally beat it ⚔️", "label": 0, "kind": "en", "lang": "en"}
+{"text": "My grandma almost fell for the \"grandson in jail needs bail money\" call. Set up a family code word, people.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "My bank froze my account after a P2P sale. How long does it usually take to get it unfrozen?", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Lost my debit card. Do I call the bank first or just freeze it in the app?", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Never sign a transaction you don't understand. Use your wallet's simulation preview before approving.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "🚨 Anyone else get the fake \"USPS package on hold\" text? Don't click it.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Address poisoning is real: always verify the full address, not just the first and last four characters.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Sharing my blog post on setting up a multisig for family savings. No ads, no affiliate links.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Good morning everyone ☕ markets look quiet today.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Just joined the forum, long-time lurker, first post!", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Honest review: the app's new UI is confusing. The trade button is buried three menus deep.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "My referral code gives us both a fee discount if you sign up. Totally optional, no pressure.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Sports betting is legal in more states every year. Thinking about DraftKings stock but worried about the regulatory risk.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Interesting paper: graph neural networks for detecting phishing addresses on Ethereum.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Paper hands got shaken out, diamond hands got rewarded. Same story every cycle 💎🙌", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Fake job ad warning: \"just receive payments into your bank account and forward them\" is money mule recruitment. You'll be the one charged.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "How do I report a stolen NFT to marketplaces so it gets flagged?", "label": 0, "kind": "en", "lang": "en"}
+{"text": "My dad lost $40k to a pig-butchering scam that began with a \"wrong number\" text. Two months of daily chats, then a \"trading platform\" with fake gains, then a \"tax\" to withdraw. Reported to police and IC3. Talk to your parents.", "label": 0, "kind": "en", "lang": "en"}
+{"text": "Как остановить зависший процесс в Linux? Обычный kill не помогает, только kill -9.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Напоминание: администраторы никогда не пишут первыми. Если у вас просят сид-фразу, это мошенники.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Меня обманули через фейковую поддержку биржи, украли USDT. Куда обращаться в полицию и какие доказательства собрать?", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Кошелёк опустошили после того, как я подключил его к сайту с «аирдропом». Можно ли что-то спасти?", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Биткоин устроил кровавую баню, лонги ликвидированы на полмиллиарда долларов.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Мой лонг с плечом 20х ликвидировали ночью. Больше никаких плеч 🥲", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Киты сливают 🐋 хомяки покупают на хаях. Классика.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Хомяков снова постригли 🐹✂️", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Новости: полиция задержала группу, которая отмывала деньги через криптовалюту.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Суд приговорил основателя биржи к 25 годам за мошенничество.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Как безопасно хранить сид-фразу? Записал на бумаге, но переживаю.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Как перевести монеты с биржи на холодный кошелёк? Боюсь ошибиться сетью.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "KYC на бирже уже третий день на проверке, это нормально?", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Потерял банковскую карту, сначала звонить в банк или блокировать в приложении?", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Токеномика у проекта ужасная: команда держит 40%, разлок через полгода. Мусорный токен, имхо.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Поддержка биржи отвечает шаблонами уже неделю, очень разочарован.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Отличный фильм, перестрелка в финале снята потрясающе 🍿", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Вчера в CS2 сделал эйс одними хедшотами, лучший матч 🎯", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Распродажа: видеокарты разобрали за минуту.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Акции оборонных компаний выросли на фоне новостей о бюджете. Кто держит?", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Стоит ли держать табачные компании ради дивидендов? Чисто про финансовую сторону.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Последнее время сильный стресс и бессонница из-за рынка. Начал ходить к психологу, стало легче.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Бросил курить 3 месяца назад, сэкономленные деньги откладываю в ETF.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "⚠️ Осторожно: приходят СМС «Ваш счёт заблокирован, перейдите по ссылке». Банк так не пишет, не переходите.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Мошенники звонят от имени «службы безопасности банка» и просят перевести деньги на «безопасный счёт». Такого счёта не существует!", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Не соглашайтесь «принимать платежи» на свою карту за процент: это вербовка дропов, отвечать будете вы.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Покупаю индекс S&P 500 каждый месяц уже три года, доходность около 40%. Скучно, но работает.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "На дневке сформировался крест смерти, жду продолжения коррекции.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Шортистов разнесли в щепки, сквиз был жёсткий.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Всем доброе утро! Как настроение на рынке? ☕", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Делюсь своим блогом о настройке аппаратного кошелька, без рекламы.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Что делать, если отправил USDT не в той сети? Поддержка обещает вернуть за комиссию.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Приложение после обновления стало неудобным, кнопка вывода спрятана глубоко в меню.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Читал отчёт о криптомошенничестве: романтические схемы «забоя свиней» приносят огромные убытки.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Бабушке позвонили «из полиции» и сказали, что внук попал в аварию. Хорошо, что она перезвонила мне. Договоритесь с родными о кодовом слове.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Как подключить двухфакторку через приложение, а не по СМС?", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Вакцина от ВПЧ: кому её стоит делать и в каком возрасте?", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Всех с пятницей! Кто на выходных куда едет?", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Поймал маржин-колл на фьючерсах, депозит порезало вдвое 😵 Урок усвоен.", "label": 0, "kind": "ru", "lang": "ru"}
+{"text": "Мой реферальный код даёт скидку на комиссию обоим, но это по желанию, никого не заставляю.", "label": 0, "kind": "ru", "lang": "ru"}

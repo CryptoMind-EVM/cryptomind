@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title data-i18n="seo.forumPost">Post Detail - CryptoMind Forum</title>
+    <link rel="icon" type="image/png" href="/static/img/title_icon.png">
+    <link rel="stylesheet" href="/static/css/tailwind-built.css?v=52">
+    <script src="https://cdn.jsdelivr.net/npm/i18next@23.7.6/i18next.min.js" crossorigin="anonymous" integrity="sha384-OCCT+KZFt2FsqTxlTd8CUSq86zW/ZKmV0oe7qj36oye2CDbbVuxIXTY20t/u9LJt"></script>
+    <script src="https://unpkg.com/lucide@0.577.0" crossorigin="anonymous" integrity="sha384-orgVf2eX2+m1zKAOIi09hD0W6GtVhoOUmqDK+sysYB2JTZ4vS86j4jm+X7a4Nnei"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js" crossorigin="anonymous" integrity="sha384-wLhprpjsmjc/XYIcF+LpMxd8yS1gss6jhevOp6F6zhiIoFK6AmHtm4bGKtehTani"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js" crossorigin="anonymous" integrity="sha384-cwS6YdhLI7XS60eoDiC+egV0qHp8zI+Cms46R0nbn8JrmoAzV9uFL60etMZhAnSu"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css?v=46">
+    <script src="/static/config.js"></script>
+    <script src="/static/js/logger.js"></script>
+    <script src="/static/js/click-delegator.js?v=3"></script>
+    <style>
+        .prose p {
+            margin-bottom: 1em;
+            line-height: 1.8;
+        }
+        .prose ul,
+        .prose ol {
+            margin-bottom: 1em;
+            padding-left: 1.5em;
+        }
+        .prose ul {
+            list-style-type: disc;
+        }
+        .prose ol {
+            list-style-type: decimal;
+        }
+        /* styles.css 給聊天泡泡的圓形編號／圓點（.prose ol/ul li::before）在文章頁會跟上面的
+           原生編號、原生圓點疊成「1. ①」「• •」——文章用原生的就好 */
+        .prose ol li,
+        .prose ul li {
+            padding-left: 0;
+        }
+        .prose ol li::before,
+        .prose ul li::before {
+            content: none;
+        }
+        .prose h1,
+        .prose h2,
+        .prose h3 {
+            color: rgb(var(--color-text-primary));
+            font-weight: 800;
+            margin-top: 1.6em;
+            margin-bottom: 0.6em;
+            line-height: 1.3;
+        }
+        .prose code {
+            background: var(--border-subtle-color);
+            border: 1px solid var(--border-subtle-color);
+            border-radius: 6px;
+            padding: 0.15em 0.4em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .prose pre {
+            background: rgb(var(--color-surface-deep));
+            border: 1px solid var(--border-light-color);
+            border-radius: 14px;
+            padding: 1em 1.1em;
+            overflow-x: auto;
+            margin-bottom: 1em;
+        }
+        .prose pre code {
+            background: transparent;
+            border: 0;
+            padding: 0;
+        }
+        .prose blockquote {
+            margin: 1em 0;
+            padding: 0.9em 1em;
+            border-left: 3px solid rgb(var(--color-primary));
+            background: rgb(var(--color-primary) / 0.06);
+            color: rgb(var(--color-text-secondary));
+        }
+    </style>
+    <!-- early-init: 防 FOUC + 預設主題（與主站共用 localStorage.selectedTheme） -->
+    <script src="/js/early-init.js"></script>
+</head>
+<body class="bg-background text-textMain min-h-screen flex flex-col" data-page="post">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-[260px] bg-[linear-gradient(180deg,rgba(0,152,234,0.12),transparent)]"></div>
+    <nav class="sticky top-0 z-50 bg-surface/95 backdrop-blur-xl border-b border-borderSubtle pl-4 pr-16 py-3">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <a href="/static/index.html#forum" id="forum-back-link" class="flex items-center gap-2 text-secondary font-bold hover:text-primary transition">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span data-i18n="forum.backToForum">Back to Forum</span>
+            </a>
+            <div class="font-bold text-lg text-primary tracking-wide" data-i18n="forum.postContent">Post Content</div>
+            <div class="w-10"></div>
+        </div>
+    </nav>
+
+    <main class="flex-1 max-w-4xl mx-auto w-full px-2.5 pb-24 pt-4 md:px-6">
+        <article class="relative overflow-hidden rounded-[32px] border border-borderSubtle bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_48px_rgba(0,0,0,0.24)] sm:p-7 mb-6 md:rounded-[34px]">
+            <div aria-hidden="true" class="pointer-events-none absolute -right-12 -top-12 h-28 w-28 rounded-full bg-primary/8 blur-3xl"></div>
+            <div class="flex flex-col gap-2.5 mb-5 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3 sm:gap-y-2">
+                <span id="post-category" class="rounded-full border border-primary/25 bg-primary/12 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-primary"><span data-i18n="forum.c.analysis">Analysis</span></span>
+                <div class="flex min-w-0 flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2.5">
+                    <span id="post-author" class="font-semibold text-secondary"><span data-i18n="common.user">User</span></span>
+                    <span class="hidden text-textMuted sm:inline">·</span>
+                    <span id="post-date" class="text-xs text-textMuted sm:text-sm"><span data-i18n="forum.post.date">Date</span></span>
+                </div>
+            </div>
+
+            <h1 id="post-title" class="mb-6 text-[1.85rem] font-extrabold leading-tight text-textMain md:text-[2.2rem]"><span data-i18n="forum.post.loadingTitle">Loading Title...</span></h1>
+
+            <div id="post-content" class="prose max-w-none text-textMuted text-[15px] leading-7 mb-6 rounded-[28px] border border-borderSubtle bg-background/40 px-5 py-5"></div>
+            <div id="post-tags" class="flex flex-wrap gap-2.5 mb-6"></div>
+            <p class="mb-6 flex items-start gap-1.5 text-xs leading-5 text-textMuted/80">
+                <i data-lucide="info" class="mt-0.5 h-3.5 w-3.5 shrink-0"></i>
+                <span data-i18n="forum.disclaimer">Posts reflect the author's personal views and are not investment advice. Investing involves risk — do your own research.</span>
+            </p>
+
+            <div class="flex flex-col gap-5 pt-5">
+                <div class="flex flex-wrap items-center gap-3 rounded-[28px] border border-borderSubtle bg-background/40 px-4 py-4">
+                    <button id="btn-push"
+                        class="inline-flex items-center gap-2.5 rounded-full border border-borderSubtle bg-background/60 px-4 py-2.5 text-textMuted hover:text-success transition group text-sm font-semibold">
+                        <i data-lucide="thumbs-up" class="w-5 h-5 group-hover:scale-110 transition"></i>
+                        <span id="stat-push">0</span>
+                    </button>
+                    <button id="btn-boo"
+                        class="inline-flex items-center gap-2.5 rounded-full border border-borderSubtle bg-background/60 px-4 py-2.5 text-textMuted hover:text-danger transition group text-sm font-semibold">
+                        <i data-lucide="thumbs-down" class="w-5 h-5 group-hover:scale-110 transition"></i>
+                        <span id="stat-boo">0</span>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button id="btn-reply"
+                        class="min-h-[52px] bg-surfaceHighlight hover:bg-surfaceHighlight text-secondary px-5 py-3.5 rounded-2xl flex items-center justify-center gap-2.5 transition text-sm font-bold min-w-0">
+                        <i data-lucide="message-square" class="w-4 h-4"></i> <span data-i18n="forum.reply">Reply</span>
+                    </button>
+                    <button id="btn-tip"
+                        class="min-h-[52px] bg-primary/12 hover:bg-primary/20 text-primary px-5 py-3.5 rounded-2xl flex items-center justify-center gap-2.5 transition text-sm font-bold min-w-0">
+                        <i data-lucide="gift" class="w-4 h-4"></i> <span data-i18n="forum.tip">Tip</span> <span data-price="tip"><i data-lucide="loader"
+                                class="w-3 h-3 animate-spin inline-block"></i></span>
+                    </button>
+                    <button id="btn-report-post"
+                        class="sm:col-span-2 min-h-[52px] bg-surfaceHighlight hover:bg-danger/10 hover:text-danger text-textMuted px-5 py-3.5 rounded-2xl flex items-center justify-center gap-2.5 transition text-sm font-bold min-w-0">
+                        <i data-lucide="flag" class="w-4 h-4"></i> <span data-i18n="forum.report">Report</span>
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <div id="reply-form" class="hidden rounded-[28px] border border-borderSubtle bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 mb-6 animate-fade-in-down shadow-[0_14px_36px_rgba(0,0,0,0.16)]">
+            <h3 class="mb-4 font-bold text-secondary text-base" data-i18n="forum.submitReply">Submit Reply</h3>
+            <textarea id="reply-content" class="mb-4 min-h-[120px] w-full rounded-[22px] border border-borderSubtle bg-surfaceHighlight/80 px-5 py-4 text-textMain outline-none ring-0 transition focus:border-primary" data-i18n="forum.replyPlaceholder" data-i18n-attr="placeholder" placeholder="Share your thoughts..."></textarea>
+            <div class="flex justify-end gap-3">
+                <button data-click="closeModal" data-click-arg="reply-form" class="px-5 py-2.5 text-sm text-textMuted hover:text-secondary" data-i18n="forum.cancel">Cancel</button>
+                <button id="submit-reply" class="rounded-full bg-primary px-7 py-2.5 text-sm font-bold text-background transition hover:opacity-90" data-i18n="forum.submitReplyBtn">Submit Reply</button>
+            </div>
+        </div>
+
+        <section class="rounded-[32px] border border-borderSubtle bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-6 shadow-[0_14px_36px_rgba(0,0,0,0.16)]">
+            <h3 class="mb-5 flex items-center gap-2.5 text-lg font-bold text-secondary">
+                <i data-lucide="message-circle" class="w-5 h-5"></i>
+                <span data-i18n="forum.comments">Comments</span>
+            </h3>
+            <div id="comments-list" class="space-y-4">
+                <div class="py-4 text-center text-textMuted" data-i18n="forum.loadingComments">Loading comments...</div>
+            </div>
+        </section>
+    </main>
+
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="true" class="fixed z-[110] flex flex-col gap-3 pointer-events-none bottom-4 left-4 right-4 items-center md:bottom-auto md:top-24 md:left-auto md:right-4 md:items-end" style="bottom: var(--shell-toast-bottom, calc(1rem + env(safe-area-inset-bottom, 0px)));"></div>
+
+    <div id="confirm-modal" class="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-surface w-full max-w-sm max-h-[80dvh] overflow-y-auto custom-scrollbar p-6 rounded-3xl border border-borderLight shadow-2xl">
+            <div id="confirm-modal-icon" class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 bg-danger/20">
+                <i data-lucide="alert-circle" class="w-8 h-8 text-danger"></i>
+            </div>
+            <h3 id="confirm-modal-title" class="text-xl font-bold text-center text-secondary mb-2"><span data-i18n="common.confirm">Confirm</span></h3>
+            <p id="confirm-modal-message" class="text-textMuted text-center text-sm mb-6" data-i18n="common.confirmQuestion">Are you sure?</p>
+            <div id="confirm-modal-buttons" class="flex gap-3">
+                <button id="confirm-modal-cancel" class="flex-1 py-3 bg-surfaceHighlight hover:bg-surfaceHighlight text-textMuted font-bold rounded-2xl transition border border-borderSubtle" data-i18n="common.cancel">Cancel</button>
+                <button id="confirm-modal-confirm" class="flex-1 py-3 bg-primary hover:brightness-110 text-background font-bold rounded-2xl transition shadow-lg"><span data-i18n="common.confirm">Confirm</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="report-modal" class="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-surface w-full max-w-md max-h-[80dvh] overflow-y-auto custom-scrollbar p-6 rounded-3xl border border-borderLight shadow-2xl">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold text-secondary flex items-center gap-2">
+                    <i data-lucide="flag" class="w-5 h-5 text-danger"></i> <span data-i18n="forum.reportContent">Report Content</span>
+                </h3>
+                <button id="report-modal-close" class="text-textMuted hover:text-secondary">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form id="report-form" class="space-y-4">
+                <input type="hidden" id="report-content-type" value="post">
+                <input type="hidden" id="report-content-id">
+                <div id="report-error" class="hidden bg-danger/10 border border-danger/20 text-danger text-sm p-3 rounded-xl mb-4 flex items-start gap-2">
+                    <i data-lucide="alert-circle" class="w-4 h-4 mt-0.5 shrink-0"></i>
+                    <span id="report-error-msg"></span>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-textMuted mb-2" data-i18n="forum.reportReason">Report Reason</label>
+                    <select id="report-type" required class="w-full bg-background border border-borderLight rounded-xl p-3 text-textMain focus:border-primary outline-none">
+                        <option value="" data-i18n="forum.selectReason">Select a reason</option>
+                        <option value="spam" data-i18n="forum.spam">Spam</option>
+                        <option value="harassment" data-i18n="forum.harassment">Harassment</option>
+                        <option value="misinformation" data-i18n="forum.misinformation">Misinformation</option>
+                        <option value="scam" data-i18n="forum.scam">Scam</option>
+                        <option value="illegal" data-i18n="forum.illegal">Illegal Content</option>
+                        <option value="other" data-i18n="forum.other">Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-textMuted mb-2" data-i18n="forum.supplementNote">Additional Notes <span class="text-textMuted/60" data-i18n="common.optional">(optional)</span></label>
+                    <textarea id="report-description" rows="3" class="w-full bg-background border border-borderLight rounded-xl p-3 text-textMain focus:border-primary outline-none resize-none" data-i18n="forum.reportDetailPlaceholder" data-i18n-attr="placeholder" placeholder="Please provide additional details for review..."></textarea>
+                </div>
+
+                <div class="text-xs text-textMuted bg-surfaceHighlight rounded-lg p-3">
+                    <p class="font-medium mb-1" data-i18n="forum.reportReminder">Report Reminder</p>
+                    <ul class="space-y-1 text-textMuted/80">
+                        <li data-i18n="forum.reportTip1">Only report content that violates community guidelines</li>
+                        <li data-i18n="forum.reportTip2">Malicious reports may result in account restrictions</li>
+                        <li data-i18n="forum.reportTip3">Daily report limits vary by membership tier</li>
+                    </ul>
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button type="button" id="report-modal-cancel" class="flex-1 py-3 bg-surfaceHighlight hover:bg-surfaceHighlight text-textMuted font-bold rounded-2xl transition border border-borderSubtle" data-i18n="forum.cancel">Cancel</button>
+                    <button type="submit" class="flex-1 py-3 bg-danger hover:bg-danger/80 text-background font-bold rounded-2xl transition shadow-lg" data-i18n="forum.submitReport">Submit Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="/js/pages/forum-post.js"></script>
+    <script src="/static/forum/js/post-page.js?v=1"></script>
+    <!-- 子頁主題切換鈕（右上角） -->
+    <script src="/js/components/ThemeToggle.js"></script>
+    <script src="/js/site-sidebar.js?v=4"></script>
+</body>
+</html>

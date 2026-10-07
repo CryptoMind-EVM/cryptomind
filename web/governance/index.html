@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title data-i18n="governance.pageTitle">Community Governance System</title>
+    <link rel="icon" type="image/png" href="/static/img/title_icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css?v=46">
+    <link rel="stylesheet" href="/static/governance/governance.css?v=5">
+    <!-- i18next（classic-compat 的 i18n.js 需要；governance 先前完全沒載 → 整頁停在英文預設文字） -->
+    <script src="https://cdn.jsdelivr.net/npm/i18next@23.7.6/i18next.min.js" crossorigin="anonymous" integrity="sha384-OCCT+KZFt2FsqTxlTd8CUSq86zW/ZKmV0oe7qj36oye2CDbbVuxIXTY20t/u9LJt"></script>
+    <!-- TON Connect SDK loaded via main page -->
+    <!-- TON Connect SDK loaded via main page -->
+    <!-- early-init: 防 FOUC + 預設主題（與主站共用 localStorage.selectedTheme） -->
+    <script src="/js/early-init.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 頂部導航 -->
+        <header class="governance-header">
+            <h1 data-i18n="governance.pageTitle">🛡️ Community Governance System</h1>
+                <p class="subtitle" data-i18n="governance.subtitle">Community oversight platform maintained by PRO members</p>
+        </header>
+
+        <!-- 標籤切換 -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="report" data-i18n="governance.submitReport">Submit Report</button>
+            <button class="tab-btn" data-tab="review" data-i18n="governance.reviewQueue">Review Queue <span class="pro-badge">PRO</span></button>
+            <button class="tab-btn" data-tab="my-reports" data-i18n="governance.myReports">My Reports</button>
+            <button class="tab-btn" data-tab="violations" data-i18n="governance.violationRecords">Violation Records</button>
+            <button class="tab-btn" data-tab="leaderboard" data-i18n="governance.leaderboard">Leaderboard</button>
+        </div>
+
+        <!-- 提交檢舉 -->
+        <div id="report-tab" class="tab-content active">
+            <div class="card">
+                <h2 data-i18n="governance.submitContentReport">📝 Submit Content Report</h2>
+                <p class="hint" data-i18n="governance.reportHint">Found violating content? Fill in the info below, PRO reviewers will deliberate.</p>
+
+                <form id="report-form" class="governance-form">
+                    <div class="form-group">
+                        <label data-i18n="governance.contentType">Content Type</label>
+                        <select id="content-type" name="content_type" required>
+                            <option value="" data-i18n="governance.selectPlaceholder">Please select...</option>
+                            <option value="post" data-i18n="governance.post">Post</option>
+                            <option value="comment" data-i18n="governance.comment">Comment</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-i18n="governance.contentId">Content ID</label>
+                        <input type="number" id="content-id" name="content_id" data-i18n="governance.contentIdPlaceholder" data-i18n-attr="placeholder" placeholder="Enter content ID" required>
+                        <small class="hint-text" data-i18n="governance.contentIdHint">You can find the ID in the content URL</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-i18n="governance.reportType">Report Type</label>
+                        <select id="report-type" name="report_type" required>
+                            <option value="" data-i18n="governance.selectPlaceholder">Please select...</option>
+                            <option value="spam" data-i18n="governance.spam">Spam</option>
+                            <option value="harassment" data-i18n="governance.harassment">Harassment</option>
+                            <option value="misinformation" data-i18n="governance.misinformation">Misinformation</option>
+                            <option value="scam" data-i18n="governance.scam">Scam</option>
+                            <option value="illegal" data-i18n="governance.illegal">Illegal Content</option>
+                            <option value="other" data-i18n="governance.other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-i18n="governance.detailDescription">Detailed Description <span class="optional" data-i18n="governance.optional">(Optional)</span></label>
+                        <textarea id="description" name="description" rows="4"
+                                  data-i18n="governance.descriptionPlaceholder" data-i18n-attr="placeholder"
+                                  placeholder="Please describe the specific violation..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" data-i18n="governance.submitReportBtn">Submit Report</button>
+                        <span id="daily-limit" class="limit-info"></span>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 檢舉規則說明 -->
+            <div class="card info-card">
+                <h3 data-i18n="governance.reportRules">📋 Report Rules</h3>
+                <ul class="rules-list">
+                    <li data-i18n="governance.rule1">Free users can report 5 times/day; PRO members can report 10 times</li>
+                    <li data-i18n="governance.rule2">Only one report per user per content</li>
+                    <li data-i18n="governance.rule3">Cannot report your own content</li>
+                    <li data-i18n="governance.rule4">Malicious reports may result in account penalties</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 審核隊列 (PRO 專用) -->
+        <div id="review-tab" class="tab-content">
+            <div class="pro-only-notice" id="pro-notice" style="display: none;">
+                <h3 data-i18n="governance.proOnlyTitle">🔒 PRO Members Only</h3>
+                <p data-i18n="governance.proOnlyDesc">Upgrade to PRO to participate in community governance, review reports and accumulate reputation.</p>
+                <a href="/static/forum/premium.html" class="btn btn-primary" data-i18n="governance.upgradePro">Upgrade PRO</a>
+            </div>
+
+            <div id="review-content" style="display: none;">
+                <div class="card">
+                    <h2 data-i18n="governance.pendingReports">⚖️ Pending Reports</h2>
+                    <p class="hint" data-i18n="governance.pendingReportsHint">As a PRO reviewer, you can vote on whether reports are valid.</p>
+
+                    <div id="pending-reports-list" class="reports-list">
+                        <!-- 動態載入待審核檢舉 -->
+                    </div>
+
+                    <div class="loading" id="review-loading" style="display: none;">
+                        <span class="spinner"></span> <span data-i18n="governance.loading">Loading...</span>
+                    </div>
+
+                    <div class="empty-state" id="review-empty" style="display: none;">
+                        <p data-i18n="governance.noPendingReports">🎉 No pending reports at the moment</p>
+                    </div>
+                </div>
+
+                <div class="card info-card">
+                    <h3 data-i18n="governance.reputationTitle">📊 Review Reputation</h3>
+                    <div id="my-reputation" class="reputation-display">
+                        <p data-i18n="governance.loading">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 我的檢舉 -->
+        <div id="my-reports-tab" class="tab-content">
+            <div class="card">
+                <h2 data-i18n="governance.myReportsTitle">📋 My Report History</h2>
+
+                <div class="filter-bar">
+                    <button class="filter-btn active" data-status="all" data-i18n="governance.filterAll">All</button>
+                    <button class="filter-btn" data-status="pending" data-i18n="governance.filterPending">Pending</button>
+                    <button class="filter-btn" data-status="approved" data-i18n="governance.filterApproved">Approved</button>
+                    <button class="filter-btn" data-status="rejected" data-i18n="governance.filterRejected">Rejected</button>
+                </div>
+
+                <div id="my-reports-list" class="reports-list">
+                    <!-- 動態載入檢舉記錄 -->
+                </div>
+
+                    <div class="loading" id="my-reports-loading" style="display: none;">
+                        <span class="spinner"></span> <span data-i18n="governance.loading">Loading...</span>
+                    </div>
+
+                    <div class="empty-state" id="my-reports-empty" style="display: none;">
+                        <p data-i18n="governance.noReports">You haven't submitted any reports yet</p>
+                        <a href="#" class="btn btn-link" data-click="switchTabReport" data-i18n="governance.submitFirst">Submit your first report</a>
+                    </div>
+            </div>
+        </div>
+
+        <!-- 違規記錄 -->
+        <div id="violations-tab" class="tab-content">
+            <div class="card">
+                <h2 data-i18n="governance.violationTitle">⚠️ Violation Records</h2>
+
+                <div id="violation-points" class="points-summary">
+                    <!-- 動態載入違規點數 -->
+                </div>
+
+                <h3 data-i18n="governance.violationHistory">Violation History</h3>
+                <div id="violations-list" class="violations-list">
+                    <!-- 動態載入違規記錄 -->
+                </div>
+
+                    <div class="loading" id="violations-loading" style="display: none;">
+                        <span class="spinner"></span> <span data-i18n="governance.loading">Loading...</span>
+                    </div>
+            </div>
+
+            <div class="card info-card">
+                <h3 data-i18n="governance.pointsExplanation">📊 Points & Penalty Explanation</h3>
+                <table class="points-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="governance.pointsCol">Points</th>
+                            <th data-i18n="governance.penaltyCol">Penalty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1-4</td><td data-i18n="governance.noPenalty">No Penalty</td></tr>
+                        <tr><td>5-9</td><td data-i18n="governance.warning">⚠️ Warning</td></tr>
+                        <tr><td>10-19</td><td data-i18n="governance.suspend3d">🚫 Suspend 3 days</td></tr>
+                        <tr><td>20-29</td><td data-i18n="governance.suspend7d">🚫 Suspend 7 days</td></tr>
+                        <tr><td>30-39</td><td data-i18n="governance.suspend30d">🚫 Suspend 30 days</td></tr>
+                        <tr><td>40+</td><td data-i18n="governance.permanentBan">⛔ Permanent Ban</td></tr>
+                    </tbody>
+                </table>
+                <p class="hint"><small data-i18n="governance.pointsDecayNote">* Points decrease by 1 automatically if no new violations within 30 days</small></p>
+            </div>
+        </div>
+
+        <!-- 審核排行 -->
+        <div id="leaderboard-tab" class="tab-content">
+            <div class="card">
+                <h2 data-i18n="governance.leaderboardTitle">🏆 Reviewer Leaderboard</h2>
+                <p class="hint" data-i18n="governance.leaderboardHint">Thanks to these PRO members for contributing to community governance!</p>
+
+                <div id="leaderboard-list" class="leaderboard-list">
+                    <!-- 動態載入排行榜 -->
+                </div>
+
+                    <div class="loading" id="leaderboard-loading" style="display: none;">
+                        <span class="spinner"></span> <span data-i18n="governance.loading">Loading...</span>
+                    </div>
+            </div>
+
+            <div class="card info-card">
+                <h3 data-i18n="governance.reputationSystem">🎖️ Reputation System</h3>
+                <ul class="rules-list">
+                    <li data-i18n="governance.repRule1">Correct vote (matches final result): +1 reputation</li>
+                    <li data-i18n="governance.repRule2">Wrong vote (opposite to final result): -1 reputation</li>
+                    <li data-i18n="governance.repRule3">Higher reputation = greater voting weight</li>
+                    <li data-i18n="governance.repRule4">Accuracy > 90% grants extra weight bonus</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 檢舉詳情模態框 -->
+    <div id="report-detail-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div id="report-detail-content">
+                <!-- 動態載入檢舉詳情 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 訊息提示 -->
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="true"
+        class="fixed z-[110] flex flex-col gap-3 pointer-events-none bottom-4 left-4 right-4 items-center md:bottom-auto md:top-6 md:left-auto md:right-6 md:items-end"
+        style="bottom: var(--shell-toast-bottom, calc(1rem + env(safe-area-inset-bottom, 0px)));"></div>
+
+    <script src="/static/config.js"></script>
+    <script src="/static/js/click-delegator.js?v=3"></script>
+    <script type="module" src="/static/js/classic-compat.js?v=2"></script>
+    <!-- 子頁標準 i18n boot（建議 #7）：init + EN/中 語言鈕統一由模組提供 -->
+    <script type="module" src="/static/js/subpage-boot.js?v=2"></script>
+    <script src="/static/governance/governance.js?v=6"></script>
+    <!-- 子頁主題切換鈕（右上角） -->
+    <script src="/js/components/ThemeToggle.js"></script>
+    <script src="/js/site-sidebar.js?v=4"></script>
+</body>
+</html>

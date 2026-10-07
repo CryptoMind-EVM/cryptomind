@@ -1,0 +1,792 @@
+"""
+系統配置管理模組 V2
+
+提供從數據庫讀取和更新系統配置的功能。
+包含多層快取機制（進程內 + Redis）以提高性能。
+
+商用化設計：
+- 多層快取：進程內快取(10秒) -> Redis快取(5分鐘) -> PostgreSQL
+- 配置變更審計日誌
+- Redis Pub/Sub 跨進程快取失效
+- 支持即時更新配置，無需重啟服務
+- 分類管理（pricing, limits, general）
+- 權限控制（is_public 標記）
+
+架構圖：
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   API 請求   │ --> │ 進程內快取   │ --> │ Redis 快取  │ --> │ PostgreSQL  │
+└─────────────┘     │   (10秒)    │     │  (5分鐘)    │     └─────────────┘
+                    └─────────────┘     └──────┬──────┘
+                                               │
+                                        Pub/Sub 失效通知
+"""
+
+import asyncio
+import json
+import logging
+import threading
+import time
+from typing import Any, Dict, List, Optional
+
+logger = logging.getLogger(__name__)
+from core.redis_url import redact_redis_url, resolve_redis_url
+
+from .connection import get_connection
+
+# ============================================================================
+# Redis 支持（可選依賴）
+# ============================================================================
+
+try:
+    import redis
+
+    REDIS_AVAILABLE = True
+except ImportError:
+    REDIS_AVAILABLE = False
+    redis = None
+
+# ============================================================================
+# 配置常量
+# ============================================================================
+
+MEMORY_CACHE_TTL = 10  # 進程內快取 10 秒
+REDIS_CACHE_TTL = 300  # Redis 快取 5 分鐘
+CONFIG_CHANNEL = "config:updates"  # Redis Pub/Sub 頻道
+REDIS_KEY_PREFIX = "config:"
+
+# ============================================================================
+# 多層快取管理器
+# ============================================================================
+
+
+class ConfigCacheManager:
+    """
+    多層快取管理器
+
+    Layer 1: 進程內記憶體快取（10秒）- 最快，避免頻繁網絡請求
+    Layer 2: Redis 快取（5分鐘）- 跨進程同步
+    Layer 3: PostgreSQL 數據庫 - 持久化存儲
+    """
+
+    _instance = None
+    _lock = threading.Lock()
+
+    def __new__(cls):
+        if cls._instance is None:
+            with cls._lock:
+                if cls._instance is None:
+                    cls._instance = super().__new__(cls)
+                    cls._instance._initialized = False
+        return cls._instance
+
+    def __init__(self):
+        if self._initialized:
+            return
+
+        self._memory_cache: Dict[str, Any] = {}
+        self._memory_timestamp: float = 0
+        self._redis_client: Optional[Any] = None
+        self._pubsub_thread: Optional[threading.Thread] = None
+        self._initialized = True
+
+        # 初始化 Redis 連接
+        self._init_redis()
+
+    def _init_redis(self):
+        """初始化 Redis 連接"""
+        if not REDIS_AVAILABLE:
+            logger.warning("Redis module not installed, using in-memory cache")
+            return
+
+        redis_url, source = resolve_redis_url()
+        if not redis_url:
+            logger.warning("REDIS_URL not set, using in-memory cache")
+            return
+
+        try:
+            self._redis_client = redis.from_url(redis_url, decode_responses=True)
+            self._redis_client.ping()
+            logger.info("Redis connected (%s): %s", source, redact_redis_url(redis_url))
+
+            # 啟動 Pub/Sub 監聽線程
+            self._start_pubsub_listener()
+
+        except (asyncio.CancelledError, KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as e:
+            logger.warning(
+                "Redis connection failed, falling back to in-memory cache: %s", e
+            )
+            self._redis_client = None
+
+    def _start_pubsub_listener(self):
+        """啟動 Redis Pub/Sub 監聽器"""
+        if not self._redis_client:
+            return
+
+        def listener():
+            try:
+                pubsub = self._redis_client.pubsub()
+                pubsub.subscribe(CONFIG_CHANNEL)
+
+                for message in pubsub.listen():
+                    if message["type"] == "message":
+                        # 收到失效通知，清除本地快取
+                        self._memory_cache = {}
+                        self._memory_timestamp = 0
+                        logger.info(
+                            "Cache invalidation notification received, local cache cleared"
+                        )
+            except (asyncio.CancelledError, KeyboardInterrupt, SystemExit):
+                raise
+            except Exception as e:
+                logger.error("Pub/Sub listener error: %s", e)
+
+        self._pubsub_thread = threading.Thread(target=listener, daemon=True)
+        self._pubsub_thread.start()
+        logger.info("Pub/Sub listener started")
+
+    # ========================================================================
+    # 快取讀取
+    # ========================================================================
+
+    def get_all(self) -> Dict[str, Any]:
+        """
+        獲取所有配置（多層快取）
+        """
+        # Layer 1: 進程內快取
+        if self._is_memory_cache_valid():
+            return self._memory_cache.copy()
+
+        # Layer 2: Redis 快取
+        redis_data = self._get_from_redis()
+        if redis_data is not None:
+            self._set_memory_cache(redis_data)
+            return redis_data.copy()
+
+        # Layer 3: 數據庫
+        db_data = self._load_from_db()
+        self._set_memory_cache(db_data)
+        self._set_to_redis(db_data)
+        return db_data.copy()
+
+    def _is_memory_cache_valid(self) -> bool:
+        """檢查進程內快取是否有效"""
+        return (time.time() - self._memory_timestamp) < MEMORY_CACHE_TTL and bool(
+            self._memory_cache
+        )
+
+    def _set_memory_cache(self, data: Dict[str, Any]):
+        """設置進程內快取"""
+        self._memory_cache = data.copy()
+        self._memory_timestamp = time.time()
+
+    def _get_from_redis(self) -> Optional[Dict[str, Any]]:
+        """從 Redis 獲取快取"""
+        if not self._redis_client:
+            return None
+
+        try:
+            data = self._redis_client.get(f"{REDIS_KEY_PREFIX}all")
+            if data:
+                return json.loads(data)
+        except (asyncio.CancelledError, KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as e:
+            logger.warning("Redis read failed: %s", e)
+            if "connecting to" in str(e) or "Name or service not known" in str(e):
+                self._redis_client = None
+        return None
+
+    def _set_to_redis(self, data: Dict[str, Any]):
+        """設置 Redis 快取"""
+        if not self._redis_client:
+            return
+
+        try:
+            self._redis_client.setex(
+                f"{REDIS_KEY_PREFIX}all", REDIS_CACHE_TTL, json.dumps(data)
+            )
+        except (asyncio.CancelledError, KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as e:
+            logger.warning("Redis write failed: %s", e)
+            if "connecting to" in str(e) or "Name or service not known" in str(e):
+                self._redis_client = None
+
+    def _load_from_db(self) -> Dict[str, Any]:
+        """從數據庫載入所有配置"""
+        conn = get_connection()
+        c = conn.cursor()
+        try:
+            c.execute("SELECT key, value, value_type FROM system_config")
+            rows = c.fetchall()
+
+            result = {}
+            for key, value, value_type in rows:
+                result[key] = _parse_value(value, value_type)
+            return result
+        finally:
+            conn.close()
+
+    # ========================================================================
+    # 快取失效
+    # ========================================================================
+
+    def invalidate(self, key: Optional[str] = None):
+        """
+        使快取失效
+
+        Args:
+            key: 指定 key 或 None 清除全部
+        """
+        # 清除進程內快取
+        self._memory_cache = {}
+        self._memory_timestamp = 0
+
+        if not self._redis_client:
+            return
+
+        try:
+            # 清除 Redis 快取
+            if key:
+                self._redis_client.delete(f"{REDIS_KEY_PREFIX}{key}")
+            self._redis_client.delete(f"{REDIS_KEY_PREFIX}all")
+
+            # 發布失效通知（讓其他進程也失效）
+            self._redis_client.publish(
+                CONFIG_CHANNEL,
+                json.dumps(
+                    {"action": "invalidate", "key": key, "timestamp": time.time()}
+                ),
+            )
+            logger.debug("Cache invalidation notification published")
+
+        except (asyncio.CancelledError, KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as e:
+            logger.warning("Redis invalidation failed: %s", e)
+            if "connecting to" in str(e) or "Name or service not known" in str(e):
+                self._redis_client = None
+
+
+# 全局快取管理器實例
+_cache_manager: Optional[ConfigCacheManager] = None
+
+
+def _get_cache_manager() -> ConfigCacheManager:
+    """獲取快取管理器單例"""
+    global _cache_manager
+    if _cache_manager is None:
+        _cache_manager = ConfigCacheManager()
+    return _cache_manager
+
+
+# ============================================================================
+# 值解析工具
+# ============================================================================
+
+
+def _parse_value(value: str, value_type: str) -> Any:
+    """根據類型解析配置值"""
+    if value == "null" or value is None:
+        return None
+
+    if value_type == "int":
+        return int(value)
+    elif value_type == "float":
+        return float(value)
+    elif value_type == "bool":
+        return value.lower() in ("true", "1", "yes")
+    elif value_type == "json":
+        return json.loads(value)
+    else:
+        return value
+
+
+def _serialize_value(value: Any) -> str:
+    """序列化配置值為字串"""
+    if value is None:
+        return "null"
+
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    elif isinstance(value, (dict, list)):
+        return json.dumps(value)
+    else:
+        return str(value)
+
+
+def _detect_value_type(value: Any) -> str:
+    """自動檢測值類型"""
+    if value is None:
+        return "string"
+    if isinstance(value, bool):
+        return "bool"
+    if isinstance(value, int):
+        return "int"
+    if isinstance(value, float):
+        return "float"
+    if isinstance(value, (dict, list)):
+        return "json"
+    return "string"
+
+
+# ============================================================================
+# 向後兼容的快取函數
+# ============================================================================
+
+
+def invalidate_cache():
+    """清除快取，強制下次讀取時重新載入（向後兼容）"""
+    _get_cache_manager().invalidate()
+
+
+def _refresh_cache():
+    """刷新快取（向後兼容，實際由 ConfigCacheManager 處理）"""
+    _get_cache_manager().invalidate()
+
+
+def _is_cache_valid() -> bool:
+    """檢查快取是否有效（向後兼容）"""
+    return _get_cache_manager()._is_memory_cache_valid()
+
+
+# ============================================================================
+# 配置讀取
+# ============================================================================
+
+
+def get_config(key: str, default: Any = None) -> Any:
+    """
+    獲取單個配置值
+
+    Args:
+        key: 配置鍵名
+        default: 默認值（如果配置不存在）
+
+    Returns:
+        配置值
+    """
+    all_configs = _get_cache_manager().get_all()
+    return all_configs.get(key, default)
+
+
+def get_all_configs(
+    category: Optional[str] = None, public_only: bool = True
+) -> Dict[str, Any]:
+    """
+    獲取所有配置
+
+    Args:
+        category: 過濾特定分類（pricing, limits, general）
+        public_only: 是否只返回公開配置
+
+    Returns:
+        配置字典
+    """
+    conn = get_connection()
+    c = conn.cursor()
+
+    try:
+        query = "SELECT key, value, value_type FROM system_config WHERE 1=1"
+        params = []
+
+        if category:
+            query += " AND category = %s"
+            params.append(category)
+
+        if public_only:
+            query += " AND is_public = 1"
+
+        c.execute(query, params)
+        rows = c.fetchall()
+
+        return {key: _parse_value(value, value_type) for key, value, value_type in rows}
+    finally:
+        conn.close()
+
+
+def get_prices() -> Dict[str, float]:
+    """
+    獲取所有價格配置
+
+    Returns:
+        價格配置字典，格式與 TON_PAYMENT_PRICES 相容
+    """
+    all_configs = _get_cache_manager().get_all()
+
+    return {
+        "create_post": all_configs.get("price_create_post", 1.0),
+        "tip": all_configs.get("price_tip", 1.0),
+        "premium": all_configs.get("price_premium", 1.0),
+    }
+
+
+def get_limits() -> Dict[str, Optional[int]]:
+    """
+    獲取所有限制配置
+
+    Returns:
+        限制配置字典，格式與原 FORUM_LIMITS 相容
+    """
+    all_configs = _get_cache_manager().get_all()
+
+    return {
+        "daily_post_free": all_configs.get("limit_daily_post_free", 3),
+        "daily_post_premium": all_configs.get(
+            "limit_daily_post_premium"
+        ),  # None = 無限
+        "daily_comment_free": all_configs.get("limit_daily_comment_free", 20),
+        "daily_comment_premium": all_configs.get(
+            "limit_daily_comment_premium"
+        ),  # None = 無限
+    }
+
+
+# ============================================================================
+# 配置更新（帶審計日誌）
+# ============================================================================
+
+
+def set_config(
+    key: str,
+    value: Any,
+    value_type: str = "string",
+    category: str = "general",
+    description: str = "",
+    is_public: bool = True,
+    changed_by: str = "system",
+) -> bool:
+    """
+    設置配置值（創建或更新，帶審計日誌）
+
+    Args:
+        key: 配置鍵名
+        value: 配置值
+        value_type: 值類型 (string, int, float, bool, json)
+        category: 分類 (pricing, limits, general)
+        description: 描述
+        is_public: 是否公開
+        changed_by: 變更者（用戶 ID 或 'system'）
+
+    Returns:
+        是否成功
+    """
+    conn = get_connection()
+    c = conn.cursor()
+
+    try:
+        # 獲取舊值（用於審計日誌）
+        c.execute("SELECT value FROM system_config WHERE key = %s", (key,))
+        old_row = c.fetchone()
+        old_value = old_row[0] if old_row else None
+
+        # 自動檢測類型
+        if value_type == "string" and value is not None:
+            value_type = _detect_value_type(value)
+
+        serialized_value = _serialize_value(value)
+
+        c.execute(
+            """
+            INSERT INTO system_config (key, value, value_type, category, description, is_public, updated_at)
+            VALUES (%s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP)
+            ON CONFLICT(key) DO UPDATE SET
+                value = EXCLUDED.value,
+                value_type = EXCLUDED.value_type,
+                category = EXCLUDED.category,
+                description = EXCLUDED.description,
+                is_public = EXCLUDED.is_public,
+                updated_at = CURRENT_TIMESTAMP
+        """,
+            (key, serialized_value, value_type, category, description, int(is_public)),
+        )
+
+        # 寫入審計日誌
+        _write_audit_log(c, key, old_value, serialized_value, changed_by)
+
+        conn.commit()
+
+        # 清除快取
+        _get_cache_manager().invalidate()
+
+        logger.info("Config updated: %s = %s (by %s)", key, value, changed_by)
+        return True
+
+    except (asyncio.CancelledError, KeyboardInterrupt, SystemExit):
+        raise
+    except Exception as e:
+        logger.error("Failed to set config: %s", e)
+        conn.rollback()
+        return False
+    finally:
+        conn.close()
+
+
+def _write_audit_log(cursor, key: str, old_value: Any, new_value: Any, changed_by: str):
+    """寫入配置變更審計日誌"""
+    try:
+        cursor.execute(
+            """
+            INSERT INTO config_audit_log (config_key, old_value, new_value, changed_by, changed_at)
+            VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP)
+        """,
+            (key, old_value, new_value, changed_by),
+        )
+    except (asyncio.CancelledError, KeyboardInterrupt, SystemExit):
+        raise
+    except Exception as e:
+        # 審計表可能不存在，僅記錄警告
+        logger.warning("Audit log write failed (table may not exist): %s", e)
+
+
+def update_price(key: str, value: float, changed_by: str = "admin") -> bool:
+    """
+    更新價格配置的便捷方法
+
+    Args:
+        key: 價格鍵名 (create_post, tip, premium)
+        value: 新價格
+        changed_by: 變更者
+
+    Returns:
+        是否成功
+    """
+    config_key = f"price_{key}"
+    return set_config(config_key, value, "float", "pricing", changed_by=changed_by)
+
+
+def update_limit(key: str, value: Optional[int], changed_by: str = "admin") -> bool:
+    """
+    更新限制配置的便捷方法
+
+    Args:
+        key: 限制鍵名 (daily_post_free, daily_post_premium, etc.)
+        value: 新限制值 (None = 無限)
+        changed_by: 變更者
+
+    Returns:
+        是否成功
+    """
+    config_key = f"limit_{key}"
+    return set_config(config_key, value, "int", "limits", changed_by=changed_by)
+
+
+# ============================================================================
+# 審計日誌查詢
+# ============================================================================
+
+
+def get_config_history(key: str, limit: int = 20) -> List[Dict]:
+    """
+    獲取配置變更歷史
+
+    Args:
+        key: 配置鍵名
+        limit: 返回記錄數量
+
+    Returns:
+        變更歷史列表
+    """
+    conn = get_connection()
+    c = conn.cursor()
+    try:
+        c.execute(
+            """
+            SELECT old_value, new_value, changed_by, changed_at
+            FROM config_audit_log
+            WHERE config_key = %s
+            ORDER BY changed_at DESC
+            LIMIT %s
+        """,
+            (key, limit),
+        )
+        rows = c.fetchall()
+
+        return [
+            {
+                "old_value": row[0],
+                "new_value": row[1],
+                "changed_by": row[2],
+                "changed_at": row[3].isoformat() if row[3] else None,
+            }
+            for row in rows
+        ]
+    except (asyncio.CancelledError, KeyboardInterrupt, SystemExit):
+        raise
+    except Exception as e:
+        logger.warning("Audit log query failed: %s", e)
+        return []
+    finally:
+        conn.close()
+
+
+# ============================================================================
+# 批量操作
+# ============================================================================
+
+
+def bulk_update_configs(configs: Dict[str, Any], changed_by: str = "admin") -> bool:
+    """
+    批量更新配置
+
+    Args:
+        configs: 配置字典 {key: value}
+        changed_by: 變更者
+
+    Returns:
+        是否全部成功
+    """
+    conn = get_connection()
+    c = conn.cursor()
+
+    try:
+        for key, value in configs.items():
+            # 獲取舊值
+            c.execute("SELECT value FROM system_config WHERE key = %s", (key,))
+            old_row = c.fetchone()
+            old_value = old_row[0] if old_row else None
+
+            serialized_value = _serialize_value(value)
+            c.execute(
+                """
+                UPDATE system_config
+                SET value = %s, updated_at = CURRENT_TIMESTAMP
+                WHERE key = %s
+            """,
+                (serialized_value, key),
+            )
+
+            # 寫入審計日誌
+            _write_audit_log(c, key, old_value, serialized_value, changed_by)
+
+        conn.commit()
+        _get_cache_manager().invalidate()
+        return True
+    except (asyncio.CancelledError, KeyboardInterrupt, SystemExit):
+        raise
+    except Exception as e:
+        logger.error("Batch update failed: %s", e)
+        conn.rollback()
+        return False
+    finally:
+        conn.close()
+
+
+def get_config_metadata(key: str) -> Optional[Dict]:
+    """
+    獲取配置的完整元數據
+
+    Returns:
+        包含 key, value, value_type, category, description, is_public, updated_at 的字典
+    """
+    conn = get_connection()
+    c = conn.cursor()
+
+    try:
+        c.execute(
+            """
+            SELECT key, value, value_type, category, description, is_public, created_at, updated_at
+            FROM system_config WHERE key = %s
+        """,
+            (key,),
+        )
+        row = c.fetchone()
+
+        if row:
+            return {
+                "key": row[0],
+                "value": _parse_value(row[1], row[2]),
+                "raw_value": row[1],
+                "value_type": row[2],
+                "category": row[3],
+                "description": row[4],
+                "is_public": bool(row[5]),
+                "created_at": row[6].isoformat() if row[6] else None,
+                "updated_at": row[7].isoformat() if row[7] else None,
+            }
+        return None
+    finally:
+        conn.close()
+
+
+def list_all_configs_with_metadata() -> List[Dict]:
+    """
+    列出所有配置及其元數據（管理後台用）
+
+    Returns:
+        配置列表
+    """
+    conn = get_connection()
+    c = conn.cursor()
+
+    try:
+        c.execute("""
+            SELECT key, value, value_type, category, description, is_public, created_at, updated_at
+            FROM system_config ORDER BY category, key
+        """)
+        rows = c.fetchall()
+
+        return [
+            {
+                "key": row[0],
+                "value": _parse_value(row[1], row[2]),
+                "raw_value": row[1],
+                "value_type": row[2],
+                "category": row[3],
+                "description": row[4],
+                "is_public": bool(row[5]),
+                "created_at": row[6].isoformat() if row[6] else None,
+                "updated_at": row[7].isoformat() if row[7] else None,
+            }
+            for row in rows
+        ]
+    finally:
+        conn.close()
+
+
+# ============================================================================
+# 初始化審計表
+# ============================================================================
+
+
+def init_audit_table():
+    """初始化審計日誌表（如果不存在）"""
+    conn = get_connection()
+    c = conn.cursor()
+    try:
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS config_audit_log (
+                id SERIAL PRIMARY KEY,
+                config_key TEXT NOT NULL,
+                old_value TEXT,
+                new_value TEXT,
+                changed_by TEXT NOT NULL DEFAULT 'system',
+                changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        c.execute(
+            "CREATE INDEX IF NOT EXISTS idx_audit_key ON config_audit_log(config_key)"
+        )
+        c.execute(
+            "CREATE INDEX IF NOT EXISTS idx_audit_time ON config_audit_log(changed_at)"
+        )
+        conn.commit()
+        logger.info("Audit log table initialized")
+    except (asyncio.CancelledError, KeyboardInterrupt, SystemExit):
+        raise
+    except Exception as e:
+        logger.error("Audit table init failed: %s", e)
+    finally:
+        conn.close()
+
+
+# ============================================================================
+# 模組初始化
+# ============================================================================
+
+# 注意：
+# 不要在 import 時自動觸發資料庫 I/O。這會讓 pytest collect、腳本工具與
+# 單純函式匯入都被迫連資料庫，造成收集卡住或啟動副作用。
+# 審計表初始化應由 API startup / DB bootstrap 明確呼叫。

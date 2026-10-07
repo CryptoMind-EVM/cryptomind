@@ -1,0 +1,22 @@
+id: general_research
+version: "1.1.0"
+display_name: "General Research"
+description: "一般研究、網頁搜尋、比較與摘要"
+tier: free
+capabilities:
+  - web_research
+  - comparison
+  - summary
+default_analysis_mode: quick
+default_action_policy: read_only
+allowed_data_sources:
+  - web
+allowed_tool_categories:
+  - general
+  - news
+  - finance
+  - macro
+  - global_stock
+default_skills: []
+required_tools:
+  - web_search

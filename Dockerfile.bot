@@ -1,0 +1,41 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Telegram Bot image — 極簡（aiogram + httpx only）
+#
+# bot 只透過 HTTP 打 API service，不碰 DB/Redis/LLM/前端。
+# 對比 root Dockerfile（537MB，含 Node/Vite/gunicorn/langchain 全家/pandas），
+# 本 image 預期 ~150MB。
+#
+# 誰 build 本檔：docker-compose.prod.yml 的 telegram-bot 服務
+# （build.dockerfile: Dockerfile.bot）。設定在版控裡，不靠任何面板。
+#
+# 2026-09-04 的教訓（Zeabur 時代）：這件事曾只活在面板上（root Dockerfile ＋
+# 自訂啟動指令），指令一掉就 fallback 回根目錄 Dockerfile＝起整包 API，然後因為
+# bot 服務沒有 JWT_SECRET_KEY 而 BackOff 重啟迴圈。
+# ─────────────────────────────────────────────────────────────────────────────
+# 基底映像走 Docker Hub 的鏡像，不直接打 Docker Hub——Zeabur builder 的共用出口 IP
+# 會撞上 Docker Hub 匿名 pull 的速率上限，建置在載 metadata 那步就 429 死掉。
+# mirror.gcr.io 是 Google 對官方映像的 pull-through cache，manifest digest 與
+# Docker Hub 相同。理由與換回方式見根目錄 Dockerfile 的同名 ARG 註解。
+ARG PYTHON_IMAGE=mirror.gcr.io/library/python:3.13-slim
+
+FROM ${PYTHON_IMAGE}
+
+ENV PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app
+
+WORKDIR /app
+
+COPY requirements-bot.txt .
+RUN pip install --upgrade pip setuptools wheel \
+    && pip install -r requirements-bot.txt
+
+# 只 COPY bot 真正需要的：bot/ 套件（純 HTTP 打 API service，不碰 core/）。
+COPY bot/ bot/
+
+LABEL "language"="python"
+
+# python -m bot.telegram_bot；TELEGRAM_BOT_MODE 控制 polling/webhook
+CMD ["python", "-m", "bot.telegram_bot"]

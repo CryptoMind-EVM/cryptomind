@@ -1,0 +1,233 @@
+[
+ {
+  "title": "BTC 短線看法",
+  "content": "BTC 今天跌破 60000，技術面看 4 小時 MACD 死叉，短線可能還會再測 58000 支撐，大家怎麼看？",
+  "expect": "pass"
+ },
+ {
+  "title": "台積電法說會心得",
+  "content": "台積電法說會心得：先進製程營收占比持續上升，毛利率指引優於預期，長線我還是續抱。",
+  "expect": "pass"
+ },
+ {
+  "title": "ETH 質押請益",
+  "content": "請益：ETH 質押要選 Lido 還是自己跑節點比較安全？新手怕搞錯。",
+  "expect": "pass"
+ },
+ {
+  "title": "防詐提醒",
+  "content": "防詐提醒：任何人跟你要助記詞都是詐騙，官方客服絕對不會私訊你，千萬不要給！",
+  "expect": "pass"
+ },
+ {
+  "title": "被騙經驗分享",
+  "content": "分享被騙經驗：上個月點了一個假空投連結，授權之後錢包的 USDT 全被轉走，大家要小心 approve。",
+  "expect": "pass"
+ },
+ {
+  "title": "0050 定期定額心得",
+  "content": "定期定額 0050 三年心得，報酬大概 35%，重點是不要看盤亂賣。",
+  "expect": "pass"
+ },
+ {
+  "title": "冷錢包推薦？",
+  "content": "新手問一下，冷錢包推薦 Ledger 還是 Trezor？主要放 BTC 跟 ETH。",
+  "expect": "pass"
+ },
+ {
+  "title": "CPI 今晚公布",
+  "content": "美國 CPI 今晚公布，市場預期 2.8%，如果高於預期可能壓到科技股跟幣圈。",
+  "expect": "pass"
+ },
+ {
+  "title": "空投教學",
+  "content": "空投教學：官方空投請只從項目官網和官方推特領取，任何私訊給你的連結都不要點。",
+  "expect": "pass"
+ },
+ {
+  "title": "FOMC 後的幣圈",
+  "content": "FOMC 降息 1 碼之後，BTC 當天漲了 4%，但隔天就回吐，市場可能早就反應了。",
+  "expect": "pass"
+ },
+ {
+  "title": "我的記帳方法",
+  "content": "分享我的記帳方法：每月固定支出先列出來，剩下的錢再分投資跟生活費。",
+  "expect": "pass"
+ },
+ {
+  "title": "Base gas 費怎麼算",
+  "content": "請問 Base 鏈的 gas 費怎麼估算？我轉 USDC 好像才幾分錢。",
+  "expect": "pass"
+ },
+ {
+  "title": "週末閒聊",
+  "content": "閒聊：週末大家都在做什麼？我去爬山順便想想要不要加碼。",
+  "expect": "pass"
+ },
+ {
+  "title": "MetaMask 設定 Base",
+  "content": "教學：如何在 MetaMask 新增 Base 網路，RPC 跟 Chain ID 要填官方文件上的。",
+  "expect": "pass"
+ },
+ {
+  "title": "ETF 新聞整理",
+  "content": "新聞整理：SEC 批准以太坊現貨 ETF 選擇權交易，下週開始。",
+  "expect": "pass"
+ },
+ {
+  "title": "SOL thoughts",
+  "content": "My take on SOL: strong dev activity, but the valuation already prices in a lot. Holding a small position.",
+  "expect": "pass"
+ },
+ {
+  "title": "Base bridge question",
+  "content": "Does anyone know if the Base bridge fee is lower on weekends? Just curious.",
+  "expect": "pass"
+ },
+ {
+  "title": "美股 AI 分析",
+  "content": "我這週用 AI 分析了三檔美股，NVDA 的本益比還是偏高，先觀望。",
+  "expect": "pass"
+ },
+ {
+  "title": "空投領取",
+  "content": "恭喜你獲得 500 USDT 空投！限時 24 小時，點擊 bit.ly/claim-usdt 連接錢包立即領取。",
+  "expect": "block"
+ },
+ {
+  "title": "帳戶異常通知",
+  "content": "您好，我是 CryptoMind 官方客服，偵測到您的帳戶異常，請提供錢包助記詞以便驗證身分。",
+  "expect": "block"
+ },
+ {
+  "title": "限時活動",
+  "content": "限時活動：轉 0.1 ETH 到 0x8f3a...c21e，一小時內返還 0.2 ETH，名額只剩 20 位！",
+  "expect": "block"
+ },
+ {
+  "title": "VIP 帶單",
+  "content": "老師帶單穩賺不賠，每天 30% 收益，加 LINE ID：money888 進 VIP 群。",
+  "expect": "block"
+ },
+ {
+  "title": "套利機器人",
+  "content": "私訊我，教你套利機器人日賺 500U，保證不虧，已經有上百人跟上。",
+  "expect": "block"
+ },
+ {
+  "title": "錢包同步錯誤",
+  "content": "錢包同步錯誤，請到 walletconnect-fix.com 輸入你的 12 個單字恢復錢包。",
+  "expect": "block"
+ },
+ {
+  "title": "內部消息",
+  "content": "內部消息：這個幣下週上幣安，現在進場穩賺 100 倍，名額有限要買快私我。",
+  "expect": "block"
+ },
+ {
+  "title": "免審核貸款",
+  "content": "貸款免審核，當天撥款，只需先支付 200 USDT 保證金即可放款。",
+  "expect": "block"
+ },
+ {
+  "title": "高薪兼職",
+  "content": "高薪兼職刷單，日結 3000 元，無需經驗，在家用手機就能做，加我 Telegram。",
+  "expect": "block"
+ },
+ {
+  "title": "交友",
+  "content": "寂寞嗎？美女一對一視訊陪聊，加 Telegram @sweetgirl_tw 私密服務。",
+  "expect": "flag"
+ },
+ {
+  "title": "提幣凍結通知",
+  "content": "Binance 客服通知：您的提幣已被凍結，請立即聯繫 @binance_support_hk 解凍，逾期資產將被沒收。",
+  "expect": "block"
+ },
+ {
+  "title": "免費 NFT",
+  "content": "免費領取限量 NFT，只要連接錢包並按下 approve 授權即可，數量有限先搶先贏。",
+  "expect": "block"
+ },
+ {
+  "title": "穩定理財",
+  "content": "USDT 穩定理財，年化 200% 保本保息，已有上千名會員獲利，我帶你入門。",
+  "expect": "block"
+ },
+ {
+  "title": "包裹通知",
+  "content": "您的包裹因地址不完整無法投遞，請於 24 小時內點擊連結更新資料並支付 30 元補寄費。",
+  "expect": "block"
+ },
+ {
+  "title": "中獎通知",
+  "content": "中獎通知：您被抽中獲得 iPhone 17，只需支付運費 99 元即可領取。",
+  "expect": "block"
+ },
+ {
+  "title": "ICO 名額",
+  "content": "我在交易所上班，可以幫你拿到 ICO 內部認購名額，先把款項匯到我的帳戶。",
+  "expect": "block"
+ },
+ {
+  "title": "交易加速",
+  "content": "你的交易卡住了嗎？把私鑰傳給我，我幫你手動加速上鏈。",
+  "expect": "block"
+ },
+ {
+  "title": "拉盤群",
+  "content": "加入我們的拉盤群，下一個百倍幣就在這，一起喊單一起賺，進群連結在我簡介。",
+  "expect": "block"
+ },
+ {
+  "title": "以太坊生日活動",
+  "content": "我是 Vitalik，為了慶祝以太坊生日，發送任何數量的 ETH 給我，我會雙倍返還。",
+  "expect": "block"
+ },
+ {
+  "title": "代操",
+  "content": "代操帳戶，保證月報酬 50%，只要提供含提幣權限的 API 金鑰就好。",
+  "expect": "block"
+ },
+ {
+  "title": "URGENT",
+  "content": "URGENT: your wallet has been compromised. Verify your 12-word recovery phrase at secure-wallet-verify.io now.",
+  "expect": "block"
+ },
+ {
+  "title": "Giveaway",
+  "content": "Send 1 ETH to this address and receive 2 ETH back instantly. Official Ethereum Foundation giveaway!",
+  "expect": "block"
+ },
+ {
+  "title": "VIP 帶單",
+  "content": "老師帶單穩@賺不賠，每天 3@0% 收益，加 L@I@N@E 進 V@I@P 群",
+  "expect": "block"
+ },
+ {
+  "title": "官方客服通知",
+  "content": "您的帳戶異常，請提供你的助.記.詞完成驗證，否則 24 小時內凍結",
+  "expect": "block"
+ },
+ {
+  "title": "限時空投",
+  "content": "限時活動：轉 0.1 ETH 到活動地址，立即 2@倍@返@還",
+  "expect": "block"
+ },
+ {
+  "title": "Support",
+  "content": "Your withdrawal is locked. Please verify your s e e d phrase here to unlock it.",
+  "expect": "block",
+  "known_miss": "v4 0.25：英文「提幣被鎖、驗證助記詞」型詐騙訓練資料太少，下一版補"
+ },
+ {
+  "title": "今天心得🎉",
+  "content": "BTC 站上 6 萬🚀🚀 我的看法：短線先觀望，等回測 58000 再說～ 大家怎麼看？",
+  "expect": "pass"
+ },
+ {
+  "title": "三檔比較",
+  "content": "台積電 / 聯發科 / 鴻海 三檔比較 ★★★ 長線持有，短線看月線支撐",
+  "expect": "pass"
+ }
+]

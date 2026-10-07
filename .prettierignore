@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Production
+build/
+dist/
+
+# Generated files
+*.min.js
+*.min.css
+*.bundle.js
+
+# Third-party
+web/static/vendor/
+web/static/lib/
+
+# Logs
+logs
+*.log

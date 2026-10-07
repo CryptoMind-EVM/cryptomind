@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - CryptoMind</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <script src="/js/early-init.js"></script>
+<style>
+        :root {
+            color-scheme: light;
+            --legal-bg: #F5F5F7;
+            --legal-surface: #FFFFFF;
+            --legal-text: #17171C;
+            --legal-text-muted: #4A4C54;
+            --legal-border: rgba(0,0,0,0.1);
+            --legal-primary: #2563EB;
+            --legal-code-bg: #EEEEF0;
+            --legal-accent-soft: rgba(37,99,235,0.08);
+        }
+        html.dark {
+            color-scheme: dark;
+            --legal-bg: #14161F;
+            --legal-surface: #1D202B;
+            --legal-text: #FFFDF9;
+            --legal-text-muted: #A7A9B2;
+            --legal-border: rgba(255,253,249,0.1);
+            --legal-primary: #2563EB;
+            --legal-code-bg: #10121A;
+            --legal-accent-soft: rgba(37,99,235,0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+            background: var(--legal-bg);
+            color: var(--legal-text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: var(--legal-surface);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--legal-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: var(--legal-accent-soft);
+            border: 1px solid var(--legal-primary);
+            color: var(--legal-text);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .back-btn:hover {
+            background: var(--legal-accent-soft);
+        }
+
+        .navbar h1 {
+            font-size: 1.2rem;
+            font-family: 'Inter Tight', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+            font-weight: 600;
+        }
+
+        .lang-toggle {
+            background: var(--legal-primary);
+            border: none;
+            color: #FFFFFF;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            transition: transform 0.3s;
+        }
+
+        .lang-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        /* 語言直選：原生 select 去掉外觀，色與字型跟著鈕走；
+           option 在 Firefox 會繼承白字，要明確給深色 */
+        .lang-toggle select {
+            appearance: none;
+            -webkit-appearance: none;
+            background: transparent;
+            border: none;
+            color: inherit;
+            font: inherit;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .lang-toggle select:focus-visible {
+            outline: 2px solid #FFFFFF;
+            outline-offset: 2px;
+        }
+
+        .lang-toggle option {
+            color: #111111;
+            background: #FFFFFF;
+        }
+
+        .lang-toggle::after {
+            content: '▾';
+            font-size: 0.8em;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 6rem;
+        }
+
+        .prose h2 {
+            color: var(--legal-text);
+            margin: 2rem 0 1rem;
+            font-size: 1.5rem;
+            font-family: 'Inter Tight', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+            border-bottom: 2px solid var(--legal-primary);
+            padding-bottom: 0.5rem;
+        }
+
+        .prose h3 {
+            color: var(--legal-text-muted);
+            margin: 1.5rem 0 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .prose p,
+        .prose ul {
+            margin: 0.8rem 0;
+            color: var(--legal-text-muted);
+        }
+
+        .prose ul {
+            padding-left: 2rem;
+        }
+
+        .prose li {
+            margin: 0.5rem 0;
+        }
+
+        .prose strong {
+            color: var(--legal-text);
+        }
+
+        .prose a {
+            color: var(--legal-primary);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .prose a:hover {
+            color: var(--legal-primary);
+        }
+
+        .footer {
+            background: var(--legal-surface);
+            padding: 2rem 1.5rem;
+            border-top: 1px solid var(--legal-border);
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--legal-primary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--legal-primary);
+        }
+
+        .copyright {
+            color: var(--legal-text-muted);
+            font-size: 0.9rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .effective-date {
+            background: var(--legal-accent-soft);
+            padding: 1rem;
+            border-left: 3px solid var(--legal-primary);
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .highlight {
+            background: rgba(250, 173, 20, 0.14);
+            border-left: 3px solid #ffd700;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .legal-notice {
+            background: var(--legal-accent-soft);
+            border-left: 3px solid var(--legal-primary);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <button class="back-btn" data-click="goHome"><span data-zh="← 返回" data-zh-cn="← 返回" data-en="← Back" data-ru="← Назад">← 返回</span></button>
+            <h1 id="nav-title"><span data-zh="隱私政策" data-zh-cn="隐私政策" data-en="Privacy Policy" data-ru="Политика конфиденциальности">隱私政策</span></h1>
+        </div>
+        <label class="lang-toggle">
+            🌐 <select id="legal-lang-select" aria-label="Language">
+                <option value="zh-TW">繁體中文</option>
+                <option value="zh-CN">简体中文</option>
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+            </select>
+        </label>
+    </nav>
+
+    <div class="container">
+        <div id="content" class="prose">
+            <div class="effective-date">
+                <strong><span data-zh="生效日期" data-zh-cn="生效日期" data-en="Effective Date" data-ru="Дата вступления в силу">生效日期</span>：</strong>2026年10月4日（<span data-zh="最後更新" data-zh-cn="最后更新" data-en="Last Updated" data-ru="Последнее обновление">最後更新</span>）<br>
+                <strong><span data-zh="版本" data-zh-cn="版本" data-en="Version" data-ru="Версия">版本</span>：</strong>v2.4
+            </div>
+
+            <div class="legal-notice">
+                <strong data-zh="🔗 錢包登入與鏈上付款聲明" data-zh-cn="🔗 钱包登录与链上付款声明" data-en="🔗 Wallet Sign-In &amp; On-Chain Payment Statement" data-ru="🔗 Заявление о входе через кошелёк и ончейн-платежах">🔗 錢包登入與鏈上付款聲明</strong><br>
+                <span data-zh="CryptoMind 網頁版以 EVM 錢包透過 Sign-In with Ethereum（SIWE）登入，Telegram Mini App 內以 Telegram 帳號登入；付費功能以 Base 網路上的 USDC 支付。錢包連線與區塊鏈資料查詢需要將部分資料（如錢包地址）傳送給第三方服務，詳見第 3 條。" data-zh-cn="CryptoMind 网页版以 EVM 钱包通过 Sign-In with Ethereum（SIWE）登录，Telegram Mini App 内以 Telegram 账号登录；付费功能以 Base 网络上的 USDC 支付。钱包连接与区块链资料查询需要将部分数据（如钱包地址）发送给第三方服务，详见第 3 条。" data-en="On the web, you sign in to CryptoMind with an EVM wallet using Sign-In with Ethereum (SIWE); inside the Telegram Mini App, you sign in with your Telegram account. Paid features are paid in USDC on the Base network. Wallet connections and blockchain data lookups require sending some data (such as your wallet address) to third-party services; see Section 3." data-ru="В веб-версии вход в CryptoMind выполняется с EVM-кошелька через Sign-In with Ethereum (SIWE), в Telegram Mini App — через ваш аккаунт Telegram. Платные функции оплачиваются в USDC в сети Base. Для подключения кошелька и запросов данных блокчейна часть данных (например, адрес кошелька) передаётся сторонним сервисам; подробнее см. раздел 3.">CryptoMind 網頁版以 EVM 錢包透過 Sign-In with Ethereum（SIWE）登入，Telegram Mini App 內以 Telegram 帳號登入；付費功能以 Base 網路上的 USDC 支付。錢包連線與區塊鏈資料查詢需要將部分資料（如錢包地址）傳送給第三方服務，詳見第 3 條。</span>
+            </div>
+
+            <p><span data-zh="CryptoMind 重視您的隱私。本政策說明我們如何收集、使用和保護您的個人資料。" data-zh-cn="CryptoMind 重视您的隐私。本政策说明我们如何收集、使用和保护您的个人资料。" data-en="CryptoMind values your privacy. This policy explains how we collect, use, and protect your personal data." data-ru="CryptoMind ценит вашу конфиденциальность. Эта политика объясняет, как мы собираем, используем и защищаем ваши персональные данные.">CryptoMind 重視您的隱私。本政策說明我們如何收集、使用和保護您的個人資料。</span></p>
+
+            <div class="legal-notice">
+                <strong data-zh="📋 個人資料保護法（PDPA）合規揭露" data-zh-cn="📋 个人资料保护法（PDPA）合规揭露" data-en="📋 Personal Data Protection Act (PDPA) Compliance Disclosure" data-ru="📋 Раскрытие информации о соответствии Закону о защите персональных данных (PDPA)">📋 個人資料保護法（PDPA）合規揭露</strong><br>
+                <span data-zh="依據中華民國《個人資料保護法》第 15 條，本平台於收集您的個人資料時，應明確告知以下事項：" data-zh-cn="依据中华民国《个人资料保护法》第 15 条，本平台于收集您的个人资料时，应明确告知以下事项：" data-en="Under Article 15 of the ROC Personal Data Protection Act, when collecting your personal data, this Platform shall clearly inform you of the following:" data-ru="Согласно статье 15 Закона Китайской Республики (Тайвань) о защите персональных данных, при сборе ваших персональных данных Платформа обязана ясно сообщить вам следующее:">依據中華民國《個人資料保護法》第 15 條，本平台於收集您的個人資料時，應明確告知以下事項：</span>
+                <ul style="margin-top: 0.5rem;">
+                    <li><strong><span data-zh="收集者名稱" data-zh-cn="收集者名称" data-en="Data Collector Name" data-ru="Наименование сборщика данных">收集者名稱</span></strong>：<span data-zh="CryptoMind（本平台營運團隊）" data-zh-cn="CryptoMind（本平台营运团队）" data-en="CryptoMind (this platform's operating team)" data-ru="CryptoMind (команда, обслуживающая платформу)">CryptoMind（本平台營運團隊）</span></li>
+                    <li><strong><span data-zh="收集目的" data-zh-cn="收集目的" data-en="Purpose of Collection" data-ru="Цель сбора">收集目的</span></strong>：<span data-zh="帳戶識別、支付處理、社群互動、AI 分析服務、錢包持倉與帳本同步、Email 簡報寄送（僅限您訂閱時）、安全防護" data-zh-cn="账户识别、支付处理、社群互动、AI 分析服务、钱包持仓与账本同步、Email 简报寄送（仅限您订阅时）、安全防护" data-en="Account identification, payment processing, community interaction, AI analysis services, wallet holdings and ledger sync, sending the Email brief (only if you subscribe), security protection" data-ru="Идентификация аккаунта, обработка платежей, взаимодействие в сообществе, услуги AI-анализа, синхронизация активов кошелька и журнала операций, отправка Email-сводки (только если вы подписались), защита безопасности">帳戶識別、支付處理、社群互動、AI 分析服務、錢包持倉與帳本同步、Email 簡報寄送（僅限您訂閱時）、安全防護</span></li>
+                    <li><strong><span data-zh="資料類別" data-zh-cn="资料类别" data-en="Categories of Data" data-ru="Категории данных">資料類別</span></strong>：<span data-zh="錢包地址、Telegram 帳號資訊（以 Telegram 登入或綁定時）、Email 地址（僅限您訂閱 Email 簡報時）、暱稱、發文/評論/打賞記錄、付款與鏈上同步紀錄、私人訊息、API 請求日誌、好友清單" data-zh-cn="钱包地址、Telegram 账号信息（以 Telegram 登录或绑定时）、Email 地址（仅限您订阅 Email 简报时）、昵称、发文/评论/打赏记录、付款与链上同步记录、私人讯息、API 请求日志、好友清单" data-en="Wallet address, Telegram account information (when you sign in with or bind Telegram), email address (only if you subscribe to the Email brief), nickname, post/comment/tip records, payment and on-chain sync records, private messages, API request logs, friends list" data-ru="Адрес кошелька, данные аккаунта Telegram (при входе через Telegram или его привязке), адрес электронной почты (только при подписке на Email-сводку), никнейм, записи постов/комментариев/чаевых, записи платежей и ончейн-синхронизации, личные сообщения, журналы API-запросов, список друзей">錢包地址、Telegram 帳號資訊（以 Telegram 登入或綁定時）、Email 地址（僅限您訂閱 Email 簡報時）、暱稱、發文/評論/打賞記錄、付款與鏈上同步紀錄、私人訊息、API 請求日誌、好友清單</span></li>
+                    <li><strong><span data-zh="使用期間/地區/對象/方式" data-zh-cn="使用期间/地区/对象/方式" data-en="Retention Period/Area/Subject/Method" data-ru="Срок/регион/получатели/способ использования">使用期間/地區/對象/方式</span></strong>：<span data-zh="帳戶存續期間 + 保留期限（見第 6 條）；資料存儲於台灣伺服器；由本平台使用，並依第 3 條所列情形傳送給第三方服務（如錢包連線服務、區塊鏈資料服務、Email 寄送服務、您選擇的 AI 模型供應商）" data-zh-cn="账户存续期间 + 保留期限（见第 6 条）；数据存储于台湾服务器；由本平台使用，并依第 3 条所列情形发送给第三方服务（如钱包连接服务、区块链资料服务、Email 寄送服务、您选择的 AI 模型供应商）" data-en="During account lifetime + retention period (see Section 6); data stored on Taiwan servers; used by the Platform and sent to third-party services in the cases listed in Section 3 (such as wallet connection services, blockchain data services, email delivery services, and the AI model provider you choose)" data-ru="В течение срока существования аккаунта + срок хранения (см. раздел 6); данные хранятся на серверах на Тайване; используются Платформой и передаются сторонним сервисам в случаях, указанных в разделе 3 (например, сервисам подключения кошельков, сервисам данных блокчейна, сервисам отправки электронной почты и выбранному вами поставщику AI-моделей)">帳戶存續期間 + 保留期限（見第 6 條）；資料存儲於台灣伺服器；由本平台使用，並依第 3 條所列情形傳送給第三方服務（如錢包連線服務、區塊鏈資料服務、Email 寄送服務、您選擇的 AI 模型供應商）</span></li>
+                    <li><strong><span data-zh="您的權利（第 3 條）" data-zh-cn="您的权利（第 3 条）" data-en="Your Rights (Section 3)" data-ru="Ваши права (раздел 3)">您的權利（第 3 條）</span></strong>：<span data-zh="查詢/閱覽、製給複製本、補充/更正、停止收集/處理/利用" data-zh-cn="查询/阅览、制给复制本、补充/更正、停止收集/处理/利用" data-en="Inquiry/Access, copy production, supplement/correction, stop collection/processing/utilization" data-ru="Запрос/доступ, получение копии, дополнение/исправление, прекращение сбора/обработки/использования">查詢/閱覽、製給複製本、補充/更正、停止收集/處理/利用</span></li>
+                    <li><strong><span data-zh="不提供之影響" data-zh-cn="不提供之影响" data-en="Consequence of Non-Provision" data-ru="Последствия непредоставления">不提供之影響</span></strong>：<span data-zh="若不以錢包或 Telegram 帳號登入，將無法註冊帳戶，僅能以訪客模式使用部分功能；未綁定錢包則無法使用付費功能；未提供 Email 則無法收到 Email 簡報，其他功能不受影響" data-zh-cn="若不以钱包或 Telegram 账号登录，将无法注册账户，仅能以访客模式使用部分功能；未绑定钱包则无法使用付费功能；未提供 Email 则无法收到 Email 简报，其他功能不受影响" data-en="If you do not sign in with a wallet or Telegram account, you cannot register an account and can only use some features in guest mode; without a bound wallet, you cannot use paid features; without an email address you will not receive the Email brief, and other features are unaffected" data-ru="Если вы не войдёте через кошелёк или аккаунт Telegram, вы не сможете зарегистрировать аккаунт и сможете пользоваться лишь частью функций в режиме гостя; без привязанного кошелька платные функции недоступны; без адреса электронной почты вы не будете получать Email-сводку, остальные функции от этого не зависят">若不以錢包或 Telegram 帳號登入，將無法註冊帳戶，僅能以訪客模式使用部分功能；未綁定錢包則無法使用付費功能；未提供 Email 則無法收到 Email 簡報，其他功能不受影響</span></li>
+                </ul>
+            </div>
+
+            <h2 data-zh="1. 我們收集的資料" data-zh-cn="1. 我们收集的资料" data-en="1. Information We Collect" data-ru="1. Собираемая нами информация">1. 我們收集的資料</h2>
+            <h3 data-zh="1.1 身份資訊" data-zh-cn="1.1 身份信息" data-en="1.1 Identity Information" data-ru="1.1 Идентификационная информация">1.1 身份資訊</h3>
+            <ul>
+                <li><strong data-zh="錢包地址" data-zh-cn="钱包地址" data-en="Wallet address" data-ru="Адрес кошелька">錢包地址</strong>：<span data-zh="您以 Sign-In with Ethereum（SIWE）簽名登入或綁定的 EVM 錢包地址（含以 Email 或 Google 登入時由 Reown 為您建立的錢包，見第 3.6 條），用於帳戶識別、付款來源驗證與交易記錄；舊版以 TON 錢包建立的帳戶，其 TON 地址仍作為帳戶識別碼" data-zh-cn="您以 Sign-In with Ethereum（SIWE）签名登录或绑定的 EVM 钱包地址（含以 Email 或 Google 登录时由 Reown 为您创建的钱包，见第 3.6 条），用于账户识别、付款来源验证与交易记录；旧版以 TON 钱包创建的账户，其 TON 地址仍作为账户识别码" data-en="The EVM wallet address you sign in with or bind via a Sign-In with Ethereum (SIWE) signature (including the wallet Reown creates for you when you sign in with Email or Google; see Section 3.6), used for account identification, payment-source verification, and transaction records; for legacy accounts created with a TON wallet, the TON address remains the account identifier" data-ru="Адрес EVM-кошелька, с которым вы входите или который привязываете с помощью подписи Sign-In with Ethereum (SIWE) (включая кошелёк, который Reown создаёт для вас при входе через Email или Google; см. раздел 3.6); используется для идентификации аккаунта, проверки источника платежа и записи транзакций; для старых аккаунтов, созданных с кошельком TON, адрес TON по-прежнему служит идентификатором аккаунта">您以 Sign-In with Ethereum（SIWE）簽名登入或綁定的 EVM 錢包地址（含以 Email 或 Google 登入時由 Reown 為您建立的錢包，見第 3.6 條），用於帳戶識別、付款來源驗證與交易記錄；舊版以 TON 錢包建立的帳戶，其 TON 地址仍作為帳戶識別碼</span></li>
+                <li><strong data-zh="Telegram 帳號資訊" data-zh-cn="Telegram 账号信息" data-en="Telegram account information" data-ru="Данные аккаунта Telegram">Telegram 帳號資訊</strong>：<span data-zh="以 Telegram 登入或綁定 Telegram 時，Telegram 提供的使用者 ID、使用者名稱、名字等基本資料，用於帳戶識別；首次以 Telegram 登入時，並依 Telegram 介面語言設定預設語言" data-zh-cn="以 Telegram 登录或绑定 Telegram 时，Telegram 提供的用户 ID、用户名、名字等基本信息，用于账户识别；首次以 Telegram 登录时，并依 Telegram 界面语言设置默认语言" data-en="When you sign in with or bind Telegram, basic information provided by Telegram, such as your user ID, username, and first name, used for account identification; on your first Telegram sign-in, your Telegram interface language is also used to set your default language" data-ru="При входе через Telegram или его привязке — основные данные, предоставляемые Telegram (например, ID пользователя, имя пользователя и имя), используемые для идентификации аккаунта; при первом входе через Telegram язык интерфейса Telegram также используется для установки языка по умолчанию">以 Telegram 登入或綁定 Telegram 時，Telegram 提供的使用者 ID、使用者名稱、名字等基本資料，用於帳戶識別；首次以 Telegram 登入時，並依 Telegram 介面語言設定預設語言</span></li>
+                <li><strong data-zh="Email 地址（選填）" data-zh-cn="Email 地址（选填）" data-en="Email address (optional)" data-ru="Адрес электронной почты (по желанию)">Email 地址（選填）</strong>：<span data-zh="僅在您於設定中訂閱 Email 簡報時收集，用於寄送簡報與訂閱確認信（見第 3.7 條）。以 Email 或 Google 登入時所用的帳號由 Reown 處理，本平台伺服器不會取得或儲存（見第 3.6 條）" data-zh-cn="仅在您于设置中订阅 Email 简报时收集，用于寄送简报与订阅确认信（见第 3.7 条）。以 Email 或 Google 登录时所用的账号由 Reown 处理，本平台服务器不会取得或存储（见第 3.6 条）" data-en="Collected only if you subscribe to the Email brief in Settings, and used to send the brief and the subscription confirmation email (see Section 3.7). The account you use to sign in with Email or Google is handled by Reown; our servers never obtain or store it (see Section 3.6)" data-ru="Собирается, только если вы подписались на Email-сводку в настройках, и используется для отправки сводки и письма с подтверждением подписки (см. раздел 3.7). Аккаунт, который вы используете для входа через Email или Google, обрабатывает Reown; наши серверы его не получают и не хранят (см. раздел 3.6)">僅在您於設定中訂閱 Email 簡報時收集，用於寄送簡報與訂閱確認信（見第 3.7 條）。以 Email 或 Google 登入時所用的帳號由 Reown 處理，本平台伺服器不會取得或儲存（見第 3.6 條）</span></li>
+                <li><strong data-zh="暱稱與個人資料" data-zh-cn="昵称与个人资料" data-en="Nickname & Profile" data-ru="Никнейм и профиль">暱稱與個人資料</strong>：<span data-zh="您在平台上設定的顯示資訊" data-zh-cn="您在平台上设定的显示信息" data-en="Display information you set on the Platform" data-ru="Отображаемая информация, которую вы задали на Платформе">您在平台上設定的顯示資訊</span></li>
+            </ul>
+            <h3 data-zh="1.2 使用數據" data-zh-cn="1.2 使用数据" data-en="1.2 Usage Data" data-ru="1.2 Данные об использовании">1.2 使用數據</h3>
+            <ul>
+                <li><span data-zh="瀏覽記錄、功能使用習慣" data-zh-cn="浏览记录、功能使用习惯" data-en="Browsing history, feature usage patterns" data-ru="История просмотров, шаблоны использования функций">瀏覽記錄、功能使用習慣</span></li>
+                <li><span data-zh="論壇發文、評論、打賞記錄" data-zh-cn="论坛发文、评论、打赏记录" data-en="Forum posts, comments, tip records" data-ru="Посты форума, комментарии, записи о чаевых">論壇發文、評論、打賞記錄</span></li>
+                <li><span data-zh="詐騙檢舉與治理系統參與記錄" data-zh-cn="诈骗检举与治理系统参与记录" data-en="Scam reports and governance system participation records" data-ru="Отчёты о мошенничестве и записи участия в системе управления">詐騙檢舉與治理系統參與記錄</span></li>
+                <li><span data-zh="API 請求日誌（IP 位址、時間戳）" data-zh-cn="API 请求日志（IP 地址、时间戳）" data-en="API request logs (IP address, timestamp)" data-ru="Журналы API-запросов (IP-адрес, метка времени)">API 請求日誌（IP 位址、時間戳）</span></li>
+                <li><strong data-zh="私人訊息內容" data-zh-cn="私人讯息内容" data-en="Private message content" data-ru="Содержание личных сообщений">私人訊息內容</strong>：<span data-zh="您與其他用戶之間的私訊與群組聊天訊息，僅供對話雙方或群組成員存取（新成員預設看不到入群前的訊息）；參與者可使用聊天室 AI 助理處理自己看得到的訊息（見 1.7）" data-zh-cn="您与其他用户之间的私讯与群组聊天消息，仅供对话双方或群组成员访问（新成员默认看不到入群前的消息）；参与者可使用聊天室 AI 助理处理自己看得到的消息（见 1.7）" data-en="Direct messages and group chat messages between you and other users, accessible only to the participants or group members (by default, new members cannot see messages sent before they joined); participants can use the chat AI assistant on the messages they can see (see 1.7)" data-ru="Личные сообщения и сообщения групповых чатов между вами и другими пользователями, доступные только участникам беседы или членам группы (по умолчанию новые участники не видят сообщения, отправленные до их вступления); участники могут использовать ИИ-помощника чата для сообщений, которые они видят (см. 1.7)">您與其他用戶之間的私訊與群組聊天訊息，僅供對話雙方或群組成員存取（新成員預設看不到入群前的訊息）；參與者可使用聊天室 AI 助理處理自己看得到的訊息（見 1.7）</span></li>
+                <li><strong data-zh="好友與封鎖清單" data-zh-cn="好友与封锁清单" data-en="Friends & block list" data-ru="Список друзей и блокировки">好友與封鎖清單</strong>：<span data-zh="您的社交關係連結記錄" data-zh-cn="您的社交关系链接记录" data-en="Your social relationship link records" data-ru="Записи ваших социальных связей">您的社交關係連結記錄</span></li>
+                <li><strong data-zh="條款同意紀錄" data-zh-cn="条款同意记录" data-en="Consent records" data-ru="Записи о согласии">條款同意紀錄</strong>：<span data-zh="您同意服務條款與隱私政策的版本與時間，用於證明您已閱讀並同意該版本" data-zh-cn="您同意服务条款与隐私政策的版本与时间，用于证明您已阅读并同意该版本" data-en="The version of the Terms of Service and Privacy Policy you agreed to and when, kept as proof that you read and accepted that version" data-ru="Версия Условий использования и Политики конфиденциальности, с которой вы согласились, и время согласия — как подтверждение того, что вы ознакомились с этой версией и приняли её">您同意服務條款與隱私政策的版本與時間，用於證明您已閱讀並同意該版本</span></li>
+            </ul>
+            <h3 data-zh="1.3 交易資訊" data-zh-cn="1.3 交易信息" data-en="1.3 Transaction Information" data-ru="1.3 Информация о транзакциях">1.3 交易資訊</h3>
+            <ul>
+                <li><span data-zh="付款記錄（會員訂閱、發文費用、打賞；目前以 Base 網路上的 USDC 支付），包含交易雜湊（tx hash）" data-zh-cn="付款记录（会员订阅、发文费用、打赏；目前以 Base 网络上的 USDC 支付），包含交易哈希（tx hash）" data-en="Payment records (membership subscriptions, post fees, tips; currently paid in USDC on the Base network), including transaction hashes (tx hash)" data-ru="Записи платежей (подписка на членство, платные посты, чаевые; в настоящее время оплачиваются в USDC в сети Base), включая хеши транзакций (tx hash)">付款記錄（會員訂閱、發文費用、打賞；目前以 Base 網路上的 USDC 支付），包含交易雜湊（tx hash）</span></li>
+                <li><span data-zh="交易金額、時間、收款方資訊" data-zh-cn="交易金额、时间、收款方信息" data-en="Transaction amount, time, payee information" data-ru="Сумма транзакции, время, информация о получателе">交易金額、時間、收款方資訊</span></li>
+                <li><span data-zh="您選擇同步或監測之錢包的公開鏈上資料（餘額、轉帳紀錄），用於持倉顯示、帳本與提醒" data-zh-cn="您选择同步或监测的钱包的公开链上资料（余额、转账记录），用于持仓显示、账本与提醒" data-en="Public on-chain data (balances, transfer history) of wallets you choose to sync or monitor, used for holdings display, your ledger, and alerts" data-ru="Публичные ончейн-данные (балансы, история переводов) кошельков, которые вы решили синхронизировать или отслеживать; используются для отображения активов, журнала операций и оповещений">您選擇同步或監測之錢包的公開鏈上資料（餘額、轉帳紀錄），用於持倉顯示、帳本與提醒</span></li>
+            </ul>
+            <h3 data-zh="1.4 AI 分析使用記錄" data-zh-cn="1.4 AI 分析使用记录" data-en="1.4 AI Analysis Usage Records" data-ru="1.4 Записи использования AI-анализа">1.4 AI 分析使用記錄</h3>
+            <ul>
+                <li><span data-zh="您觸發 AI 市場脈動分析的幣種與時間記錄" data-zh-cn="您触发 AI 市场脉动分析的币种与时间记录" data-en="Cryptocurrency and timestamp records when you trigger AI market analysis" data-ru="Записи криптовалют и времени, когда вы запускаете AI-анализ рынка">您觸發 AI 市場脈動分析的幣種與時間記錄</span></li>
+                <li><span data-zh="台股、美股深度分析的查詢記錄" data-zh-cn="台股、美股深度分析的查询记录" data-en="Taiwan and US stock deep analysis query records" data-ru="Записи запросов глубокого анализа тайваньских и американских акций">台股、美股深度分析的查詢記錄</span></li>
+            </ul>
+
+            <h3 data-zh="1.5 對話附圖" data-zh-cn="1.5 对话附图" data-en="1.5 Chat Image Attachments" data-ru="1.5 Изображения в диалогах">1.5 對話附圖</h3>
+            <p><span data-zh="當您在對話中附加圖片時，該圖片會傳輸至您於設定中選擇的 AI 模型供應商（如 DeepSeek、OpenAI、Google Gemini、Anthropic 等），用於產生圖片內容描述與分析。為支援歷史對話重播，圖片的壓縮版本會保存於我們的資料庫，最長 30 天後自動刪除；您刪除對話時，該對話的所有附圖會立即一併刪除。附圖僅限您本人透過登入帳戶讀取，他人無法存取，我們亦不會將其用於模型訓練。AI 生成的圖片內容描述會隨對話記錄保存。訪客模式不提供圖片上傳功能。" data-zh-cn="当您在对话中附加图片时，该图片会传输至您于设置中选择的 AI 模型供应商（如 DeepSeek、OpenAI、Google Gemini、Anthropic 等），用于产生图片内容描述与分析。为支持历史对话回放，图片的压缩版本会保存于我们的数据库，最长 30 天后自动删除；您删除对话时，该对话的所有附图会立即一并删除。附图仅限您本人通过登录账户读取，他人无法访问，我们亦不会将其用于模型训练。AI 生成的图片内容描述会随对话记录保存。访客模式不提供图片上传功能。" data-en="When you attach an image in a conversation, that image is transmitted to the AI model provider you selected in Settings (e.g., DeepSeek, OpenAI, Google Gemini, Anthropic) to generate a content description and analysis. To support conversation history replay, a compressed copy of the image is stored in our database for up to 30 days and then automatically deleted; when you delete a conversation, all images attached to it are deleted immediately. Attachments are accessible only by you through your signed-in account — no one else can access them — and we never use them for model training. The AI-generated description of the image is kept with your conversation record. Image upload is not available in Guest Mode." data-ru="Когда вы прикрепляете изображение в диалоге, оно передаётся выбранному вами в настройках поставщику AI-модели (например, DeepSeek, OpenAI, Google Gemini, Anthropic) для создания описания и анализа. Для поддержки воспроизведения истории диалогов сжатая копия изображения хранится в нашей базе данных не более 30 дней, после чего автоматически удаляется; при удалении диалога все прикреплённые к нему изображения удаляются немедленно. Вложения доступны только вам через ваш аккаунт — никто другой не может получить к ним доступ, и мы не используем их для обучения моделей. С записью диалога сохраняется только созданное ИИ описание изображения. В режиме гостя загрузка изображений недоступна.">當您在對話中附加圖片時，該圖片會傳輸至您於設定中選擇的 AI 模型供應商（如 DeepSeek、OpenAI、Google Gemini、Anthropic 等），用於產生圖片內容描述與分析。為支援歷史對話重播，圖片的壓縮版本會保存於我們的資料庫，最長 30 天後自動刪除；您刪除對話時，該對話的所有附圖會立即一併刪除。附圖僅限您本人透過登入帳戶讀取，他人無法存取，我們亦不會將其用於模型訓練。AI 生成的圖片內容描述會隨對話記錄保存。訪客模式不提供圖片上傳功能。</span></p>
+
+            <h3 data-zh="1.6 訪客模式" data-zh-cn="1.6 访客模式" data-en="1.6 Guest Mode" data-ru="1.6 Режим гостя">1.6 訪客模式</h3>
+            <p><span data-zh="您可以在不登入的情況下以「訪客模式」體驗部分功能。訪客身分透過簽名 Cookie（有效期 30 天）識別，僅用於計算每日免費 AI 額度與訪客功能開關；我們不會為訪客建立帳戶資料。訪客亦可瀏覽公開市場數據頁面。" data-zh-cn="您可以在不登录的情况下以「访客模式」体验部分功能。访客身份通过签名 Cookie（有效期 30 天）识别，仅用于计算每日免费 AI 额度与访客功能开关；我们不会为访客建立账户数据。访客亦可浏览公开市场数据页面。" data-en="You can try some features in Guest Mode without logging in. Guest identity is identified via a signed cookie (valid for 30 days) used solely to count the daily free AI quota and toggle guest features; we do not create account records for guests. Guests can also browse public market data pages." data-ru="Вы можете попробовать часть функций в «режиме гостя» без входа. Гостевая личность определяется подписанной cookie (срок действия 30 дней), используемой исключительно для учёта ежедневной бесплатной квоты AI и переключения гостевых функций; учётные записи для гостей не создаются. Гости также могут просматривать страницы с публичными рыночными данными.">您可以在不登入的情況下以「訪客模式」體驗部分功能。訪客身分透過簽名 Cookie（有效期 30 天）識別，僅用於計算每日免費 AI 額度與訪客功能開關；我們不會為訪客建立帳戶資料。訪客亦可瀏覽公開市場數據頁面。</span></p>
+
+            <h3 data-zh="1.7 聊天室 AI 助理" data-zh-cn="1.7 聊天室 AI 助理" data-en="1.7 Chat AI Assistant" data-ru="1.7 ИИ-помощник чата">1.7 聊天室 AI 助理</h3>
+            <p><span data-zh="私訊或群組的參與者可以使用聊天室 AI 助理，針對自己在該聊天室看得到的訊息提問（例如整理最近的對話、解釋某個主題）。使用時，提問者看得到的訊息（不含已收回或已自行刪除的訊息）會連同發言人暱稱傳送至提問者使用的 AI 模型——本平台提供的模型，或提問者自行綁定的 AI 模型供應商（見 3.5）——以產生只有提問者看得到的回答。AI 助理可能查詢公開的行情、新聞與網路搜尋結果，但不會讀取任何使用者的帳戶資料；提問與回答只有提問者本人看得到，會保存在我們的伺服器以便跨裝置接續（每個聊天室最近 10 則、最長 7 天，到期自動刪除；提問者可隨時刪除單則或全部）。回答所依據的訊息被發言者收回、被提問者自行刪除，或提問者退出該群組／被移出／刪除該私訊對話時，相關的提問與回答會一併刪除；帳號刪除時亦同。AI 的回答不會自動發送到聊天室；是否分享到聊天室由提問者自行決定，確認後會以提問者的名義送出為一則「AI 分析」訊息，之後與一般訊息相同：聊天室成員都看得到、可由提問者收回，並依一般訊息的方式保存。我們不會將聊天內容用於模型訓練。為防止濫用，我們會記錄每位使用者每日的使用次數（不含內容）。" data-zh-cn="私讯或群组的参与者可以使用聊天室 AI 助理，针对自己在该聊天室看得到的消息提问（例如整理最近的对话、解释某个主题）。使用时，提问者看得到的消息（不含已撤回或已自行删除的消息）会连同发言人昵称发送至提问者使用的 AI 模型——本平台提供的模型，或提问者自行绑定的 AI 模型供应商（见 3.5）——以产生只有提问者看得到的回答。AI 助理可能查询公开的行情、新闻与网络搜索结果，但不会读取任何用户的账户数据；提问与回答只有提问者本人看得到，会保存在我们的服务器以便跨设备接续（每个聊天室最近 10 条、最长 7 天，到期自动删除；提问者可随时删除单条或全部）。回答所依据的消息被发言者撤回、被提问者自行删除，或提问者退出该群组／被移出／删除该私讯对话时，相关的提问与回答会一并删除；账户删除时亦同。AI 的回答不会自动发送到聊天室；是否分享到聊天室由提问者自行决定，确认后会以提问者的名义发送为一条“AI 分析”消息，之后与普通消息相同：聊天室成员都看得到、可由提问者撤回，并按普通消息的方式保存。我们不会将聊天内容用于模型训练。为防止滥用，我们会记录每位用户每日的使用次数（不含内容）。" data-en="Participants in a direct message or group chat can use the chat AI assistant to ask about the messages they can see in that chat (for example, to summarize the recent conversation or explain a topic). When they do, the messages visible to the person asking (excluding recalled messages and messages they deleted for themselves), together with the senders&#x27; display names, are sent to the AI model that person uses — a model provided by the Platform, or an AI model provider they have linked themselves (see 3.5) — to generate an answer that only the person asking can see. The assistant may look up public market data, news and web search results, but it never reads any user&#x27;s account data. Questions and answers are visible only to the person who asked. They are stored on our servers so you can pick up on another device (the latest 10 per chat, for at most 7 days, then deleted automatically; the person who asked can delete a single entry or all of them at any time). If a message an answer was based on is recalled by its sender or deleted by the person who asked, or if the person who asked leaves or is removed from the group or deletes the direct-message conversation, the related questions and answers are deleted as well, and likewise when an account is deleted. An AI answer is never sent to the chat automatically; the person who asked decides whether to share it. If they do, it is posted in their name as an “AI analysis” message and from then on is treated like any other message: everyone in the chat can see it, the person who shared it can recall it, and it is stored the way other messages are. We do not use chat content for model training. To prevent abuse, we record how many times each user uses the assistant per day (not the content)." data-ru="Участники личной переписки или группового чата могут использовать ИИ-помощника чата, чтобы задавать вопросы о сообщениях, которые они видят в этом чате (например, кратко изложить недавнюю переписку или объяснить тему). При этом видимые задающему вопрос сообщения (кроме отозванных и удалённых им для себя) вместе с отображаемыми именами отправителей передаются ИИ-модели, которую он использует, — модели, предоставляемой Платформой, или поставщику ИИ-моделей, которого он подключил сам (см. 3.5), — чтобы сформировать ответ, видимый только ему. Помощник может обращаться к публичным рыночным данным, новостям и результатам веб-поиска, но никогда не читает данные чьих-либо аккаунтов. Вопросы и ответы видны только задавшему вопрос. Они хранятся на наших серверах, чтобы можно было продолжить с другого устройства (последние 10 в каждом чате, не более 7 дней, затем удаляются автоматически; задавший вопрос может в любой момент удалить одну запись или все). Если сообщение, на котором основан ответ, отозвано отправителем или удалено задавшим вопрос, либо задавший вопрос покидает группу, исключён из неё или удаляет личную переписку, связанные вопросы и ответы также удаляются; то же происходит при удалении аккаунта. ИИ-ответ никогда не отправляется в чат автоматически: задавший вопрос сам решает, делиться ли им. Если он делится, ответ публикуется от его имени как сообщение «Анализ ИИ» и дальше обрабатывается как любое другое сообщение: его видят все участники чата, поделившийся может его отозвать, хранится оно так же, как остальные сообщения. Мы не используем содержимое чатов для обучения моделей. Для предотвращения злоупотреблений мы учитываем, сколько раз в день каждый пользователь обращается к помощнику (без содержимого).">私訊或群組的參與者可以使用聊天室 AI 助理，針對自己在該聊天室看得到的訊息提問（例如整理最近的對話、解釋某個主題）。使用時，提問者看得到的訊息（不含已收回或已自行刪除的訊息）會連同發言人暱稱傳送至提問者使用的 AI 模型——本平台提供的模型，或提問者自行綁定的 AI 模型供應商（見 3.5）——以產生只有提問者看得到的回答。AI 助理可能查詢公開的行情、新聞與網路搜尋結果，但不會讀取任何使用者的帳戶資料；提問與回答只有提問者本人看得到，會保存在我們的伺服器以便跨裝置接續（每個聊天室最近 10 則、最長 7 天，到期自動刪除；提問者可隨時刪除單則或全部）。回答所依據的訊息被發言者收回、被提問者自行刪除，或提問者退出該群組／被移出／刪除該私訊對話時，相關的提問與回答會一併刪除；帳號刪除時亦同。AI 的回答不會自動發送到聊天室；是否分享到聊天室由提問者自行決定，確認後會以提問者的名義送出為一則「AI 分析」訊息，之後與一般訊息相同：聊天室成員都看得到、可由提問者收回，並依一般訊息的方式保存。我們不會將聊天內容用於模型訓練。為防止濫用，我們會記錄每位使用者每日的使用次數（不含內容）。</span></p>
+
+            <div class="highlight">
+                <h3 data-zh="🔒 重要：金鑰與私鑰安全" data-zh-cn="🔒 重要：密钥与私钥安全" data-en="🔒 Important: Key Security" data-ru="🔒 Важно: безопасность ключей">🔒 重要：金鑰與私鑰安全</h3>
+                <p><strong data-zh="本平台從不需要、也不會要求您提供錢包私鑰、助記詞或交易所 API 金鑰。" data-zh-cn="本平台从不需要、也不会要求您提供钱包私钥、助记词或交易所 API 密钥。" data-en="The Platform never needs, and will never ask for, your wallet private key, seed phrase, or exchange API keys." data-ru="Платформе никогда не нужны ваш приватный ключ кошелька, сид-фраза или API-ключи биржи, и мы никогда их не запрашиваем.">本平台從不需要、也不會要求您提供錢包私鑰、助記詞或交易所 API 金鑰。</strong></p>
+                <p><span data-zh="若您在設定中綁定 AI 模型的 API 金鑰（自帶金鑰，BYOK）：" data-zh-cn="若您在设置中绑定 AI 模型的 API 密钥（自带密钥，BYOK）：" data-en="If you add an AI model API key in Settings (bring your own key, BYOK):" data-ru="Если вы добавляете в настройках API-ключ AI-модели (BYOK — «свой ключ»):">若您在設定中綁定 AI 模型的 API 金鑰（自帶金鑰，BYOK）：</span></p>
+                <ul>
+                    <li>✅ <span data-zh="金鑰以加密形式儲存於我們的伺服器（每筆使用獨立的鹽值），不以明文保存" data-zh-cn="密钥以加密形式存储于我们的服务器（每笔使用独立的盐值），不以明文保存" data-en="The key is stored encrypted on our server (each record with its own salt), never in plain text" data-ru="Ключ хранится на нашем сервере в зашифрованном виде (с отдельной солью для каждой записи), а не в открытом виде">金鑰以加密形式儲存於我們的伺服器（每筆使用獨立的鹽值），不以明文保存</span></li>
+                    <li>✅ <span data-zh="僅用於代您呼叫您所選擇的 AI 模型供應商" data-zh-cn="仅用于代您调用您所选择的 AI 模型供应商" data-en="It is used only to call the AI model provider you chose, on your behalf" data-ru="Он используется только для обращения от вашего имени к выбранному вами поставщику AI-моделей">僅用於代您呼叫您所選擇的 AI 模型供應商</span></li>
+                    <li>✅ <span data-zh="畫面上只顯示遮罩後的金鑰；更換裝置不需重新輸入" data-zh-cn="界面上只显示遮罩后的密钥；更换装置不需重新输入" data-en="Only a masked version is displayed; you don&#x27;t need to re-enter it on a new device" data-ru="Отображается только замаскированная версия; на новом устройстве вводить его заново не нужно">畫面上只顯示遮罩後的金鑰；更換裝置不需重新輸入</span></li>
+                    <li>✅ <span data-zh="您可隨時在設定中刪除，刪除後即不再使用" data-zh-cn="您可随时在设置中删除，删除后即不再使用" data-en="You can delete it in Settings at any time; once deleted, it is no longer used" data-ru="Вы можете удалить его в настройках в любой момент; после удаления он больше не используется">您可隨時在設定中刪除，刪除後即不再使用</span></li>
+                </ul>
+            </div>
+
+            <h2 data-zh="2. 資料使用方式" data-zh-cn="2. 资料使用方式" data-en="2. How We Use Your Data" data-ru="2. Как мы используем ваши данные">2. 資料使用方式</h2>
+            <h3 data-zh="2.1 服務提供" data-zh-cn="2.1 服务提供" data-en="2.1 Service Provision" data-ru="2.1 Предоставление услуг">2.1 服務提供</h3>
+            <ul>
+                <li><span data-zh="驗證身份並維護帳戶安全" data-zh-cn="验证身份并维护账户安全" data-en="Verify identity and maintain account security" data-ru="Проверка личности и обеспечение безопасности аккаунта">驗證身份並維護帳戶安全</span></li>
+                <li><span data-zh="提供個人化加密貨幣、台股、美股市場分析" data-zh-cn="提供个性化加密货币、台股、美股市场分析" data-en="Provide personalized cryptocurrency, Taiwan stock, and US stock market analysis" data-ru="Персонализированный анализ рынка криптовалют, тайваньских и американских акций">提供個人化加密貨幣、台股、美股市場分析</span></li>
+                <li><span data-zh="處理 USDC 付款交易（會員訂閱、發文費用、打賞），並核對付款來源為您已綁定的錢包" data-zh-cn="处理 USDC 付款交易（会员订阅、发文费用、打赏），并核对付款来源为您已绑定的钱包" data-en="Process USDC payment transactions (membership subscriptions, post fees, tips) and verify that payments come from a wallet bound to your account" data-ru="Обработка платёжных транзакций USDC (подписка на членство, платные посты, чаевые) и проверка того, что платёж отправлен с привязанного к вашему аккаунту кошелька">處理 USDC 付款交易（會員訂閱、發文費用、打賞），並核對付款來源為您已綁定的錢包</span></li>
+                <li><span data-zh="同步您選擇的錢包之鏈上持倉與轉帳，提供持倉顯示與帳本功能" data-zh-cn="同步您选择的钱包的链上持仓与转账，提供持仓显示与账本功能" data-en="Sync on-chain holdings and transfers of wallets you choose, to provide holdings display and ledger features" data-ru="Синхронизация ончейн-активов и переводов выбранных вами кошельков для отображения активов и ведения журнала операций">同步您選擇的錢包之鏈上持倉與轉帳，提供持倉顯示與帳本功能</span></li>
+                <li><span data-zh="提供 AI 市場脈動分析與深度研究報告" data-zh-cn="提供 AI 市场脉动分析与深度研究报告" data-en="Provide AI market analysis and in-depth research reports" data-ru="Предоставление AI-анализа рынка и глубоких аналитических отчётов">提供 AI 市場脈動分析與深度研究報告</span></li>
+                <li><span data-zh="維護好友關係、私訊通訊功能" data-zh-cn="维护好友关系、私讯通讯功能" data-en="Maintain friendships and private messaging functionality" data-ru="Поддержка дружеских связей и функции личных сообщений">維護好友關係、私訊通訊功能</span></li>
+            </ul>
+            <h3 data-zh="2.2 社群管理" data-zh-cn="2.2 社群管理" data-en="2.2 Community Management" data-ru="2.2 Управление сообществом">2.2 社群管理</h3>
+            <ul>
+                <li><span data-zh="偵測並防範詐騙、濫用行為" data-zh-cn="侦测并防范诈骗、滥用行为" data-en="Detect and prevent fraud and abuse" data-ru="Выявление и предотвращение мошенничества и злоупотреблений">偵測並防範詐騙、濫用行為</span></li>
+                <li><span data-zh="執行治理系統的懲罰與申訴機制" data-zh-cn="执行治理系统的惩罚与申诉机制" data-en="Enforce governance system penalties and appeal mechanisms" data-ru="Исполнение санкций и механизма апелляций системы управления">執行治理系統的懲罰與申訴機制</span></li>
+                <li><span data-zh="審核論壇內容是否符合" data-zh-cn="审核论坛内容是否符合" data-en="Review whether forum content complies with the" data-ru="Проверка соответствия контента форума">審核論壇內容是否符合</span> <a href="community-guidelines.html" class="text-primary hover:text-accent transition"><span data-zh="社群守則" data-zh-cn="社群守则" data-en="Community Guidelines" data-ru="Правилам сообщества">社群守則</span></a></li>
+            </ul>
+            <h3 data-zh="2.3 安全與防護" data-zh-cn="2.3 安全与防护" data-en="2.3 Security & Protection" data-ru="2.3 Безопасность и защита">2.3 安全與防護</h3>
+            <ul>
+                <li><span data-zh="監控可疑活動（異常登入、惡意檢舉）" data-zh-cn="监控可疑活动（异常登录、恶意检举）" data-en="Monitor suspicious activities (abnormal login, malicious reports)" data-ru="Мониторинг подозрительной активности (аномальные входы, злоумышленные жалобы)">監控可疑活動（異常登入、惡意檢舉）</span></li>
+                <li><span data-zh="維護系統穩定性與資料完整性" data-zh-cn="维护系统稳定性与资料完整性" data-en="Maintain system stability and data integrity" data-ru="Поддержание стабильности системы и целостности данных">維護系統穩定性與資料完整性</span></li>
+            </ul>
+
+            <h2 data-zh="3. 資料分享與第三方" data-zh-cn="3. 资料分享与第三方" data-en="3. Data Sharing & Third Parties" data-ru="3. Передача данных третьим лицам">3. 資料分享與第三方</h2>
+            <h3 data-zh="3.1 錢包連線與區塊鏈資料服務（重要）" data-zh-cn="3.1 钱包连接与区块链资料服务（重要）" data-en="3.1 Wallet Connection &amp; Blockchain Data Services (Important)" data-ru="3.1 Сервисы подключения кошельков и данных блокчейна (важно)">3.1 錢包連線與區塊鏈資料服務（重要）</h3>
+            <div class="legal-notice">
+                <p><span data-zh="錢包登入與付款時，您的錢包 App 與本平台之間的連線與簽名請求可能經由 Reown（WalletConnect）的中繼服務傳遞；付款驗證、持倉同步與錢包查詢則會向區塊鏈公開資料服務查詢（例如 Base 網路 RPC 節點、Blockscout、Etherscan、GoPlus；TON 地址為 TonAPI、toncenter）。以下資料會傳送給這些服務：" data-zh-cn="钱包登录与付款时，您的钱包 App 与本平台之间的连接与签名请求可能经由 Reown（WalletConnect）的中继服务传递；付款验证、持仓同步与钱包查询则会向区块链公开资料服务查询（例如 Base 网络 RPC 节点、Blockscout、Etherscan、GoPlus；TON 地址为 TonAPI、toncenter）。以下数据会发送给这些服务：" data-en="When you sign in or pay with a wallet, connection and signature requests between your wallet app and the Platform may be relayed through Reown (WalletConnect) relay services; payment verification, holdings sync, and wallet lookups query public blockchain data services (for example, Base network RPC nodes, Blockscout, Etherscan, and GoPlus; for TON addresses, TonAPI and toncenter). The following data is sent to these services:" data-ru="При входе и оплате через кошелёк запросы на подключение и подпись между вашим приложением-кошельком и Платформой могут передаваться через ретрансляционные сервисы Reown (WalletConnect); для проверки платежей, синхронизации активов и запросов по кошелькам используются публичные сервисы данных блокчейна (например, RPC-узлы сети Base, Blockscout, Etherscan и GoPlus; для адресов TON — TonAPI и toncenter). Этим сервисам передаются следующие данные:">錢包登入與付款時，您的錢包 App 與本平台之間的連線與簽名請求可能經由 Reown（WalletConnect）的中繼服務傳遞；付款驗證、持倉同步與錢包查詢則會向區塊鏈公開資料服務查詢（例如 Base 網路 RPC 節點、Blockscout、Etherscan、GoPlus；TON 地址為 TonAPI、toncenter）。以下資料會傳送給這些服務：</span></p>
+                <ul>
+                    <li><span data-zh="您的錢包地址（登入、綁定，以及您選擇同步、監測或查詢的地址）" data-zh-cn="您的钱包地址（登录、绑定，以及您选择同步、监测或查询的地址）" data-en="Your wallet address (for sign-in and binding, and addresses you choose to sync, monitor, or look up)" data-ru="Адрес вашего кошелька (для входа и привязки, а также адреса, которые вы решили синхронизировать, отслеживать или проверить)">您的錢包地址（登入、綁定，以及您選擇同步、監測或查詢的地址）</span></li>
+                    <li><span data-zh="錢包連線與簽名請求（簽名僅用於證明地址所有權，不包含您的私鑰）" data-zh-cn="钱包连接与签名请求（签名仅用于证明地址所有权，不包含您的私钥）" data-en="Wallet connection and signature requests (signatures only prove address ownership and never include your private key)" data-ru="Запросы на подключение кошелька и подпись (подпись лишь подтверждает владение адресом и не содержит ваш приватный ключ)">錢包連線與簽名請求（簽名僅用於證明地址所有權，不包含您的私鑰）</span></li>
+                    <li><span data-zh="付款交易資訊（交易雜湊、金額）" data-zh-cn="付款交易信息（交易哈希、金额）" data-en="Payment transaction information (transaction hash, amount)" data-ru="Информация о платёжных транзакциях (хеш транзакции, сумма)">付款交易資訊（交易雜湊、金額）</span></li>
+                </ul>
+                <p><span data-zh="這些資料受各服務的隱私權政策約束，並可能儲存於全球伺服器。區塊鏈上的交易本身為公開資料，任何人皆可查詢，且無法刪除或修改。" data-zh-cn="这些数据受各服务的隐私政策约束，并可能存储于全球服务器。区块链上的交易本身为公开资料，任何人皆可查询，且无法删除或修改。" data-en="This data is governed by each service's privacy policy and may be stored on servers worldwide. Blockchain transactions themselves are public, can be viewed by anyone, and cannot be deleted or modified." data-ru="Эти данные регулируются политиками конфиденциальности соответствующих сервисов и могут храниться на серверах по всему миру. Сами транзакции в блокчейне являются публичными, доступны любому для просмотра и не могут быть удалены или изменены.">這些資料受各服務的隱私權政策約束，並可能儲存於全球伺服器。區塊鏈上的交易本身為公開資料，任何人皆可查詢，且無法刪除或修改。</span></p>
+            </div>
+            <h3 data-zh="3.2 OKX API" data-zh-cn="3.2 OKX API" data-en="3.2 OKX API" data-ru="3.2 OKX API">3.2 OKX API</h3>
+            <p><span data-zh="加密貨幣市場數據通過 OKX public API 獲取。我們不會將您的個人資訊發送給 OKX。" data-zh-cn="加密货币市场数据通过 OKX public API 获取。我们不会把您的个人信息发送给 OKX。" data-en="Cryptocurrency market data is obtained through the OKX public API. We will not send your personal information to OKX." data-ru="Данные рынка криптовалют получаются через публичный API OKX. Мы не передаём вашу личную информацию OKX.">加密貨幣市場數據通過 OKX public API 獲取。我們不會將您的個人資訊發送給 OKX。</span></p>
+            <h3 data-zh="3.3 yfinance（台股 / 美股資料）" data-zh-cn="3.3 yfinance（台股 / 美股资料）" data-en="3.3 yfinance (Taiwan / US Stock Data)" data-ru="3.3 yfinance (данные тайваньских / американских акций)">3.3 yfinance（台股 / 美股資料）</h3>
+            <p><span data-zh="台灣股市及美國股市資料通過 yfinance 開源套件獲取，屬延遲盤後資料。我們不會將您的個人資訊發送給 yfinance 或相關資料提供商。" data-zh-cn="台湾股市及美国股市资料通过 yfinance 开源套件获取，属延迟盘后资料。我们不会把您的个人信息发送给 yfinance 或相关资料提供商。" data-en="Taiwan and US stock market data is obtained through the yfinance open source library, which is delayed after-hours data. We will not send your personal information to yfinance or related data providers." data-ru="Данные тайваньской и американской фондовых бирж получаются через библиотеку с открытым кодом yfinance (отложенные данные после закрытия торгов). Мы не передаём вашу личную информацию yfinance или связанным поставщикам данных.">台灣股市及美國股市資料通過 yfinance 開源套件獲取，屬延遲盤後資料。我們不會將您的個人資訊發送給 yfinance 或相關資料提供商。</span></p>
+            <h3 data-zh="3.4 法律要求" data-zh-cn="3.4 法律要求" data-en="3.4 Legal Requirements" data-ru="3.4 Законные требования">3.4 法律要求</h3>
+            <p><span data-zh="在以下情況下，我們可能需要披露資料：" data-zh-cn="在以下情况下，我们可能需要披露资料：" data-en="In the following circumstances, we may need to disclose data:" data-ru="В следующих обстоятельствах нам может потребоваться раскрыть данные:">在以下情況下，我們可能需要披露資料：</span></p>
+            <ul>
+                <li><span data-zh="遵守法律義務或政府要求" data-zh-cn="遵守法律义务或政府要求" data-en="Comply with legal obligations or government requests" data-ru="Соблюдение правовых обязательств или требований государственных органов">遵守法律義務或政府要求</span></li>
+                <li><span data-zh="保護平台、用戶或公眾的權利與安全" data-zh-cn="保护平台、用户或公众的权利与安全" data-en="Protect the Platform's, users', or public's rights and safety" data-ru="Защита прав и безопасности Платформы, пользователей или общества">保護平台、用戶或公眾的權利與安全</span></li>
+                <li><span data-zh="調查涉嫌違法行為（詐騙、洗錢等）" data-zh-cn="调查涉嫌违法行为（诈骗、洗钱等）" data-en="Investigate suspected illegal activities (fraud, money laundering, etc.)" data-ru="Расследование подозреваемой противоправной деятельности (мошенничество, отмывание денег и т. д.)">調查涉嫌違法行為（詐騙、洗錢等）</span></li>
+            </ul>
+
+            <h3 data-zh="3.5 AI 模型供應商（由您選擇）" data-zh-cn="3.5 AI 模型供应商（由您选择）" data-en="3.5 AI Model Providers (selected by you)" data-ru="3.5 Поставщики AI-моделей (выбираете вы)">3.5 AI 模型供應商（由您選擇）</h3>
+            <p><span data-zh="您於設定中選擇的 AI 模型供應商（可能包括 OpenAI、Google Gemini、Anthropic、DeepSeek、OpenRouter、智譜 GLM（Z.ai）、Moonshot Kimi、Groq、SiliconFlow、MiniMax、阿里雲 DashScope、火山方舟、NVIDIA NIM 等）會接收您的對話內容（含附圖）以產生分析回覆。我們採「自帶金鑰（BYOK）」架構：對話與附圖內容直接傳輸至您選擇的供應商，受該供應商隱私政策規範；我們不會將您的對話內容另作模型訓練用途。" data-zh-cn="您于设置中选择的 AI 模型供应商（可能包括 OpenAI、Google Gemini、Anthropic、DeepSeek、OpenRouter、智谱 GLM（Z.ai）、Moonshot Kimi、Groq、SiliconFlow、MiniMax、阿里云 DashScope、火山方舟、NVIDIA NIM 等）会接收您的对话内容（含附图）以产生分析回复。我们采「自带密钥（BYOK）」架构：对话与附图内容直接传输至您选择的供应商，受该供应商隐私政策规范；我们不会将您的对话内容另作模型训练用途。" data-en="The AI model provider you select in Settings (which may include OpenAI, Google Gemini, Anthropic, DeepSeek, OpenRouter, Z.ai GLM, Moonshot Kimi, Groq, SiliconFlow, MiniMax, Alibaba DashScope, Volcengine Ark, NVIDIA NIM, etc.) receives your conversation content (including attachments) to generate analysis. We use a bring-your-own-key (BYOK) architecture: conversations and attachments are transmitted directly to the provider you choose and are governed by that provider's privacy policy. We do not use your conversation content for model training." data-ru="Выбранный вами в настройках поставщик AI-модели (это могут быть OpenAI, Google Gemini, Anthropic, DeepSeek, OpenRouter, Z.ai GLM, Moonshot Kimi, Groq, SiliconFlow, MiniMax, Alibaba DashScope, Volcengine Ark, NVIDIA NIM и др.) получает содержимое вашего диалога (включая вложения) для формирования анализа. Мы используем архитектуру BYOK («принеси свой ключ»): содержимое диалога и вложений передаётся напрямую выбранному поставщику и регулируется его политикой конфиденциальности. Мы не используем содержимое ваших диалогов для обучения моделей.">您於設定中選擇的 AI 模型供應商（可能包括 OpenAI、Google Gemini、Anthropic、DeepSeek、OpenRouter、智譜 GLM（Z.ai）、Moonshot Kimi、Groq、SiliconFlow、MiniMax、阿里雲 DashScope、火山方舟、NVIDIA NIM 等）會接收您的對話內容（含附圖）以產生分析回覆。我們採「自帶金鑰（BYOK）」架構：對話與附圖內容直接傳輸至您選擇的供應商，受該供應商隱私政策規範；我們不會將您的對話內容另作模型訓練用途。</span></p>
+
+            <h3 data-zh="3.6 Email／Google 登入與刷卡購買 USDC" data-zh-cn="3.6 Email／Google 登录与刷卡购买 USDC" data-en="3.6 Email/Google Sign-In and Buying USDC by Card" data-ru="3.6 Вход через Email/Google и покупка USDC картой">3.6 Email／Google 登入與刷卡購買 USDC</h3>
+            <p><span data-zh="若您選擇以 Email 或 Google 登入，您輸入的 Email 或 Google 帳號由 Reown 驗證並為您建立內嵌錢包，登入時一樣以 SIWE 簽名；本平台伺服器只取得該錢包的地址，不會取得或儲存您的 Email、Google 帳號資訊或錢包私鑰。這些資料由 Reown 依其隱私政策處理。" data-zh-cn="若您选择以 Email 或 Google 登录，您输入的 Email 或 Google 账号由 Reown 验证并为您创建内嵌钱包，登录时一样以 SIWE 签名；本平台服务器只取得该钱包的地址，不会取得或存储您的 Email、Google 账号信息或钱包私钥。这些数据由 Reown 依其隐私政策处理。" data-en="If you choose to sign in with Email or Google, Reown verifies the email or Google account you enter and creates an embedded wallet for you; sign-in still uses a SIWE signature. Our servers receive only that wallet&#x27;s address and never obtain or store your email, Google account information, or wallet private key. This data is handled by Reown under its privacy policy." data-ru="Если вы выбираете вход через Email или Google, Reown проверяет введённый вами адрес электронной почты или аккаунт Google и создаёт для вас встроенный кошелёк; вход по-прежнему выполняется с подписью SIWE. Наши серверы получают только адрес этого кошелька и никогда не получают и не хранят ваш адрес электронной почты, данные аккаунта Google или приватный ключ кошелька. Эти данные обрабатывает Reown в соответствии со своей политикой конфиденциальности.">若您選擇以 Email 或 Google 登入，您輸入的 Email 或 Google 帳號由 Reown 驗證並為您建立內嵌錢包，登入時一樣以 SIWE 簽名；本平台伺服器只取得該錢包的地址，不會取得或儲存您的 Email、Google 帳號資訊或錢包私鑰。這些資料由 Reown 依其隱私政策處理。</span></p>
+            <p><span data-zh="Premium 的「刷卡買 USDC」由 Reown 串接的第三方購幣服務（Meld 及其合作夥伴）提供：您的卡號、身分驗證（KYC）等資料直接提供給這些服務商，不經過本平台，本平台不會取得您的付款卡資訊；您的收款錢包地址與購買金額會提供給該服務商以完成交易。" data-zh-cn="Premium 的「刷卡买 USDC」由 Reown 对接的第三方购币服务（Meld 及其合作伙伴）提供：您的卡号、身份验证（KYC）等资料直接提供给这些服务商，不经过本平台，本平台不会取得您的付款卡信息；您的收款钱包地址与购买金额会提供给该服务商以完成交易。" data-en="“Buy USDC by card” for Premium is provided by third-party on-ramp services connected through Reown (Meld and its partners): your card number, identity verification (KYC) details, and similar data go directly to these providers and never pass through the Platform, so we never obtain your payment card information. Your receiving wallet address and the purchase amount are shared with the provider to complete the purchase." data-ru="Функция «Купить USDC картой» для Premium предоставляется сторонними сервисами покупки криптовалюты, подключёнными через Reown (Meld и его партнёры): номер карты, данные проверки личности (KYC) и т. п. передаются напрямую этим поставщикам и не проходят через Платформу, поэтому мы никогда не получаем данные вашей платёжной карты. Адрес вашего кошелька-получателя и сумма покупки передаются поставщику для завершения покупки.">Premium 的「刷卡買 USDC」由 Reown 串接的第三方購幣服務（Meld 及其合作夥伴）提供：您的卡號、身分驗證（KYC）等資料直接提供給這些服務商，不經過本平台，本平台不會取得您的付款卡資訊；您的收款錢包地址與購買金額會提供給該服務商以完成交易。</span></p>
+            <h3 data-zh="3.7 Email 寄送服務（Resend）" data-zh-cn="3.7 Email 寄送服务（Resend）" data-en="3.7 Email Delivery Service (Resend)" data-ru="3.7 Сервис отправки электронной почты (Resend)">3.7 Email 寄送服務（Resend）</h3>
+            <p><span data-zh="若您訂閱 Email 簡報，我們透過寄信服務 Resend（位於美國）寄送簡報與訂閱確認信；Resend 會收到您的 Email 地址與信件內容，僅用於寄送。每封簡報都附有一鍵退訂連結，您也可隨時在設定中移除 Email。" data-zh-cn="若您订阅 Email 简报，我们通过寄信服务 Resend（位于美国）寄送简报与订阅确认信；Resend 会收到您的 Email 地址与信件内容，仅用于寄送。每封简报都附有一键退订链接，您也可随时在设置中移除 Email。" data-en="If you subscribe to the Email brief, we send the brief and the subscription confirmation email through the email delivery service Resend (based in the US); Resend receives your email address and the message content solely to deliver them. Every brief includes a one-click unsubscribe link, and you can remove your email in Settings at any time." data-ru="Если вы подписались на Email-сводку, мы отправляем сводку и письмо с подтверждением подписки через сервис отправки электронной почты Resend (США); Resend получает ваш адрес электронной почты и содержание письма исключительно для доставки. Каждая сводка содержит ссылку для отписки в один клик, а удалить адрес можно в настройках в любой момент.">若您訂閱 Email 簡報，我們透過寄信服務 Resend（位於美國）寄送簡報與訂閱確認信；Resend 會收到您的 Email 地址與信件內容，僅用於寄送。每封簡報都附有一鍵退訂連結，您也可隨時在設定中移除 Email。</span></p>
+
+            <h2 data-zh="4. 用戶權利" data-zh-cn="4. 用户权利" data-en="4. User Rights" data-ru="4. Права пользователей">4. 用戶權利</h2>
+            <h3 data-zh="4.1 存取與複本" data-zh-cn="4.1 存取与复本" data-en="4.1 Access &amp; Copies" data-ru="4.1 Доступ и копии">4.1 存取與複本</h3>
+            <p><span data-zh="您可以在「設定」頁面查看您的個人資料；如需完整副本，請依第 11 條與我們聯絡，我們將依法提供。" data-zh-cn="您可以在「设定」页面查看您的个人资料；如需完整副本，请依第 11 条与我们联络，我们将依法提供。" data-en="You can view your personal data on the Settings page; for a full copy, contact us as described in Section 11 and we will provide it as required by law." data-ru="Вы можете просмотреть свои персональные данные на странице настроек; чтобы получить полную копию, свяжитесь с нами способом, указанным в разделе 11, и мы предоставим её в соответствии с законом.">您可以在「設定」頁面查看您的個人資料；如需完整副本，請依第 11 條與我們聯絡，我們將依法提供。</span></p>
+            <h3 data-zh="4.2 修改資料" data-zh-cn="4.2 修改资料" data-en="4.2 Modify Data" data-ru="4.2 Изменение данных">4.2 修改資料</h3>
+            <p><span data-zh="您可以隨時更新個人資料設定（暱稱、顯示圖片）。" data-zh-cn="您可以随时更新个人资料设定（昵称、显示图片）。" data-en="You can update your personal data settings (nickname, display picture) at any time." data-ru="Вы можете в любой момент обновить настройки профиля (никнейм, изображение).">您可以隨時更新個人資料設定（暱稱、顯示圖片）。</span></p>
+            <h3 data-zh="4.3 刪除帳戶" data-zh-cn="4.3 删除账户" data-en="4.3 Delete Account" data-ru="4.3 Удаление аккаунта">4.3 刪除帳戶</h3>
+            <p><span data-zh="您可以申請刪除帳戶。刪除後：" data-zh-cn="您可以申请删除账户。删除后：" data-en="You can apply to delete your account. After deletion:" data-ru="Вы можете подать заявку на удаление аккаунта. После удаления:">您可以申請刪除帳戶。刪除後：</span></p>
+            <ul>
+                <li><span data-zh="個人資料將被移除" data-zh-cn="个人资料将被移除" data-en="Personal data will be removed" data-ru="Персональные данные будут удалены">個人資料將被移除</span></li>
+                <li><span data-zh="論壇發文可能保留但匿名化（顯示為「已刪除用戶」）" data-zh-cn="论坛发文可能保留但匿名化（显示为「已删除用户」）" data-en="Forum posts may be retained but anonymized (displayed as 'Deleted User')" data-ru="Посты форума могут быть сохранены, но анонимизированы (отображаются как «Удалённый пользователь»)">論壇發文可能保留但匿名化（顯示為「已刪除用戶」）</span></li>
+                <li><strong data-zh="已發送的打賞（鏈上 USDC 轉帳）無法撤回" data-zh-cn="已发送的打赏（链上 USDC 转账）无法撤回" data-en="Sent tips (on-chain USDC transfers) cannot be withdrawn" data-ru="Отправленные чаевые (ончейн-переводы USDC) невозможно отменить">已發送的打賞（鏈上 USDC 轉帳）無法撤回</strong></li>
+                <li><span data-zh="已支付的會員費用不予退款" data-zh-cn="已支付的会员费用不予退款" data-en="Paid membership fees are non-refundable" data-ru="Уплаченные взносы за членство не возвращаются">已支付的會員費用不予退款</span></li>
+                <li><strong data-zh="區塊鏈上的交易紀錄為公開資料，本平台無法刪除；第三方服務端的資料依其政策處理" data-zh-cn="区块链上的交易记录为公开资料，本平台无法删除；第三方服务端的数据依其政策处理" data-en="Transaction records on the blockchain are public and cannot be deleted by the Platform; data held by third-party services is handled according to their policies" data-ru="Записи транзакций в блокчейне публичны, и Платформа не может их удалить; данные на стороне сторонних сервисов обрабатываются согласно их политикам">區塊鏈上的交易紀錄為公開資料，本平台無法刪除；第三方服務端的資料依其政策處理</strong></li>
+            </ul>
+
+            <h2 data-zh="5. Cookie 與追蹤技術" data-zh-cn="5. Cookie 与追踪技术" data-en="5. Cookies & Tracking Technology" data-ru="5. Cookies и технологии отслеживания">5. Cookie 與追蹤技術</h2>
+            <h3 data-zh="5.1 必要 Cookie" data-zh-cn="5.1 必要 Cookie" data-en="5.1 Necessary Cookies" data-ru="5.1 Необходимые cookies">5.1 必要 Cookie</h3>
+            <p><span data-zh="我們僅使用必要的 Cookie 來維護登入狀態和語言偏好。" data-zh-cn="我们仅使用必要的 Cookie 来维护登录状态和语言偏好。" data-en="We only use necessary cookies to maintain login status and language preferences." data-ru="Мы используем только необходимые cookies для поддержания состояния входа и языковых предпочтений.">我們僅使用必要的 Cookie 來維護登入狀態和語言偏好。</span></p>
+            <h3 data-zh="5.2 無廣告追蹤" data-zh-cn="5.2 无广告追踪" data-en="5.2 No Ad Tracking" data-ru="5.2 Без рекламного отслеживания">5.2 無廣告追蹤</h3>
+            <p><strong data-zh="我們不使用第三方廣告追蹤器或分析工具。" data-zh-cn="我们不使用第三方广告追踪器或分析工具。" data-en="We do not use third-party advertising trackers or analytics tools." data-ru="Мы не используем сторонние рекламные трекеры или аналитические инструменты.">我們不使用第三方廣告追蹤器或分析工具。</strong></p>
+
+            <h2 data-zh="6. 資料保留期限" data-zh-cn="6. 资料保留期限" data-en="6. Data Retention" data-ru="6. Срок хранения данных">6. 資料保留期限</h2>
+            <ul>
+                <li><strong data-zh="帳戶資料" data-zh-cn="账户资料" data-en="Account data" data-ru="Данные аккаунта">帳戶資料</strong>：<span data-zh="帳戶活躍期間 + 刪除後 30 天" data-zh-cn="账户活跃期间 + 删除后 30 天" data-en="During account activity + 30 days after deletion" data-ru="В период активности аккаунта + 30 дней после удаления">帳戶活躍期間 + 刪除後 30 天</span></li>
+                <li><strong data-zh="交易記錄" data-zh-cn="交易记录" data-en="Transaction records" data-ru="Записи транзакций">交易記錄</strong>：<span data-zh="7 年（符合金融法規要求）" data-zh-cn="7 年（符合金融法规要求）" data-en="7 years (compliant with financial regulations)" data-ru="7 лет (в соответствии с финансовыми нормативами)">7 年（符合金融法規要求）</span></li>
+                <li><strong data-zh="治理記錄" data-zh-cn="治理记录" data-en="Governance records" data-ru="Записи системы управления">治理記錄</strong>：<span data-zh="永久保留（防範重複違規）" data-zh-cn="永久保留（防范重复违规）" data-en="Permanently retained (to prevent repeated violations)" data-ru="Хранятся бессрочно (для предотвращения повторных нарушений)">永久保留（防範重複違規）</span></li>
+                <li><strong data-zh="API 日誌" data-zh-cn="API 日志" data-en="API logs" data-ru="Журналы API">API 日誌</strong>：<span data-zh="90 天" data-zh-cn="90 天" data-en="90 days" data-ru="90 дней">90 天</span></li>
+                <li><strong data-zh="第三方服務資料" data-zh-cn="第三方服务数据" data-en="Third-party service data" data-ru="Данные сторонних сервисов">第三方服務資料</strong>：<span data-zh="依各服務政策保留；區塊鏈上的交易為公開且永久的紀錄" data-zh-cn="依各服务政策保留；区块链上的交易为公开且永久的记录" data-en="Retained per each service's policy; blockchain transactions are public and permanent records" data-ru="Хранятся согласно политике каждого сервиса; транзакции в блокчейне являются публичными и постоянными записями">依各服務政策保留；區塊鏈上的交易為公開且永久的紀錄</span></li>
+                <li><strong data-zh="對話訊息與附圖" data-zh-cn="对话消息与附图" data-en="Conversation messages and image attachments" data-ru="Сообщения диалога и вложения">對話訊息與附圖</strong>：<span data-zh="隨帳戶保存，您可隨時刪除對話；附圖壓縮檔最長保存 30 天，刪除對話即一併刪除" data-zh-cn="随账户保存，您可随时删除对话；附图压缩文件最长保存 30 天，删除对话即一并删除" data-en="Retained with your account; you can delete conversations at any time. Compressed image attachments are kept for up to 30 days and are deleted immediately when you delete the conversation." data-ru="Хранятся с аккаунтом; вы можете удалить диалог в любой момент. Сжатые копии изображений хранятся не более 30 дней и удаляются сразу при удалении диалога.">隨帳戶保存，您可隨時刪除對話；附圖壓縮檔最長保存 30 天，刪除對話即一併刪除</span></li>
+                <li><strong data-zh="Email 地址" data-zh-cn="Email 地址" data-en="Email address" data-ru="Адрес электронной почты">Email 地址</strong>：<span data-zh="保存至您在設定中移除 Email 或刪除帳戶為止；退訂後即停止寄信，但保留退訂紀錄以免誤寄，您移除 Email 時一併刪除" data-zh-cn="保存至您在设置中移除 Email 或删除账户为止；退订后即停止寄信，但保留退订记录以免误寄，您移除 Email 时一并删除" data-en="Kept until you remove it in Settings or delete your account; after you unsubscribe we stop sending, but keep the unsubscribe record so we don&#x27;t email you by mistake, and it is deleted when you remove the email" data-ru="Хранится, пока вы не удалите его в настройках или не удалите аккаунт; после отписки мы прекращаем отправку, но сохраняем запись об отписке, чтобы не отправить письмо по ошибке; она удаляется, когда вы удаляете адрес">保存至您在設定中移除 Email 或刪除帳戶為止；退訂後即停止寄信，但保留退訂紀錄以免誤寄，您移除 Email 時一併刪除</span></li>
+                <li><strong data-zh="條款同意紀錄" data-zh-cn="条款同意记录" data-en="Consent records" data-ru="Записи о согласии">條款同意紀錄</strong>：<span data-zh="隨帳戶保存，刪除帳戶時一併刪除" data-zh-cn="随账户保存，删除账户时一并删除" data-en="Kept with your account and deleted when you delete your account" data-ru="Хранятся вместе с аккаунтом и удаляются при удалении аккаунта">隨帳戶保存，刪除帳戶時一併刪除</span></li>
+            </ul>
+
+            <h2 data-zh="7. 年齡限制" data-zh-cn="7. 年龄限制" data-en="7. Age Restrictions" data-ru="7. Возрастные ограничения">7. 年齡限制</h2>
+            <p><span data-zh="本平台不向 18 歲以下用戶提供服務。我們不會故意收集未成年人的個人資料。若發現未成年用戶，我們將立即刪除相關帳戶。" data-zh-cn="本平台不向 18 岁以下用户提供服务。我们不会故意收集未成年人的个人资料。若发现未成年用户，我们将立即删除相关账户。" data-en="This Platform does not provide services to users under 18. We do not intentionally collect personal data from minors. If a minor user is discovered, we will immediately delete the relevant account." data-ru="Платформа не предоставляет услуги пользователям младше 18 лет. Мы не собираем персональные данные несовершеннолетних намеренно. При обнаружении несовершеннолетнего пользователя мы немедленно удалим соответствующий аккаунт.">本平台不向 18 歲以下用戶提供服務。我們不會故意收集未成年人的個人資料。若發現未成年用戶，我們將立即刪除相關帳戶。</span></p>
+
+            <h2 data-zh="8. 跨境資料傳輸" data-zh-cn="8. 跨境资料传输" data-en="8. Cross-Border Data Transfer" data-ru="8. Трансграничная передача данных">8. 跨境資料傳輸</h2>
+            <p><span data-zh="您的資料主要存儲在台灣伺服器。使用錢包連線、區塊鏈資料服務、Email 寄送服務或您選擇的 AI 模型供應商等第三方服務時（見第 3 條），資料可能傳輸至其位於境外（可能位於美國或其他國家）的基礎設施。我們確保所有傳輸符合：" data-zh-cn="您的资料主要存储在台湾服务器。使用钱包连接、区块链资料服务、Email 寄送服务或您选择的 AI 模型供应商等第三方服务时（见第 3 条），资料可能传输至其位于境外（可能位于美国或其他国家）的基础设施。我们确保所有传输符合：" data-en="Your data is primarily stored on Taiwan servers. When third-party services such as wallet connection services, blockchain data services, email delivery services, or the AI model provider you choose are used (see Section 3), data may be transferred to their infrastructure outside Taiwan (possibly in the US or other countries). We ensure all transfers comply with:" data-ru="Ваши данные в основном хранятся на серверах на Тайване. При использовании сторонних сервисов, таких как сервисы подключения кошельков, сервисы данных блокчейна, сервисы отправки электронной почты или выбранный вами поставщик AI-моделей (см. раздел 3), данные могут передаваться в их инфраструктуру за пределами Тайваня (возможно, в США или других странах). Мы обеспечиваем соответствие всех передач следующим требованиям:">您的資料主要存儲在台灣伺服器。使用錢包連線、區塊鏈資料服務、Email 寄送服務或您選擇的 AI 模型供應商等第三方服務時（見第 3 條），資料可能傳輸至其位於境外（可能位於美國或其他國家）的基礎設施。我們確保所有傳輸符合：</span></p>
+            <ul>
+                <li><span data-zh="GDPR（歐盟通用數據保護條例）" data-zh-cn="GDPR（欧盟通用数据保护条例）" data-en="GDPR (EU General Data Protection Regulation)" data-ru="GDPR (Общий регламент по защите данных ЕС)">GDPR（歐盟通用數據保護條例）</span></li>
+                <li><span data-zh="台灣個人資料保護法" data-zh-cn="台湾个人资料保护法" data-en="Taiwan Personal Data Protection Act" data-ru="Тайваньский закон о защите персональных данных">台灣個人資料保護法</span></li>
+            </ul>
+
+            <h2 data-zh="9. 資料安全措施" data-zh-cn="9. 资料安全措施" data-en="9. Data Security Measures" data-ru="9. Меры защиты данных">9. 資料安全措施</h2>
+            <ul>
+                <li><span data-zh="您綁定的 API 金鑰以加密形式儲存（每筆使用獨立鹽值），不以明文保存" data-zh-cn="您绑定的 API 密钥以加密形式存储（每笔使用独立盐值），不以明文保存" data-en="API keys you add are stored encrypted (each with its own salt), never in plain text" data-ru="Добавленные вами API-ключи хранятся в зашифрованном виде (с отдельной солью для каждого), а не в открытом виде">您綁定的 API 金鑰以加密形式儲存（每筆使用獨立鹽值），不以明文保存</span></li>
+                <li><span data-zh="HTTPS 加密傳輸（SSL/TLS）" data-zh-cn="HTTPS 加密传输（SSL/TLS）" data-en="HTTPS encrypted transmission (SSL/TLS)" data-ru="Шифрованная передача HTTPS (SSL/TLS)">HTTPS 加密傳輸（SSL/TLS）</span></li>
+                <li><span data-zh="定期安全審計與漏洞修補" data-zh-cn="定期安全审计与漏洞修补" data-en="Regular security audits and vulnerability patching" data-ru="Регулярные аудиты безопасности и устранение уязвимостей">定期安全審計與漏洞修補</span></li>
+                <li><span data-zh="限制員工存取權限（最小權限原則）" data-zh-cn="限制员工存取权限（最小权限原则）" data-en="Restrict employee access (principle of least privilege)" data-ru="Ограничение доступа сотрудников (принцип наименьших привилегий)">限制員工存取權限（最小權限原則）</span></li>
+                <li><span data-zh="不收集、不儲存錢包私鑰、助記詞或付款卡資訊" data-zh-cn="不收集、不存储钱包私钥、助记词或付款卡信息" data-en="We never collect or store wallet private keys, seed phrases, or payment card information" data-ru="Мы никогда не собираем и не храним приватные ключи кошельков, сид-фразы или данные платёжных карт">不收集、不儲存錢包私鑰、助記詞或付款卡資訊</span></li>
+            </ul>
+
+            <h2 data-zh="9.1 資料外洩通報" data-zh-cn="9.1 资料外泄通报" data-en="9.1 Data Breach Notification" data-ru="9.1 Уведомление об утечке данных">9.1 資料外洩通報</h2>
+            <p><span data-zh="若發生個人資料安全事件（資料外洩、未授權存取、損毀），本平台將：" data-zh-cn="若发生个人资料安全事件（资料外泄、未授权存取、损毁），本平台将：" data-en="In the event of a personal data security incident (data breach, unauthorized access, damage), the Platform will:" data-ru="В случае инцидента безопасности персональных данных (утечка, несанкционированный доступ, повреждение) Платформа:">若發生個人資料安全事件（資料外洩、未授權存取、損毀），本平台將：</span></p>
+            <ul>
+                <li><strong data-zh="立即啟動應變措施" data-zh-cn="立即启动应变措施" data-en="Immediately activate response measures" data-ru="Немедленно активирует меры реагирования">立即啟動應變措施</strong><span data-zh="，控制損害範圍並修復漏洞" data-zh-cn="，控制损害范围并修补漏洞" data-en=", control the damage scope and fix vulnerabilities" data-ru=", локализует масштаб ущерба и устраняет уязвимости">，控制損害範圍並修復漏洞</span></li>
+                <li><strong data-zh="於 72 小時內通知受影響用戶" data-zh-cn="于 72 小时内通知受影响用户" data-en="Notify affected users within 72 hours" data-ru="Уведомит затронутых пользователей в течение 72 часов">於 72 小時內通知受影響用戶</strong><span data-zh="，說明外洩範圍、可能影響及建議防護措施" data-zh-cn="，说明外泄范围、可能影响及建议防护措施" data-en=", explaining the scope, possible impacts, and recommended protective measures" data-ru=", объяснив масштаб, возможные последствия и рекомендуемые защитные меры">，說明外洩範圍、可能影響及建議防護措施</span></li>
+                <li><strong data-zh="依法向主管機關通報" data-zh-cn="依法向主管机关通报" data-en="Report to authorities as required by law" data-ru="Сообщит в уполномоченные органы в соответствии с законом">依法向主管機關通報</strong><span data-zh="（依個人資料保護法及未來「個人資料保護委員會」相關規定）" data-zh-cn="（依个人资料保护法及未来「个人资料保护委员会」相关规定）" data-en="(per the Personal Data Protection Act and future Personal Data Protection Commission regulations)" data-ru="(согласно закону о защите персональных данных и будущим регламентам Комитета по защите персональных данных)">（依個人資料保護法及未來「個人資料保護委員會」相關規定）</span></li>
+                <li><strong data-zh="保留事件紀錄" data-zh-cn="保留事件记录" data-en="Retain incident records" data-ru="Сохранит записи об инциденте">保留事件紀錄</strong><span data-zh="以供查核" data-zh-cn="以供查核" data-en=" for inspection" data-ru=" для проверки">以供查核</span></li>
+            </ul>
+            <p><span data-zh="通報方式：平台公告、電子郵件或站內通知。" data-zh-cn="通报方式：平台公告、电子邮件或站内通知。" data-en="Notification methods: Platform announcements, email, or in-app notifications." data-ru="Способы уведомления: объявления на платформе, электронная почта или уведомления в приложении.">通報方式：平台公告、電子郵件或站內通知。</span></p>
+
+            <h2 data-zh="10. 隱私政策變更" data-zh-cn="10. 隐私政策变更" data-en="10. Privacy Policy Changes" data-ru="10. Изменения политики конфиденциальности">10. 隱私政策變更</h2>
+            <p><span data-zh="我們可能更新本政策。重大變更將通過平台公告通知，並要求您重新確認同意。" data-zh-cn="我们可能更新本政策。重大变更将通过平台公告通知，并要求您重新确认同意。" data-en="We may update this policy. Major changes will be announced on the platform and require your re-confirmation." data-ru="Мы можем обновлять эту политику. Существенные изменения будут объявлены на платформе и потребуют вашего повторного подтверждения.">我們可能更新本政策。重大變更將通過平台公告通知，並要求您重新確認同意。</span></p>
+
+            <h2 data-zh="11. 聯絡我們" data-zh-cn="11. 联络我们" data-en="11. Contact Us" data-ru="11. Связь с нами">11. 聯絡我們</h2>
+            <p><span data-zh="如有隱私相關疑問或數據請求，請聯絡：" data-zh-cn="如有隐私相关疑问或数据请求，请联络：" data-en="For privacy questions or data requests, contact:" data-ru="По вопросам конфиденциальности или запросам данных обращайтесь:">如有隱私相關疑問或數據請求，請聯絡：</span></p>
+            <ul>
+                <li><span data-zh="Email：" data-zh-cn="Email：" data-en="Email: " data-ru="Email: ">Email：</span><strong>brief@getcryptomind.com</strong></li>
+                <li><span data-zh="平台論壇：私訊 " data-zh-cn="平台论坛：私讯 " data-en="Platform Forum: DM " data-ru="Форум платформы: личное сообщение ">平台論壇：私訊 </span><strong>@Admin</strong></li>
+                <li><span data-zh="平台網址：" data-zh-cn="平台网址：" data-en="Platform URL:" data-ru="Сайт платформы:">平台網址：</span><strong>getcryptomind.com</strong></li>
+            </ul>
+
+            <div class="legal-notice" style="margin-top: 2rem;">
+                <strong data-zh="📎 相關政策連結" data-zh-cn="📎 相关政策链接" data-en="📎 Related Policy Links" data-ru="📎 Ссылки на связанные документы">📎 相關政策連結</strong>
+                <ul style="margin-top: 0.5rem;">
+                    <li><a href="https://reown.com/privacy-policy" target="_blank" rel="noopener noreferrer" style="color: #0098EA;"><span data-zh="Reown（WalletConnect）隱私權政策" data-zh-cn="Reown（WalletConnect）隐私政策" data-en="Reown (WalletConnect) Privacy Policy" data-ru="Политика конфиденциальности Reown (WalletConnect)">Reown（WalletConnect）隱私權政策</span></a></li>
+                    <li><a href="https://telegram.org/privacy" target="_blank" rel="noopener noreferrer" style="color: #0098EA;"><span data-zh="Telegram 隱私權政策" data-zh-cn="Telegram 隐私政策" data-en="Telegram Privacy Policy" data-ru="Политика конфиденциальности Telegram">Telegram 隱私權政策</span></a></li>
+                    <li><a href="terms-of-service.html" style="color: #0098EA;"><span data-zh="CryptoMind 服務條款" data-zh-cn="CryptoMind 服务条款" data-en="CryptoMind Terms of Service" data-ru="Условия обслуживания CryptoMind">CryptoMind 服務條款</span></a></li>
+                    <li><a href="community-guidelines.html" style="color: #0098EA;"><span data-zh="CryptoMind 社群守則" data-zh-cn="CryptoMind 社群守则" data-en="CryptoMind Community Guidelines" data-ru="Правила сообщества CryptoMind">CryptoMind 社群守則</span></a></li>
+                </ul>
+            </div>
+
+            <div class="legal-notice">
+                <span data-zh="語言版本說明：本政策提供繁體中文、簡體中文、英文及俄文版本。若各語言版本之間存在歧異，以英文版本為準。" data-zh-cn="语言版本说明：本政策提供繁体中文、简体中文、英文及俄文版本。若各语言版本之间存在歧异，以英文版本为准。" data-en="Language versions: This policy is provided in Traditional Chinese, Simplified Chinese, English, and Russian. In case of any discrepancy between versions, the English version shall prevail." data-ru="Языковые версии: эта политика предоставляется на традиционном китайском, упрощённом китайском, английском и русском языках. В случае расхождений между версиями преимущественную силу имеет английская версия.">語言版本說明：本政策提供繁體中文、簡體中文、英文及俄文版本。若各語言版本之間存在歧異，以英文版本為準。</span>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="terms-of-service.html"><span data-zh="服務條款" data-zh-cn="服务条款" data-en="Terms of Service" data-ru="Условия обслуживания">服務條款</span></a>
+            <a href="privacy-policy.html"><span data-zh="隱私政策" data-zh-cn="隐私政策" data-en="Privacy Policy" data-ru="Политика конфиденциальности">隱私政策</span></a>
+            <a href="community-guidelines.html"><span data-zh="社群守則" data-zh-cn="社群守则" data-en="Community Guidelines" data-ru="Правила сообщества">社群守則</span></a>
+            <a href="/static/index.html"><span data-zh="返回平台" data-zh-cn="返回平台" data-en="Back to Platform" data-ru="Вернуться на платформу">返回平台</span></a>
+        </div>
+        <div class="copyright">
+            © 2026 CryptoMind. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="/static/legal/legal-lang.js?v=1"></script>
+    <script src="/js/components/ThemeToggle.js"></script>
+</body>
+
+</html>

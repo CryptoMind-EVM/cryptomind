@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoMind AI</title>
+    <!--OG-->
+    <link rel="icon" type="image/png" href="/static/img/title_icon.png">
+    <link rel="stylesheet" href="/static/styles.css?v=46">
+    <link rel="stylesheet" href="/static/css/tailwind-built.css?v=52">
+    <style>
+        body { background: rgb(var(--color-background)); color: rgb(var(--color-text-primary)); }
+        .card { background: rgb(var(--color-surface)); border: 1px solid rgb(var(--color-border-subtle) / .1); border-radius: 1rem; }
+        .label { font-size: 11px; letter-spacing: .04em; opacity: .6; margin-bottom: .35rem; }
+        /* 答案是純文字：保留換行、長字串（地址、網址）不撐破版面 */
+        .answer { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; line-height: 1.7; }
+        .cta { display: inline-flex; align-items: center; justify-content: center; padding: .65rem 1.25rem; border-radius: 9999px; font-weight: 600; font-size: 14px; background: rgb(var(--color-primary)); color: rgb(var(--color-background)); text-decoration: none; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <main class="max-w-2xl mx-auto px-4 py-8">
+        <header class="mb-5 flex items-center gap-2">
+            <a href="/" class="flex items-center gap-2" style="text-decoration:none;color:inherit">
+                <img src="/static/img/title_icon.png" alt="" width="28" height="28" class="w-7 h-7 rounded-lg object-cover">
+                <span class="font-semibold text-sm">CryptoMind</span>
+            </a>
+            <span id="shared-note" class="text-xs opacity-60 ml-auto"></span>
+        </header>
+
+        <section id="error" class="hidden card p-6 text-center text-sm opacity-80"></section>
+
+        <section id="content" class="hidden space-y-4">
+            <div class="card p-4">
+                <p class="label" id="label-q"></p>
+                <h1 id="question" class="text-lg font-semibold" style="overflow-wrap:anywhere"></h1>
+            </div>
+            <div class="card p-4">
+                <p class="label" id="label-a"></p>
+                <div id="answer" class="answer"></div>
+            </div>
+            <p id="disclaimer" class="text-xs opacity-70"></p>
+            <div class="flex flex-col items-center gap-2 pt-2">
+                <a id="cta" class="cta" href="/"></a>
+                <p id="expiry-note" class="text-xs opacity-50 text-center"></p>
+            </div>
+        </section>
+    </main>
+
+<script src="/static/answer-share.js?v=1"></script>
+</body>
+</html>
